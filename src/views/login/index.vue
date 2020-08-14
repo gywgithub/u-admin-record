@@ -19,7 +19,7 @@
       </transition>
     </div>
     <div class="loginBox">
-      <h2 class="loginH2"><strong>Vue</strong> 后台管理系统</h2>
+      <h2 class="loginH2">柚咪后台管理系统</h2>
       <div class="loginCon">
         <div class="titleDiv">
           <h3>Sign up now</h3>
