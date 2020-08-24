@@ -1,10 +1,25 @@
-import $axios from './index'
+import request from "@/utils/request";
 
-export function getPageTab1(params) {
-  const url = '/getPageData1'
-  return $axios.get(url, params)
+export function getList(data) {
+  return request({
+    url: "/table/getList",
+    method: "post",
+    data,
+  });
 }
-export function getPageTab2() {
-  const url = '/getPageData2'
-  return $axios.get(url)
+
+export function doEdit(data) {
+  return request({
+    url: "/table/doEdit",
+    method: "post",
+    data,
+  });
+}
+
+export function doDelete(data) {
+  return request({
+    url: "/table/doDelete",
+    method: "post",
+    data,
+  });
 }

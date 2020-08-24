@@ -1,13 +1,12 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
+  <div id="vue-admin-beautiful">
+    <router-view />
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app'
-}
+  export default {
+    name: "App",
+    mounted() {},
+  };
 </script>
-
-<style></style>

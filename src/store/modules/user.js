@@ -1,89 +1,99 @@
-import { login, getInfo } from '@/api/login'
-import { Message } from 'element-ui'
-import router, { resetRouter } from '@/router'
+/**
+ * @copyright chuzhixin 1204505056@qq.com
+ * @description 登录、获取用户信息、退出登录、清除accessToken逻辑，不建议修改
+ */
+
+import Vue from "vue";
+import { getUserInfo, login, logout } from "@/api/user";
+import {
+  getAccessToken,
+  removeAccessToken,
+  setAccessToken,
+} from "@/utils/accessToken";
+import { resetRouter } from "@/router";
+import { title, tokenName } from "@/config/settings";
 
 const state = {
-  token: localStorage.getItem('token') ? localStorage.getItem('token') : '', // 认证凭证'
-  userName: '',
-  roles: [],
-  introduce: ''
-}
+  accessToken: getAccessToken(),
+  username: "",
+  avatar: "",
+  permissions: [],
+};
+const getters = {
+  accessToken: (state) => state.accessToken,
+  username: (state) => state.username,
+  avatar: (state) => state.avatar,
+  permissions: (state) => state.permissions,
+};
 const mutations = {
-  SET_TOKEN(state, val) {
-    state.token = val
-    localStorage.setItem('token', val)
+  setAccessToken(state, accessToken) {
+    state.accessToken = accessToken;
+    setAccessToken(accessToken);
   },
-  DEL_TOKEN(state) {
-    state.token = ''
-    state.userName = ''
-    state.roles = ''
-    state.introduce = ''
-    localStorage.removeItem('token')
+  setUsername(state, username) {
+    state.username = username;
   },
-  SET_ROLES(state, payload) {
-    state.roles = payload
+  setAvatar(state, avatar) {
+    state.avatar = avatar;
   },
-  SET_NAME(state, payload) {
-    state.userName = payload
+  setPermissions(state, permissions) {
+    state.permissions = permissions;
   },
-  SET_INTRODUCE(state, payload) {
-    state.introduce = payload
-  }
-}
+};
 const actions = {
-  // user login
-  _login({ commit }, formdatas) {
-    return new Promise((resolve, reject) => {
-      login(formdatas)
-        .then(res => {
-          if (res.code === 0) {
-            if (res.data.success) {
-              Message.success(res.data.msg)
-              commit('SET_TOKEN', res.data.token)
-            } else {
-              Message.error(res.data.msg)
-            }
-            resolve(res)
-          }
-        })
-        .catch(error => {
-          reject(error)
-        })
-    })
+  setPermissions({ commit }, permissions) {
+    commit("setPermissions", permissions);
   },
-  loginOut({ commit }) {
-    commit('DEL_TOKEN')
-    resetRouter()
-    router.push({
-      path: '/login',
-      query: {
-        redirect: '/'
-      }
-    })
+  async login({ commit }, userInfo) {
+    const { data } = await login(userInfo);
+    const accessToken = data[tokenName];
+    if (accessToken) {
+      commit("setAccessToken", accessToken);
+      const hour = new Date().getHours();
+      const thisTime =
+        hour < 8
+          ? "早上好"
+          : hour <= 11
+          ? "上午好"
+          : hour <= 13
+          ? "中午好"
+          : hour < 18
+          ? "下午好"
+          : "晚上好";
+      Vue.prototype.$baseNotify(`欢迎登录${title}`, `${thisTime}！`);
+    } else {
+      Vue.prototype.$baseMessage(
+        `登录接口异常，未正确返回${tokenName}...`,
+        "error"
+      );
+    }
   },
-  _getInfo({ commit }) {
-    return new Promise((resolve, reject) => {
-      getInfo()
-        .then(res => {
-          if (res.code === 0) {
-            const { name, roles, introduce } = res.data
-            commit('SET_ROLES', roles)
-            commit('SET_NAME', name)
-            commit('SET_INTRODUCE', introduce)
-          } else {
-            Message.error(res.msg)
-          }
-          resolve(res.data)
-        })
-        .catch(error => {
-          reject(error)
-        })
-    })
-  }
-}
-export default {
-  namespaced: true,
-  state,
-  mutations,
-  actions
-}
+  async getUserInfo({ commit, state }) {
+    const { data } = await getUserInfo(state.accessToken);
+    if (!data) {
+      Vue.prototype.$baseMessage("验证失败，请重新登录...", "error");
+      return false;
+    }
+    let { permissions, username, avatar } = data;
+    if (permissions && username && Array.isArray(permissions)) {
+      commit("setPermissions", permissions);
+      commit("setUsername", username);
+      commit("setAvatar", avatar);
+      return permissions;
+    } else {
+      Vue.prototype.$baseMessage("用户信息接口异常", "error");
+      return false;
+    }
+  },
+  async logout({ dispatch }) {
+    await logout(state.accessToken);
+    await dispatch("resetAccessToken");
+    await resetRouter();
+  },
+  resetAccessToken({ commit }) {
+    commit("setPermissions", []);
+    commit("setAccessToken", "");
+    removeAccessToken();
+  },
+};
+export default { state, getters, mutations, actions };
