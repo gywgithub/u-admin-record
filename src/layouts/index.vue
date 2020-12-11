@@ -5,23 +5,23 @@
       class="layout-container-horizontal"
       :class="{
         fixed: header === 'fixed',
-        'no-tags-bar': tagsBar === 'false' || tagsBar === false,
+        'no-tabs-bar': tabsBar === 'false' || tabsBar === false,
       }"
     >
       <div :class="header === 'fixed' ? 'fixed-header' : ''">
-        <top-bar></top-bar>
+        <vab-top-bar />
         <div
-          v-if="tagsBar === 'true' || tagsBar === true"
-          :class="{ 'tag-view-show': tagsBar }"
+          v-if="tabsBar === 'true' || tabsBar === true"
+          :class="{ 'tag-view-show': tabsBar }"
         >
           <div class="vab-main">
-            <tags-bar></tags-bar>
+            <vab-tabs-bar />
           </div>
         </div>
       </div>
       <div class="vab-main main-padding">
-        <ad></ad>
-        <app-main></app-main>
+        <vab-ad />
+        <vab-app-main />
       </div>
     </div>
     <div
@@ -29,7 +29,7 @@
       class="layout-container-vertical"
       :class="{
         fixed: header === 'fixed',
-        'no-tags-bar': tagsBar === 'false' || tagsBar === false,
+        'no-tabs-bar': tabsBar === 'false' || tabsBar === false,
       }"
     >
       <div
@@ -37,117 +37,108 @@
         class="mask"
         @click="handleFoldSideBar"
       />
-      <side-bar></side-bar>
+      <vab-side-bar />
       <div class="vab-main" :class="collapse ? 'is-collapse-main' : ''">
         <div :class="header === 'fixed' ? 'fixed-header' : ''">
-          <nav-bar></nav-bar>
-          <tags-bar v-if="tagsBar === 'true' || tagsBar === true" />
+          <vab-nav-bar />
+          <vab-tabs-bar v-if="tabsBar === 'true' || tabsBar === true" />
         </div>
-        <ad></ad>
-        <app-main></app-main>
+        <vab-ad />
+        <vab-app-main />
       </div>
     </div>
-    <el-backtop></el-backtop>
+    <el-backtop />
   </div>
 </template>
 
 <script>
-  import { Ad, AppMain, NavBar, SideBar, TagsBar, TopBar } from "./components";
-  import { mapActions, mapGetters } from "vuex";
-  import { tokenName } from "@/config/settings";
+  import { mapActions, mapGetters } from 'vuex'
+  import { tokenName } from '@/config'
   export default {
-    name: "Layout",
-    components: {
-      Ad,
-      TopBar,
-      NavBar,
-      SideBar,
-      AppMain,
-      TagsBar,
-    },
+    name: 'Layout',
     data() {
-      return { oldLayout: "" };
+      return { oldLayout: '' }
     },
     computed: {
       ...mapGetters({
-        layout: "settings/layout",
-        tagsBar: "settings/tagsBar",
-        collapse: "settings/collapse",
-        header: "settings/header",
-        device: "settings/device",
+        layout: 'settings/layout',
+        tabsBar: 'settings/tabsBar',
+        collapse: 'settings/collapse',
+        header: 'settings/header',
+        device: 'settings/device',
       }),
       classObj() {
         return {
-          mobile: this.device === "mobile",
-        };
+          mobile: this.device === 'mobile',
+        }
       },
     },
     beforeMount() {
-      window.addEventListener("resize", this.handleResize);
+      window.addEventListener('resize', this.handleResize)
     },
     beforeDestroy() {
-      window.removeEventListener("resize", this.handleResize);
+      window.removeEventListener('resize', this.handleResize)
     },
     mounted() {
-      this.oldLayout = this.layout;
-      const userAgent = navigator.userAgent;
-      if (userAgent.includes("Juejin")) {
+      this.oldLayout = this.layout
+      const userAgent = navigator.userAgent
+      if (userAgent.includes('Juejin')) {
         this.$baseAlert(
-          "vue-admin-beautiful不支持在掘金内置浏览器演示，请手动复制以下地址到浏览器中查看http://mpfhrd48.sanxing.uz7.cn/vue-admin-beautiful"
-        );
+          'vue-admin-beautiful不支持在掘金内置浏览器演示，请手动复制以下地址到浏览器中查看http://mpfhrd48.sanxing.uz7.cn/vue-admin-beautiful'
+        )
       }
-      const isMobile = this.handleIsMobile();
+      const isMobile = this.handleIsMobile()
       if (isMobile) {
         if (isMobile) {
           //横向布局时如果是手机端访问那么改成纵向版
-          this.$store.dispatch("settings/changeLayout", "vertical");
+          this.$store.dispatch('settings/changeLayout', 'vertical')
         } else {
-          this.$store.dispatch("settings/changeLayout", this.oldLayout);
+          this.$store.dispatch('settings/changeLayout', this.oldLayout)
         }
-        this.$store.dispatch("settings/toggleDevice", "mobile");
+        this.$store.dispatch('settings/toggleDevice', 'mobile')
         setTimeout(() => {
-          this.$store.dispatch("settings/foldSideBar");
-        }, 2000);
+          this.$store.dispatch('settings/foldSideBar')
+        }, 2000)
       } else {
-        this.$store.dispatch("settings/openSideBar");
+        this.$store.dispatch('settings/openSideBar')
       }
       this.$nextTick(() => {
         window.addEventListener(
-          "storage",
+          'storage',
           (e) => {
-            if (e.key === tokenName || e.key === null) window.location.reload();
+            if (e.key === tokenName || e.key === null) window.location.reload()
             if (e.key === tokenName && e.value === null)
-              window.location.reload();
+              window.location.reload()
           },
           false
-        );
-      });
+        )
+      })
     },
     methods: {
       ...mapActions({
-        handleFoldSideBar: "settings/foldSideBar",
+        handleFoldSideBar: 'settings/foldSideBar',
       }),
       handleIsMobile() {
-        return document.body.getBoundingClientRect().width - 1 < 992;
+        return document.body.getBoundingClientRect().width - 1 < 992
       },
       handleResize() {
         if (!document.hidden) {
-          const isMobile = this.handleIsMobile();
+          const isMobile = this.handleIsMobile()
           if (isMobile) {
             //横向布局时如果是手机端访问那么改成纵向版
-            this.$store.dispatch("settings/changeLayout", "vertical");
+            this.$store.dispatch('settings/changeLayout', 'vertical')
           } else {
-            this.$store.dispatch("settings/changeLayout", this.oldLayout);
+            this.$store.dispatch('settings/changeLayout', this.oldLayout)
           }
 
           this.$store.dispatch(
-            "settings/toggleDevice",
-            isMobile ? "mobile" : "desktop"
-          );
+            'settings/toggleDevice',
+            isMobile ? 'mobile' : 'desktop'
+          )
         }
       },
     },
-  };
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -170,10 +161,10 @@
       position: relative;
 
       &.fixed {
-        padding-top: calc(#{$base-top-bar-height} + #{$base-tags-bar-height});
+        padding-top: calc(#{$base-top-bar-height} + #{$base-tabs-bar-height});
       }
 
-      &.fixed.no-tags-bar {
+      &.fixed.no-tabs-bar {
         padding-top: $base-top-bar-height;
       }
 
@@ -226,10 +217,10 @@
       }
 
       &.fixed {
-        padding-top: calc(#{$base-nav-bar-height} + #{$base-tags-bar-height});
+        padding-top: calc(#{$base-nav-bar-height} + #{$base-tabs-bar-height});
       }
 
-      &.fixed.no-tags-bar {
+      &.fixed.no-tabs-bar {
         padding-top: $base-nav-bar-height;
       }
 
@@ -255,7 +246,7 @@
             box-sizing: border-box;
           }
 
-          .tags-bar-container {
+          .tabs-bar-container {
             box-sizing: border-box;
           }
 

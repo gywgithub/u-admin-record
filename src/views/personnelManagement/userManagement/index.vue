@@ -51,7 +51,7 @@
       ></el-table-column>
 
       <el-table-column show-overflow-tooltip label="权限">
-        <template v-slot="{ row }">
+        <template #default="{ row }">
           <el-tag v-for="(item, index) in row.permissions" :key="index">
             {{ item }}
           </el-tag>
@@ -63,17 +63,10 @@
         prop="datatime"
         label="修改时间"
       ></el-table-column>
-      <el-table-column
-        show-overflow-tooltip
-        fixed="right"
-        label="操作"
-        width="200"
-      >
-        <template v-slot="scope">
-          <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
-          <el-button type="text" @click="handleDelete(scope.row)">
-            删除
-          </el-button>
+      <el-table-column show-overflow-tooltip label="操作" width="200">
+        <template #default="{ row }">
+          <el-button type="text" @click="handleEdit(row)">编辑</el-button>
+          <el-button type="text" @click="handleDelete(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -86,88 +79,88 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     ></el-pagination>
-    <edit ref="edit" @fetchData="fetchData"></edit>
+    <edit ref="edit" @fetch-data="fetchData"></edit>
   </div>
 </template>
 
 <script>
-  import { getList, doDelete } from "@/api/userManagement";
-  import Edit from "./components/UserManagementEdit";
+  import { getList, doDelete } from '@/api/userManagement'
+  import Edit from './components/UserManagementEdit'
 
   export default {
-    name: "UserManagement",
+    name: 'UserManagement',
     components: { Edit },
     data() {
       return {
         list: null,
         listLoading: true,
-        layout: "total, sizes, prev, pager, next, jumper",
+        layout: 'total, sizes, prev, pager, next, jumper',
         total: 0,
-        selectRows: "",
-        elementLoadingText: "正在加载...",
+        selectRows: '',
+        elementLoadingText: '正在加载...',
         queryForm: {
           pageNo: 1,
           pageSize: 10,
-          username: "",
+          username: '',
         },
-      };
+      }
     },
     created() {
-      this.fetchData();
+      this.fetchData()
     },
     methods: {
       setSelectRows(val) {
-        this.selectRows = val;
+        this.selectRows = val
       },
       handleEdit(row) {
         if (row.id) {
-          this.$refs["edit"].showEdit(row);
+          this.$refs['edit'].showEdit(row)
         } else {
-          this.$refs["edit"].showEdit();
+          this.$refs['edit'].showEdit()
         }
       },
       handleDelete(row) {
         if (row.id) {
-          this.$baseConfirm("你确定要删除当前项吗", null, async () => {
-            const { msg } = await doDelete({ ids: row.id });
-            this.$baseMessage(msg, "success");
-            this.fetchData();
-          });
+          this.$baseConfirm('你确定要删除当前项吗', null, async () => {
+            const { msg } = await doDelete({ ids: row.id })
+            this.$baseMessage(msg, 'success')
+            this.fetchData()
+          })
         } else {
           if (this.selectRows.length > 0) {
-            const ids = this.selectRows.map((item) => item.id).join();
-            this.$baseConfirm("你确定要删除选中项吗", null, async () => {
-              const { msg } = await doDelete({ ids });
-              this.$baseMessage(msg, "success");
-              this.fetchData();
-            });
+            const ids = this.selectRows.map((item) => item.id).join()
+            this.$baseConfirm('你确定要删除选中项吗', null, async () => {
+              const { msg } = await doDelete({ ids })
+              this.$baseMessage(msg, 'success')
+              this.fetchData()
+            })
           } else {
-            this.$baseMessage("未选中任何行", "error");
-            return false;
+            this.$baseMessage('未选中任何行', 'error')
+            return false
           }
         }
       },
       handleSizeChange(val) {
-        this.queryForm.pageSize = val;
-        this.fetchData();
+        this.queryForm.pageSize = val
+        this.fetchData()
       },
       handleCurrentChange(val) {
-        this.queryForm.pageNo = val;
-        this.fetchData();
+        this.queryForm.pageNo = val
+        this.fetchData()
       },
       queryData() {
-        this.queryForm.pageNo = 1;
-        this.fetchData();
+        this.queryForm.pageNo = 1
+        this.fetchData()
       },
       async fetchData() {
-        this.listLoading = true;
-        const { data, totalCount } = await getList(this.queryForm);
-        this.list = data;
-        this.total = totalCount;
+        this.listLoading = true
+        const { data, totalCount } = await getList(this.queryForm)
+        this.list = data
+        this.total = totalCount
         setTimeout(() => {
-          this.listLoading = false;
-        }, 300);
+          this.listLoading = false
+        }, 300)
       },
     },
-  };
+  }
 </script>

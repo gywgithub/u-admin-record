@@ -11,7 +11,11 @@
         </el-select>
       </el-form-item>
       <el-form-item label="内容" prop="content" class="vab-quill-content">
-        <vab-quill v-model="form.content" :min-height="400"></vab-quill>
+        <vab-quill
+          v-model="form.content"
+          :min-height="400"
+          :options="options"
+        ></vab-quill>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleSee">预览效果</el-button>
@@ -19,7 +23,7 @@
       </el-form-item>
     </el-form>
     <el-dialog title="预览效果" :visible.sync="dialogTableVisible">
-      <div style="min-height: 60vh;">
+      <div style="min-height: 60vh">
         <h1 class="news-title">{{ form.title }}</h1>
         <div class="news-content" v-html="form.content"></div>
       </div>
@@ -28,72 +32,96 @@
 </template>
 
 <script>
-  import vabQuill from "@/plugins/vabQuill";
+  import vabQuill from '@/plugins/vabQuill'
   export default {
-    name: "Editor",
+    name: 'Editor',
     components: { vabQuill },
     data() {
       return {
-        borderColor: "#dcdfe6",
+        options: {
+          theme: 'snow',
+          bounds: document.body,
+          debug: 'warn',
+          modules: {
+            toolbar: [
+              ['bold', 'italic', 'underline', 'strike'],
+              [{ header: [1, 2, 3, 4, 5, 6, false] }],
+              [{ size: ['small', false, 'large', 'huge'] }],
+              [{ color: [] }, { background: [] }],
+              ['blockquote', 'code-block'],
+              [{ list: 'ordered' }, { list: 'bullet' }],
+              [{ script: 'sub' }, { script: 'super' }],
+              [{ indent: '-1' }, { indent: '+1' }],
+              [{ align: [] }],
+              [{ direction: 'rtl' }],
+              [{ font: [] }],
+              ['clean'],
+              ['link', 'image'],
+            ],
+          },
+          placeholder: '内容...',
+          readOnly: false,
+        },
+        borderColor: '#dcdfe6',
         dialogTableVisible: false,
         form: {
-          title: "",
-          module: "",
-          content: "",
+          title: '',
+          module: '',
+          content: '',
         },
         rules: {
           title: [
             {
               required: true,
-              message: "请输入标题",
-              trigger: "blur",
+              message: '请输入标题',
+              trigger: 'blur',
             },
           ],
           module: [
             {
               required: true,
-              message: "请选择模块",
-              trigger: "change",
+              message: '请选择模块',
+              trigger: 'change',
             },
           ],
           content: [
             {
               required: true,
-              message: "请输入内容",
-              trigger: "blur",
+              message: '请输入内容',
+              trigger: 'blur',
             },
           ],
         },
-      };
+      }
     },
     methods: {
       handleSee() {
-        this.$refs["form"].validate((valid) => {
-          this.$refs.form.validateField("content", (errorMsg) => {});
+        this.$refs['form'].validate((valid) => {
+          this.$refs.form.validateField('content', (errorMsg) => {})
           if (valid) {
-            this.dialogTableVisible = true;
+            this.dialogTableVisible = true
           } else {
-            return false;
+            return false
           }
-        });
+        })
       },
       handleSave() {
-        this.$refs["form"].validate((valid) => {
-          this.$refs.form.validateField("content", (errorMsg) => {
-            this.borderColor = "#dcdfe6";
+        this.$refs['form'].validate((valid) => {
+          this.$refs.form.validateField('content', (errorMsg) => {
+            this.borderColor = '#dcdfe6'
             if (errorMsg) {
-              this.borderColor = "#F56C6C";
+              this.borderColor = '#F56C6C'
             }
-          });
+          })
           if (valid) {
-            this.$baseMessage("submit!", "success");
+            this.$baseMessage('submit!', 'success')
           } else {
-            return false;
+            return false
           }
-        });
+        })
       },
     },
-  };
+  }
 </script>
 <style lang="scss" scoped>
   .editor-container {

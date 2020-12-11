@@ -1,6 +1,6 @@
 /**
- * @copyright chuzhixin 1204505056@qq.com
- * @description 全局主题变量配置，VIP文档内提供多种好看的配色方案（ant-design风格、layui风格、iview风格），请查看VIP文档主题配置篇
+ * @author chuzhixin 1204505056@qq.com （不想保留author可删除）
+ * @description 全局主题变量配置
  */
 /* stylelint-disable */
 @charset "utf-8";
@@ -9,7 +9,7 @@ $base-color-default: #1890ff;
 //默认层级
 $base-z-index: 999;
 //横向布局纵向布局时菜单背景色
-$base-menu-background: #001529;
+$base-menu-background: rgb(40, 44, 52);
 //菜单文字颜色
 $base-menu-color: hsla(0, 0%, 100%, 0.95);
 //菜单选中文字颜色
@@ -48,16 +48,16 @@ $base-top-bar-height: 65px;
 $base-logo-height: 75px;
 //顶部nav-bar的高度
 $base-nav-bar-height: 60px;
-//顶部多标签页tags-bar的高度
-$base-tags-bar-height: 55px;
-//顶部多标签页tags-bar中每一个item的高度
+//顶部多标签页tabs-bar的高度
+$base-tabs-bar-height: 55px;
+//顶部多标签页tabs-bar中每一个item的高度
 $base-tag-item-height: 34px;
 //菜单li标签的高度
 $base-menu-item-height: 50px;
 //app-main的高度
 $base-app-main-height: calc(
-  100vh - #{$base-nav-bar-height} - #{$base-tags-bar-height} - #{$base-padding} -
-  #{$base-padding} - 55px - 30px
+  100vh - #{$base-nav-bar-height} - #{$base-tabs-bar-height} - #{$base-padding} -
+    #{$base-padding} - 55px - 55px
 );
 //纵向布局时左侧导航未折叠时的宽度
 $base-left-menu-width: 256px;
@@ -68,9 +68,9 @@ $base-left-menu-width-min: 65px;
 //纵向布局时左侧导航已折叠时右侧内容的宽度
 $base-right-content-width-min: calc(100% - #{$base-left-menu-width-min});
 //默认动画
-$base-transition: all 0.2s;
+$base-transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 //默认动画时长
-$base-transition-time: 0.2s;
+$base-transition-time: 0.3s;
 
 :export {
   //菜单文字颜色变量导出

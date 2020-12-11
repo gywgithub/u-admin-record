@@ -3,7 +3,7 @@
     <el-image
       :src="bigSrc"
       fit="cover"
-      style="width: 100%; height: 100%;"
+      style="width: 100%; height: 100%"
       @click="clickBig"
     ></el-image>
     <el-image
@@ -18,16 +18,16 @@
 
 <script>
   export default {
-    name: "VabImage",
+    name: 'VabImage',
     components: {},
     props: {
       bigSrc: {
         type: String,
-        default: "",
+        default: '',
       },
       smallSrc: {
         type: String,
-        default: "",
+        default: '',
       },
       percent: {
         type: Number,
@@ -35,19 +35,19 @@
       },
     },
     data() {
-      return {};
+      return {}
     },
     created() {},
     mounted() {},
     methods: {
       clickBig() {
-        this.$emit("clickBig");
+        this.$emit('click-big')
       },
       clickSmall() {
-        this.$emit("clickSmall");
+        this.$emit('click-small')
       },
     },
-  };
+  }
 </script>
 
 <style lang="scss" scoped>

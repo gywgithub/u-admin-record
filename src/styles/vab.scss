@@ -1,18 +1,14 @@
 /**
- * @copyright chuzhixin 1204505056@qq.com
+ * @author chuzhixin 1204505056@qq.com （不想保留author可删除）
  * @description 全局样式
  */
 
 @charset "utf-8";
 
-@import "./normalize.scss";
-@import "./transition.scss";
-@import "./loading.scss";
-@import "./themes/ocean.scss";
-@import "./themes/green.scss";
-@import "./themes/glory.scss";
-@import "./themes/dark.scss";
-$base: ".vab";
+@import './normalize.scss';
+@import './transition.scss';
+@import './loading.scss';
+$base: '.vab';
 
 @mixin scrollbar {
   max-height: 88vh;
@@ -97,6 +93,10 @@ html {
       }
     }
 
+    .v-modal {
+      backdrop-filter: blur(10px);
+    }
+
     /* el-tag开始 */
     .el-tag + .el-tag {
       margin-left: 10px;
@@ -144,7 +144,7 @@ html {
       .app-main-container {
         @include base-scrollbar;
 
-        > [class*="-container"] {
+        > [class*='-container'] {
           padding: $base-padding;
           background: $base-color-white;
         }

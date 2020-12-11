@@ -11,11 +11,6 @@
   "emmet.triggerExpansionOnTab": true,
   "editor.formatOnSave": true,
   "javascript.format.enable": true,
-  "stylelint.enable": true,
-  "css.validate": false,
-  "less.validate": false,
-  "scss.validate": false,
-  "stylelint.autoFixOnSave": true,
   "git.enableSmartCommit": true,
   "git.autofetch": true,
   "git.confirmSync": false,
@@ -30,12 +25,10 @@
     "**/.idea": true
   },
   "editor.codeActionsOnSave": {
+    "source.fixAll.stylelint": true,
     "source.fixAll.eslint": true
   },
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[scss]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[jsonc]": {
@@ -51,5 +44,11 @@
   "docthis.includeAuthorTag": true,
   "docthis.includeDescriptionTag": true,
   "docthis.enableHungarianNotationEvaluation": true,
-  "docthis.inferTypesFromNames": true
+  "docthis.inferTypesFromNames": true,
+  "vetur.format.defaultFormatter.html": "prettier",
+  "files.autoSave": "onFocusChange",
+  "path-intellisense.mappings": {
+    "@": "${workspaceRoot}/src"
+  },
+  "files.eol": "\n"
 }
