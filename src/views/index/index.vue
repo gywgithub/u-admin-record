@@ -1,25 +1,7 @@
 <template>
   <div class="index-container">
     <el-row :gutter="20">
-      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-        <el-alert v-if="noticeList[0]" :closable="noticeList[0].closable">
-          <div
-            style="display: flex; align-items: center; justify-content: center"
-          >
-            <a
-              target="_blank"
-              href="https://github.com/chuzhixin/vue-admin-beautiful"
-            >
-              <img
-                style="margin-right: 10px"
-                src="https://img.shields.io/github/stars/chuzhixin/vue-admin-beautiful?style=flat-square&label=Stars&logo=github"
-              />
-            </a>
-            {{ noticeList[0].title }}
-          </div>
-        </el-alert>
-      </el-col>
-      <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="6">
+      <el-col :xs="24" :sm="24" :md="12" :lg="24" :xl="24">
         <el-card shadow="never">
           <div slot="header">
             <span>访问量</span>
@@ -32,7 +14,6 @@
           <div class="bottom">
             <span>
               日均访问量:
-
               <vab-count
                 :start-val="config1.startVal"
                 :end-val="config1.endVal"
@@ -46,10 +27,10 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="6">
+      <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
         <el-card shadow="never">
           <div slot="header">
-            <span>授权数</span>
+            <span>新增用户</span>
           </div>
           <vab-chart
             :autoresize="true"
@@ -58,7 +39,7 @@
           />
           <div class="bottom">
             <span>
-              总授权数:
+              总用户:
               <vab-count
                 :start-val="config2.startVal"
                 :end-val="config2.endVal"
@@ -75,7 +56,7 @@
       <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
         <el-card shadow="never">
           <div slot="header">
-            <span>词云</span>
+            <span>用户常搜关键词</span>
           </div>
           <vab-chart
             :autoresize="true"
@@ -86,7 +67,7 @@
           />
           <div class="bottom">
             <span>
-              词云数量:
+              关键词总数量:
               <vab-count
                 :start-val="config3.startVal"
                 :end-val="config3.endVal"
@@ -101,124 +82,10 @@
         </el-card>
       </el-col>
 
-      <el-col
-        v-for="(item, index) in iconList"
-        :key="index"
-        :xs="12"
-        :sm="6"
-        :md="3"
-        :lg="3"
-        :xl="3"
-      >
-        <router-link :to="item.link" target="_blank">
-          <el-card class="icon-panel" shadow="never">
-            <vab-icon
-              :style="{ color: item.color }"
-              :icon="['fas', item.icon]"
-            ></vab-icon>
-            <p>{{ item.title }}</p>
-          </el-card>
-        </router-link>
-      </el-col>
-
-      <el-col :xs="24" :sm="24" :md="24" :lg="13" :xl="13">
-        <el-card class="card" shadow="never">
-          <div slot="header">
-            <span>GDP分布图</span>
-          </div>
-          <vab-chart
-            :autoresize="true"
-            theme="vab-echarts-theme"
-            :options="zgdt"
-          />
-        </el-card>
-      </el-col>
-      <el-col :xs="24" :sm="24" :md="24" :lg="11" :xl="11">
-        <el-card class="card" shadow="never">
-          <div slot="header">
-            <span>依赖信息</span>
-            <div style="float: right">部署时间:{{ updateTime }}</div>
-          </div>
-          <div class="bottom-btn">
-            <el-popover placement="top" width="250" trigger="hover">
-              <p>
-                这是一个付费群，谢谢您愿意支持开源，加群获取详细文档，群内提供vue-admin-beautiful-template基础模板
-              </p>
-              <el-image :src="require('@/assets/ewm.png')"></el-image>
-              <a slot="reference" target="_blank">
-                <el-button type="primary">QQ讨论群</el-button>
-              </a>
-            </el-popover>
-            <a @click="handleChangeTheme">
-              <el-button type="danger">修改主题和布局</el-button>
-            </a>
-            <a
-              target="_blank"
-              href="https://github.com/chuzhixin/vue-admin-beautiful"
-            >
-              <el-button type="warning">
-                github下载源码点star（实时更新）
-              </el-button>
-            </a>
-            <a
-              target="_blank"
-              href="https://gitee.com/chu1204505056/vue-admin-beautiful"
-            >
-              <el-button type="warning">码云下载源码点star</el-button>
-            </a>
-            <el-popover placement="top" width="250" trigger="hover">
-              <p>谢谢您愿意支持开源，加群获取文档，群内提供基础模板</p>
-              <el-image :src="require('@/assets/ewm.png')"></el-image>
-              <a slot="reference" target="_blank">
-                <el-button type="warning">文档</el-button>
-              </a>
-            </el-popover>
-          </div>
-          <table class="table">
-            <tr>
-              <td>@vue/cli版本</td>
-              <td>{{ devDependencies['@vue/cli-service'] }}</td>
-              <td>vue版本</td>
-              <td>{{ dependencies['vue'] }}</td>
-            </tr>
-            <tr>
-              <td>vuex版本</td>
-              <td>{{ dependencies['vuex'] }}</td>
-              <td>vue-router版本</td>
-              <td>{{ dependencies['vue-router'] }}</td>
-            </tr>
-            <tr>
-              <td>element-ui版本</td>
-              <td>{{ dependencies['element-ui'] }}</td>
-              <td>axios版本</td>
-              <td>{{ dependencies['axios'] }}</td>
-            </tr>
-            <tr>
-              <td>eslint版本</td>
-              <td>{{ devDependencies['eslint'] }}</td>
-              <td>prettier版本</td>
-              <td>{{ devDependencies['prettier'] }}</td>
-            </tr>
-            <tr>
-              <td>sass版本</td>
-              <td>{{ devDependencies['sass'] }}</td>
-              <td>mockjs版本</td>
-              <td>{{ dependencies['mockjs'] }}</td>
-            </tr>
-            <tr>
-              <td>zx-layouts版本</td>
-              <td>{{ dependencies['zx-layouts'] }}</td>
-              <td>lodash版本</td>
-              <td>{{ dependencies['lodash'] }}</td>
-            </tr>
-          </table>
-        </el-card>
-      </el-col>
-
       <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
         <el-card class="card" shadow="never">
           <div slot="header">
-            <span>更新日志</span>
+            <span>功能更新日志</span>
           </div>
           <el-timeline :reverse="reverse">
             <el-timeline-item
@@ -238,20 +105,20 @@
             <span>其他信息</span>
           </div>
           <div style="text-align: center">
-            <vab-colorful-icon style="font-size: 140px" icon-class="vab" />
-            <h1 style="font-size: 30px">vue-admin-beautiful</h1>
+            <img src="../../../public/logo.png" alt="" />
+            <h1 style="font-size: 30px">经验分享平台</h1>
           </div>
-          <div v-for="(item, index) in noticeList" :key="index">
-            <el-alert
-              v-if="index !== 0"
-              :title="item.title"
-              :type="item.type"
-              :closable="item.closable"
-            ></el-alert>
-            <br />
-          </div>
-          <el-alert :closable="false" :title="userAgent" type="info"></el-alert>
+          <el-alert
+            title="寄语：感恩相遇，愿世间美好与我们环环相扣，加油！屏幕前的我们，打破桎梏，坚守初心。改变人生命运的机会并没有太多，我们并不是不优秀，我们也并不是一无是处，我们也希望驻足山巅被众人仰望，也许我们缺少的只是一个机会，缺少的只是生命中的导师，希望有一天别人看到的不仅仅是你的努力，还有你的功成名就，出人头地。"
+            type="warning"
+            closable="false"
+          ></el-alert>
           <br />
+          <el-alert
+            title="随笔：我一直在寻找成功的途径，我还太年轻，不懂什么是格局，我只知道，能帮助他人，解决问题，就能给我带来收入，这个世界需要赚钱，才能过上平凡的生活；在这个物欲横流的时代，理想主义的我们，即使内心坚决如铁，也似乎寸步难行。"
+            type="success"
+            closable="false"
+          ></el-alert>
         </el-card>
       </el-col>
     </el-row>
@@ -271,7 +138,6 @@
     },
     data() {
       return {
-        timer: 0,
         updateTime: process.env.VUE_APP_UPDATE_TIME,
         nodeEnv: process.env.NODE_ENV,
         dependencies: dependencies,
@@ -338,7 +204,7 @@
             },
           ],
         },
-        //授权数
+        //新增用户
         sqs: {
           grid: {
             top: '4%',
@@ -350,8 +216,13 @@
           xAxis: [
             {
               type: 'category',
-              /*boundaryGap: false,*/
-              data: ['0时', '4时', '8时', '12时', '16时', '20时', '24时'],
+              data: [
+                '2020-8-10',
+                '2020-8-11',
+                '2020-8-12',
+                '2020-8-13',
+                '2020-8-14',
+              ],
               axisTick: {
                 alignWithLabel: true,
               },
@@ -364,10 +235,10 @@
           ],
           series: [
             {
-              name: '授权数',
+              name: '新增用户',
               type: 'bar',
               barWidth: '60%',
-              data: [10, 52, 20, 33, 39, 33, 22],
+              data: [10, 52, 20, 33, 39],
             },
           ],
         },
@@ -405,32 +276,32 @@
               },
               data: [
                 {
-                  name: 'vue-admin-beautiful',
+                  name: '移居',
                   value: 15000,
                 },
                 {
-                  name: 'element',
+                  name: '购物',
                   value: 10081,
                 },
                 {
-                  name: 'beautiful',
+                  name: '养老',
                   value: 9386,
                 },
 
                 {
-                  name: 'vue',
+                  name: '买房',
                   value: 6500,
                 },
                 {
-                  name: 'chuzhixin',
+                  name: '买车',
                   value: 6000,
                 },
                 {
-                  name: 'good',
+                  name: '养娃',
                   value: 4500,
                 },
                 {
-                  name: 'success',
+                  name: '定居',
                   value: 3800,
                 },
                 {
@@ -438,68 +309,28 @@
                   value: 3000,
                 },
                 {
-                  name: 'boy',
+                  name: '学习',
                   value: 2500,
                 },
                 {
-                  name: 'girl',
+                  name: '吃饭',
                   value: 2300,
                 },
                 {
-                  name: 'github',
+                  name: '生子',
                   value: 2000,
                 },
                 {
-                  name: 'hbuilder',
+                  name: '娶妻',
                   value: 1900,
                 },
                 {
-                  name: 'dcloud',
+                  name: '旅游',
                   value: 1800,
                 },
                 {
-                  name: 'china',
+                  name: '睡觉',
                   value: 1700,
-                },
-                {
-                  name: '1204505056',
-                  value: 1600,
-                },
-                {
-                  name: '972435319',
-                  value: 1500,
-                },
-                {
-                  name: 'young',
-                  value: 1200,
-                },
-                {
-                  name: 'old',
-                  value: 1100,
-                },
-                {
-                  name: 'vuex',
-                  value: 900,
-                },
-                {
-                  name: 'router',
-                  value: 800,
-                },
-                {
-                  name: 'money',
-                  value: 700,
-                },
-                {
-                  name: 'qingdao',
-                  value: 800,
-                },
-                {
-                  name: 'yantai',
-                  value: 9000,
-                },
-                {
-                  name: 'author is very cool',
-                  value: 9200,
                 },
               ],
             },
@@ -644,9 +475,6 @@
     created() {
       this.fetchData()
     },
-    beforeDestroy() {
-      clearInterval(this.timer)
-    },
     mounted() {
       let base = +new Date(2020, 1, 1)
       let oneDay = 24 * 3600 * 1000
@@ -674,11 +502,6 @@
       addData(true)
       this.fwl.xAxis[0].data = date
       this.fwl.series[0].data = data
-      this.timer = setInterval(() => {
-        addData(true)
-        this.fwl.xAxis[0].data = date
-        this.fwl.series[0].data = data
-      }, 3000)
     },
     methods: {
       handleClick(e) {
