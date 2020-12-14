@@ -1,3 +1,13 @@
+<!-- 
+  #安装完依赖包后需要手动修改以下依赖文件： (因为作者把项目中的全局样式，放到了远程仓库)
+
+  修改位置1：node_modules\_zx-layouts@0.6.23@zx-layouts\VabSideBar\index.vue
+  .vab-fas-icon {
+          padding-right: 3px; //修改为15px
+          font-size: $base-font-size-default;
+   }
+
+-->
 #
 
 <div align="center"><img width="200" src="https://gitee.com/chu1204505056/vue-admin-beautiful/raw/master/src/colorfulIcon/svg/vab.svg"/>

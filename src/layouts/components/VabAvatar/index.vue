@@ -9,6 +9,7 @@
       </div>
     </span>
     <el-dropdown-menu slot="dropdown">
+      <el-dropdown-item divided>个人中心</el-dropdown-item>
       <el-dropdown-item command="logout">退出登录</el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
