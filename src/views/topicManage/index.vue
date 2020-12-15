@@ -1,6 +1,6 @@
 <template>
   <div class="topic-container">
-    <el-row>
+    <el-row class="mb18">
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
         <el-form
           ref="ruleForm"
@@ -9,15 +9,49 @@
           :rules="rules"
           class="demo-ruleForm"
         >
-          <el-form-item label="提问者" prop="name">
+          <el-form-item label="问题ID" prop="name">
             <el-input v-model="ruleForm.name"></el-input>
           </el-form-item>
-          <el-form-item label="回答者" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
+          <el-form-item label="状态" prop="status">
+            <el-select v-model="ruleForm.status" placeholder="">
+              <el-option label="全部" value="all"></el-option>
+              <el-option label="上架中" value="sj"></el-option>
+              <el-option label="审核中" value="sh"></el-option>
+              <el-option label="已下架" value="yx"></el-option>
+            </el-select>
+          </el-form-item>
+          <span>时间范围：</span>
+          <el-date-picker
+            v-model="value2"
+            type="daterange"
+            align="right"
+            unlink-panels
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            :picker-options="pickerOptions"
+          ></el-date-picker>
+          <el-form-item label="" prop="nameType" class="ml10">
+            <el-select
+              v-model="ruleForm.nameType"
+              placeholder=""
+              @change="seachPeopleType"
+            >
+              <el-option label="全部" value="all"></el-option>
+              <el-option label="提问者" value="tw"></el-option>
+              <el-option label="回答者" value="hd"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="" prop="name">
+            <el-input
+              v-model="ruleForm.name"
+              :placeholder="seachPeoplePla"
+            ></el-input>
           </el-form-item>
           <el-button
             icon="el-icon-search"
             type="primary"
+            size="small"
             native-type="submit"
             @click="handleQuery"
           >
@@ -25,6 +59,7 @@
           </el-button>
         </el-form>
       </el-col>
+      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"></el-col>
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
         <el-button icon="el-icon-plus" type="primary" @click="handleAdd">
           添加
@@ -158,8 +193,44 @@
       return {
         imgShow: true,
         activities: [],
+        pickerOptions: {
+          shortcuts: [
+            {
+              text: '最近一周',
+              onClick(picker) {
+                const end = new Date()
+                const start = new Date()
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+                picker.$emit('pick', [start, end])
+              },
+            },
+            {
+              text: '最近一个月',
+              onClick(picker) {
+                const end = new Date()
+                const start = new Date()
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+                picker.$emit('pick', [start, end])
+              },
+            },
+            {
+              text: '最近三个月',
+              onClick(picker) {
+                const end = new Date()
+                const start = new Date()
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+                picker.$emit('pick', [start, end])
+              },
+            },
+          ],
+        },
+        value1: '',
+        value2: '',
+        seachPeoplePla: '输入提问者的姓名',
         ruleForm: {
           name: '',
+          nameType: 'all',
+          status: 'all',
         },
         rules: {
           name: [
@@ -206,6 +277,11 @@
           imageList.push(item.img)
         })
         this.imageList = imageList
+      },
+      seachPeopleType() {
+        this.ruleForm.nameType === 'hd'
+          ? (this.seachPeoplePla = '输入回答者的姓名')
+          : (this.seachPeoplePla = '输入提问者的姓名')
       },
       beforeCloseDetail() {
         this.isShowExperienceDetail = false
@@ -288,5 +364,8 @@
 <style lang="scss" scoped>
   ::v-deep .el-dialog__body {
     overflow: hidden;
+  }
+  ::v-deep .el-button {
+    margin-left: 10px;
   }
 </style>
