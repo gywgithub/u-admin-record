@@ -29,9 +29,7 @@
     "type": "git",
     "url": "git+https://github.com/chuzhixin/vue-admin-beautiful.git"
   },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
-  },
+  "gitHooks": {},
   "lint-staged": {
     "*.{js,jsx,vue}": [
       "vue-cli-service lint",
