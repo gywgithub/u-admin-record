@@ -8,7 +8,7 @@
     <footer v-show="footerCopyright" class="footer-copyright">
       Copyright
       <vab-icon :icon="['fas', 'copyright']"></vab-icon>
-      xxx-项目 {{ fullYear }}
+      经验分享平台 {{ fullYear }}
     </footer>
   </div>
 </template>

@@ -7,9 +7,8 @@
           :inline="true"
           :model="ruleForm"
           :rules="rules"
-          class="demo-ruleForm"
-        >
-          <el-form-item label="问题ID" prop="name">
+          class="demo-ruleForm">
+          <el-form-item label="发起ID" prop="name">
             <el-input v-model="ruleForm.name"></el-input>
           </el-form-item>
           <el-form-item label="状态" prop="status">
@@ -19,6 +18,12 @@
               <el-option label="审核中" value="sh"></el-option>
               <el-option label="已下架" value="yx"></el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="发起人姓名" prop="nameType" class="ml10">
+            <el-input
+              v-model="ruleForm.nameType"
+              :placeholder="seachPeoplePla"
+            ></el-input>
           </el-form-item>
           <span>时间范围：</span>
           <el-date-picker
@@ -31,30 +36,13 @@
             end-placeholder="结束日期"
             :picker-options="pickerOptions"
           ></el-date-picker>
-          <el-form-item label="" prop="nameType" class="ml10">
-            <el-select
-              v-model="ruleForm.nameType"
-              placeholder=""
-              @change="seachPeopleType"
-            >
-              <el-option label="全部" value="all"></el-option>
-              <el-option label="提问者" value="tw"></el-option>
-              <el-option label="回答者" value="hd"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="" prop="name">
-            <el-input
-              v-model="ruleForm.name"
-              :placeholder="seachPeoplePla"
-            ></el-input>
-          </el-form-item>
+
           <el-button
             icon="el-icon-search"
             type="primary"
             size="small"
             native-type="submit"
-            @click="handleQuery"
-          >
+            @click="handleQuery">
             查询
           </el-button>
         </el-form>
@@ -82,8 +70,13 @@
         show-overflow-tooltip
         type="selection"
         width="55"
+        align="center"
       ></el-table-column>
-      <el-table-column show-overflow-tooltip label="ID" width="120">
+      <el-table-column
+        show-overflow-tooltip
+        label="ID"
+        width="120"
+        align="center">
         <template #default="{ row }">
           {{ row.id }}
         </template>
@@ -92,29 +85,23 @@
         show-overflow-tooltip
         prop="title"
         label="标题"
+        align="center"
       ></el-table-column>
       <el-table-column
         show-overflow-tooltip
-        label="提问者"
+        label="发起者"
         prop="author"
+        align="center"
       ></el-table-column>
-      <el-table-column show-overflow-tooltip label="问答详情" width="180px">
+      <el-table-column
+        show-overflow-tooltip
+        label="分享者"
+        align="center"
+        width="180px">
         <template #default="{ row }">
-          <el-button type="text" @click="seeDetail(row)">查看</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column show-overflow-tooltip label="状态">
-        <template #default="{ row }">
-          <el-tooltip
-            :content="row.status"
-            class="item"
-            effect="dark"
-            placement="top-start"
-          >
-            <el-tag :type="row.status | statusFilter">
-              {{ row.status | statusTextFilter }}
-            </el-tag>
-          </el-tooltip>
+          <el-button type="text" @click="seeDetail(row)">张三</el-button> <el-tag :type="row.status | statusFilter">{{ row.status | statusTextFilter }}</el-tag><br>
+          <el-button type="text" @click="seeDetail(row)">李四</el-button> <el-tag :type="row.status | statusFilter">{{ row.status | statusTextFilter }}</el-tag><br>
+          <el-button type="text" @click="seeAllSharePeople(row)">查看全部</el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -122,8 +109,9 @@
         label="创建时间"
         prop="datetime"
         width="200"
+        align="center"
       ></el-table-column>
-      <el-table-column show-overflow-tooltip label="操作" width="180px">
+      <el-table-column show-overflow-tooltip label="操作" width="180px" align="center">
         <template #default="{ row }">
           <el-button type="text" @click="handleEdit(row)">编辑</el-button>
           <el-button type="text" @click="handleDelete(row)">删除</el-button>
@@ -140,23 +128,41 @@
       @size-change="handleSizeChange"
     ></el-pagination>
     <el-dialog
-      title="分享详情"
-      :visible.sync="isShowExperienceDetail"
-      :before-close="beforeCloseDetail"
-    >
+    title="分享时间线"
+    :visible.sync="isShowExperienceDetail"
+    :before-close="beforeCloseDetail"
+  >
+    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+      <el-timeline>
+        <el-timeline-item timestamp="2018/4/12" placement="top">
+          <el-card>
+            <h4>更新 Github 模板</h4>
+            <p>王小虎 提交于 2018/4/12 20:46</p>
+          </el-card>
+        </el-timeline-item>
+        <el-timeline-item timestamp="2018/4/3" placement="top">
+          <el-card>
+            <h4>更新 Github 模板</h4>
+            <p>王小虎 提交于 2018/4/3 20:46</p>
+          </el-card>
+        </el-timeline-item>
+        <el-timeline-item timestamp="2018/4/2" placement="top">
+          <el-card>
+            <h4>更新 Github 模板</h4>
+            <p>王小虎 提交于 2018/4/2 20:46</p>
+          </el-card>
+        </el-timeline-item>
+      </el-timeline>
+    </el-col>
+  </el-dialog>
+    <el-dialog
+      title="所有分享人"
+      :visible.sync="isShowShares"
+      :before-close="beforeCloseSharesDislog">
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-        <el-card class="card" shadow="never">
-          <el-timeline :reverse="reverse">
-            <el-timeline-item
-              v-for="(activity, index) in activities"
-              :key="index"
-              :timestamp="activity.timestamp"
-              :color="activity.color"
-            >
-              {{ activity.content }}
-            </el-timeline-item>
-          </el-timeline>
-        </el-card>
+        <div v-for="peopleItem in ps" style="display: inline-block;margin-left:10px;">
+          <el-button type="text" @click="seeDetail(row)">{{peopleItem.name}}({{ peopleItem.status | statusTextFilter }})</el-button>
+        </div>
       </el-col>
     </el-dialog>
   </div>
@@ -226,10 +232,10 @@
         },
         value1: '',
         value2: '',
-        seachPeoplePla: '输入提问者的姓名',
+        seachPeoplePla: '输入发起人的姓名',
         ruleForm: {
           name: '',
-          nameType: 'all',
+          nameType: '',
           status: 'all',
         },
         rules: {
@@ -244,6 +250,8 @@
           ],
         },
         isShowExperienceDetail: false, //是否展示分享详情
+        isShowShares: false,
+        ps:[{id : 1,name :"张三",status : "published"},{id : 2,name :"李四",status : "deleted"},{id : 3,name :"王五",status : "draft"},{id : 4,name :"赵柳",status : "deleted"}],
         reverse: true,
         list: [],
         imageList: [],
@@ -278,13 +286,11 @@
         })
         this.imageList = imageList
       },
-      seachPeopleType() {
-        this.ruleForm.nameType === 'hd'
-          ? (this.seachPeoplePla = '输入回答者的姓名')
-          : (this.seachPeoplePla = '输入提问者的姓名')
-      },
       beforeCloseDetail() {
         this.isShowExperienceDetail = false
+      },
+      beforeCloseSharesDislog() {
+        this.isShowShares = false
       },
       setSelectRows(val) {
         this.selectRows = val
@@ -302,6 +308,10 @@
           this.activities = res.data
           this.isShowExperienceDetail = true
         })
+      },
+      seeAllSharePeople(){
+          this.isShowShares = true;
+          this.sharePeoples = this.ps;
       },
       handleDelete(row) {
         if (row.id) {
