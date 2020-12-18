@@ -46,6 +46,17 @@
           </el-button>
         </el-form>
       </el-col>
+      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+        <el-button icon="el-icon-folder-add" type="primary" @click="handleBatch($event,1)">
+          批量上架
+        </el-button>
+        <el-button icon="el-icon-folder-remove" type="warning" @click="handleBatch($event,2)">
+          批量下架
+        </el-button>
+        <el-button icon="el-icon-delete" type="danger" @click="handleBatch($event,3)">
+          批量删除
+        </el-button>
+      </el-col>
     </el-row>
     <el-table
       ref="tableSort"
@@ -226,7 +237,6 @@
                   align="center">
                   <template slot-scope="scope">
                     <el-button @click="seeDetail(scope.row)" type="text" size="small">查看</el-button>
-                    <el-button type="text" size="small">编辑</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -437,14 +447,24 @@
           this.isShowShares = true;
           this.sharePeoples = this.shareList;
       },
-      handleDelete(row) {
+      handleBatch(row,type) {
+          let msg = '';
+          if(type===1) {
+              msg = '确定要上架当前项吗'
+          }
+          if(type===2) {
+              msg = '确定要下架当前项吗'
+          }
+          if(type===3) {
+              msg = '你确定要删除当前项吗'
+          }
         if (row.id) {
           this.$baseConfirm(
-            '你确定要删除当前项吗',
+              msg,
             { title: '提示' },
             async () => {
               const { msg } = await doDelete({ ids: row.id })
-              this.$baseMessage(msg, 'success')
+              this.$baseMessage('未选中任何行', 'success')
               this.fetchData()
             }
           )
@@ -452,11 +472,11 @@
           if (this.selectRows.length > 0) {
             const ids = this.selectRows.map((item) => item.id).join()
             this.$baseConfirm(
-              '你确定要删除选中项吗',
+                msg,
               { title: '提示' },
               async () => {
                 const { msg } = await doDelete({ ids: ids })
-                this.$baseMessage(msg, 'success')
+                this.$baseMessage('成功', 'success')
                 this.fetchData()
               }
             )
