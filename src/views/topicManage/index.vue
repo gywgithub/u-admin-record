@@ -19,11 +19,11 @@
               <el-option label="已下架" value="yx"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="发起人姓名" prop="nameType" class="ml10">
+          <el-form-item label="发起者" prop="nameType" class="ml10">
             <el-input
               v-model="ruleForm.nameType"
-              :placeholder="seachPeoplePla"
-            ></el-input>
+              :placeholder="seachPeoplePla">
+            </el-input>
           </el-form-item>
           <span>时间范围：</span>
           <el-date-picker
@@ -34,9 +34,8 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :picker-options="pickerOptions"
-          ></el-date-picker>
-
+            :picker-options="pickerOptions">
+          </el-date-picker>
           <el-button
             icon="el-icon-search"
             type="primary"
@@ -46,15 +45,6 @@
             查询
           </el-button>
         </el-form>
-      </el-col>
-      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24"></el-col>
-      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-        <el-button icon="el-icon-plus" type="primary" @click="handleAdd">
-          添加
-        </el-button>
-        <el-button icon="el-icon-delete" type="danger" @click="handleDelete">
-          删除
-        </el-button>
       </el-col>
     </el-row>
     <el-table
@@ -99,9 +89,15 @@
         align="center"
         width="180px">
         <template #default="{ row }">
-          <el-button type="text" @click="seeDetail(row)">张三</el-button> <el-tag :type="row.status | statusFilter">{{ row.status | statusTextFilter }}</el-tag><br>
-          <el-button type="text" @click="seeDetail(row)">李四</el-button> <el-tag :type="row.status | statusFilter">{{ row.status | statusTextFilter }}</el-tag><br>
-          <el-button type="text" @click="seeAllSharePeople(row)">查看全部</el-button>
+          <el-button type="text" @click="seeAllSharePeople(row)">查看</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column
+        show-overflow-tooltip
+        label="状态"
+        align="center">
+        <template #default="{ row }">
+          {{ row.status | statusTextFilter }}
         </template>
       </el-table-column>
       <el-table-column
@@ -113,8 +109,9 @@
       ></el-table-column>
       <el-table-column show-overflow-tooltip label="操作" width="180px" align="center">
         <template #default="{ row }">
-          <el-button type="text" @click="handleEdit(row)">编辑</el-button>
-          <el-button type="text" @click="handleDelete(row)">删除</el-button>
+          <el-button type="text" @click="goodsPutOn(row)">上架</el-button>
+          <el-button type="text" @click="goodsOffShelf(row)">下架</el-button>
+          <el-button type="text" @click="goodsDelete(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -130,39 +127,129 @@
     <el-dialog
     title="分享时间线"
     :visible.sync="isShowExperienceDetail"
-    :before-close="beforeCloseDetail"
-  >
-    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-      <el-timeline>
-        <el-timeline-item timestamp="2018/4/12" placement="top">
-          <el-card>
-            <h4>更新 Github 模板</h4>
-            <p>王小虎 提交于 2018/4/12 20:46</p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item timestamp="2018/4/3" placement="top">
-          <el-card>
-            <h4>更新 Github 模板</h4>
-            <p>王小虎 提交于 2018/4/3 20:46</p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item timestamp="2018/4/2" placement="top">
-          <el-card>
-            <h4>更新 Github 模板</h4>
-            <p>王小虎 提交于 2018/4/2 20:46</p>
-          </el-card>
-        </el-timeline-item>
-      </el-timeline>
-    </el-col>
+    :before-close="beforeCloseDetail">
+    <span slot="title" class="dialog-title">
+      <b>分享详情</b>
+    </span>
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+        <el-timeline>
+          <el-timeline-item timestamp="2018/4/12" placement="top">
+            <el-card>
+              <div slot="header" class="clearfix ovfl">
+                <el-button style="float: right; padding: 3px 0;" type="text">删除</el-button>
+              </div>
+              <h4>更新 Github 模板</h4>
+              <p>王小虎 提交于 2018/4/12 20:46</p>
+            </el-card>
+          </el-timeline-item>
+          <el-timeline-item timestamp="2018/4/3" placement="top">
+            <el-card>
+              <div slot="header" class="clearfix ovfl">
+                <el-button style="float: right; padding: 3px 0;" type="text">删除</el-button>
+              </div>
+              <h4>更新 Github 模板 </h4>
+              <p>王小虎 提交于 2018/4/3 20:46</p>
+            </el-card>
+          </el-timeline-item>
+          <el-timeline-item timestamp="2018/4/2" placement="top">
+            <el-card>
+              <div slot="header" class="clearfix ovfl">
+                <el-button style="float: right; padding: 3px 0;" type="text">删除</el-button>
+              </div>
+              <h4>更新 Github 模板</h4>
+              <p>王小虎 提交于 2018/4/2 20:46</p>
+            </el-card>
+          </el-timeline-item>
+        </el-timeline>
+      </el-col>
+    </el-tabs>
   </el-dialog>
     <el-dialog
-      title="所有分享人"
+      title="分享人列表"
       :visible.sync="isShowShares"
       :before-close="beforeCloseSharesDislog">
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-        <div v-for="peopleItem in ps" style="display: inline-block;margin-left:10px;">
-          <el-button type="text" @click="seeDetail(row)">{{peopleItem.name}}({{ peopleItem.status | statusTextFilter }})</el-button>
-        </div>
+        <el-table
+          :data="shareList"
+          style="width: 100%">
+          <el-table-column type="expand">
+            <template slot-scope="props">
+              <el-table
+                :data="shareList"
+                border
+                style="width: 100%">
+                <el-table-column
+                  fixed
+                  prop="name"
+                  label=""
+                  width="150"
+                  align="center">
+                </el-table-column>
+                <el-table-column
+                  prop="updateTime"
+                  label="最后更新时间"
+                  width="120"
+                  align="center">
+                </el-table-column>
+                <el-table-column
+                  label="分享人"
+                  width="120"
+                  align="center">
+                  <template #default="{ row }">
+                      <!--{{ row.author}}-->
+                     张三
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="pro"
+                  label="省"
+                  width="120"
+                  align="center">
+                </el-table-column>
+                <el-table-column
+                  prop="city"
+                  label="市"
+                  width="120"
+                  align="center">
+                </el-table-column>
+                <el-table-column
+                  prop="createTime"
+                  label="创建时间"
+                  width="120"
+                  align="center">
+                </el-table-column>
+                <el-table-column
+                  fixed="right"
+                  label="操作"
+                  width="100"
+                  align="center">
+                  <template slot-scope="scope">
+                    <el-button @click="seeDetail(scope.row)" type="text" size="small">查看</el-button>
+                    <el-button type="text" size="small">编辑</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="分享人"
+            prop="author"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            label="状态"
+            prop="status"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            align="center">
+            <template #default="{ row }">
+              <el-button type="text">添加分享</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-col>
     </el-dialog>
   </div>
@@ -199,6 +286,8 @@
       return {
         imgShow: true,
         activities: [],
+        activeName: 'first',
+        currSharePeopleName: '',
         pickerOptions: {
           shortcuts: [
             {
@@ -232,7 +321,7 @@
         },
         value1: '',
         value2: '',
-        seachPeoplePla: '输入发起人的姓名',
+        seachPeoplePla: '请输入发起者姓名',
         ruleForm: {
           name: '',
           nameType: '',
@@ -251,7 +340,10 @@
         },
         isShowExperienceDetail: false, //是否展示分享详情
         isShowShares: false,
-        ps:[{id : 1,name :"张三",status : "published"},{id : 2,name :"李四",status : "deleted"},{id : 3,name :"王五",status : "draft"},{id : 4,name :"赵柳",status : "deleted"}],
+        shareList:[{id : 1,name:'案例一',shareContent : [{},{},],author :"张三",status : "上架中" , createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县',},
+                    {id : 2,name:'案例二',author :"李四",status : "已下架", createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
+                    {id : 3,name:'案例三',author :"王五",status : "审核中", createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
+                    {id : 4,name:'案例四',author :"赵柳",status : "上架中", createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'}],
         reverse: true,
         list: [],
         imageList: [],
@@ -279,12 +371,41 @@
     beforeDestroy() {},
     mounted() {},
     methods: {
+      load(tree, treeNode, resolve) {
+          setTimeout(() => {
+              resolve([
+                  {
+                      id: 31,
+                      date: '2016-05-01',
+                      name: '王小虎',
+                      address: '上海市普陀区金沙江路 1519 弄'
+                  }, {
+                      id: 32,
+                      date: '2016-05-01',
+                      name: '王小虎',
+                      address: '上海市普陀区金沙江路 1519 弄'
+                  }
+              ])
+          }, 1000)
+      },
       tableSortChange() {
         const imageList = []
         this.$refs.tableSort.tableData.forEach((item, index) => {
           imageList.push(item.img)
         })
         this.imageList = imageList
+      },
+      goodsDelete(){
+          this.$baseMessage('删除成功', 'success')
+      },
+      goodsPutOn(){
+          this.$baseMessage('上架成功', 'success')
+      },
+      goodsOffShelf(){
+          this.$baseMessage('下架成功', 'success')
+      },
+      handleClick(tab, event) {
+          console.log(tab, event);
       },
       beforeCloseDetail() {
         this.isShowExperienceDetail = false
@@ -299,19 +420,22 @@
       handleEdit(row) {},
       async seeDetail(row) {
         //row.id
-        let data = {}
+          console.dir(row);
+        let data = {};
         request({
           url: '/changeLog/getList',
           method: 'post',
           data,
         }).then((res) => {
-          this.activities = res.data
+          this.activities = res.data;
+          this.currSharePeopleName = row.name;
           this.isShowExperienceDetail = true
         })
       },
-      seeAllSharePeople(){
+      seeAllSharePeople(row){
+          console.dir(row);
           this.isShowShares = true;
-          this.sharePeoples = this.ps;
+          this.sharePeoples = this.shareList;
       },
       handleDelete(row) {
         if (row.id) {

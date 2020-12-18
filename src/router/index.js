@@ -54,6 +54,23 @@ export const asyncRoutes = [
     ],
   },
   {
+    path: '/createTopic',
+    component: Layout,
+    name: 'createTopic',
+    children: [
+      {
+        path: 'index',
+        name: 'Index',
+        component: () => import('@/views/createTopic/index'),
+        meta: {
+          title: '创建分享',
+          icon: 'balance-scale',
+          permissions: ['admin'],
+        },
+      },
+    ],
+  },
+  {
     path: '/topicManage',
     component: Layout,
     name: 'TopicManage',
@@ -70,51 +87,27 @@ export const asyncRoutes = [
       },
     ],
   },
-  // {
-  //   path: 'icon',
-  //   component: EmptyLayout,
-  //   redirect: 'noRedirect',
-  //   name: 'Icon',
-  //   meta: {
-  //     title: '图标',
-  //     permissions: ['admin'],
-  //   },
-  //   children: [
-  //     {
-  //       path: 'awesomeIcon',
-  //       name: 'AwesomeIcon',
-  //       component: () => import('@/views/vab/icon/index'),
-  //       meta: { title: '常规图标' },
-  //     },
-  //     {
-  //       path: 'remixIcon',
-  //       name: 'RemixIcon',
-  //       component: () => import('@/views/vab/icon/remixIcon'),
-  //       meta: { title: '小清新图标' },
-  //     },
-  //     {
-  //       path: 'colorfulIcon',
-  //       name: 'ColorfulIcon',
-  //       component: () => import('@/views/vab/icon/colorfulIcon'),
-  //       meta: { title: '多彩图标' },
-  //     },
-  //   ],
-  // },
   {
-    path: '/createTopic',
+    path: '/personnelManagement',
     component: Layout,
-    name: 'createTopic',
+    redirect: 'noRedirect',
+    name: 'PersonnelManagement',
+    meta: { title: '账户配置', icon: 'users-cog', permissions: ['admin'] },
     children: [
       {
-        path: 'index',
-        name: 'Index',
-        component: () => import('@/views/createTopic/index'),
-        meta: {
-          title: '创建分享',
-          icon: 'balance-scale',
-          permissions: ['admin'],
-        },
+        path: 'userManagement',
+        name: 'UserManagement',
+        component: () =>
+          import('@/views/userManage/index'),
+        meta: { title: '用户管理' },
       },
+      {
+        path: 'roleManagement',
+        name: 'RoleManagement',
+        component: () =>
+          import('@/views/roleManage/index'),
+        meta: { title: '角色管理' },
+      }
     ],
   },
   {

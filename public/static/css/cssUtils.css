@@ -296,4 +296,7 @@
 .pr20{
 	padding-right:20px;
 }
+.ovfl{
+  overflow: hidden;
+}
 
