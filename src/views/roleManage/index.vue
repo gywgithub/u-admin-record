@@ -5,28 +5,11 @@
         <el-button icon="el-icon-plus" type="primary" @click="handleEdit">
           添加
         </el-button>
-        <el-button icon="el-icon-delete" type="danger" @click="handleDelete">
-          批量删除
-        </el-button>
       </vab-query-form-left-panel>
       <vab-query-form-right-panel :span="12">
-        <el-form :inline="true" :model="queryForm" @submit.native.prevent>
-          <el-form-item>
-            <el-input
-              v-model.trim="queryForm.permission"
-              placeholder="请输入查询条件"
-              clearable
-            />
-          </el-form-item>
-          <el-form-item>
-            <el-button icon="el-icon-search" type="primary" @click="queryData">
-              查询
-            </el-button>
-          </el-form-item>
-        </el-form>
+
       </vab-query-form-right-panel>
     </vab-query-form>
-
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -70,6 +53,7 @@
         total: 0,
         selectRows: '',
         elementLoadingText: '正在加载...',
+        roleList : {"code":200,"msg":"success","totalCount":2,"data":[{"id":"320000197812282872","permission":"admin","cn":'普通管理员'},{"id":"210000201902031560","permission":"editor"}]},
         queryForm: {
           pageNo: 1,
           pageSize: 10,
@@ -125,10 +109,8 @@
         this.fetchData()
       },
       async fetchData() {
-        this.listLoading = true
-        const { data, totalCount } = await getList(this.queryForm)
-        this.list = data
-        this.total = totalCount
+        this.listLoading = true;
+        this.list = this.roleList;
         setTimeout(() => {
           this.listLoading = false
         }, 300)
