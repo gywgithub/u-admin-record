@@ -12,6 +12,7 @@ const state = {
   tabsBar: theme.tabsBar || tabsBar,
   logo,
   collapse: false,
+  isShowLogo : true,
   layout: theme.layout || layout,
   header: theme.header || header,
   device: 'desktop',
@@ -19,6 +20,7 @@ const state = {
 }
 const getters = {
   collapse: (state) => state.collapse,
+  isShowLogo: (state) => state.isShowLogo,
   device: (state) => state.device,
   header: (state) => state.header,
   layout: (state) => state.layout,
@@ -29,6 +31,10 @@ const getters = {
 const mutations = {
   changeLayout: (state, layout) => {
     if (layout) state.layout = layout
+  },
+  changeIsShowLogo: (state, isShowLogo) => {
+    console.log("99999999999999");
+    state.isShowLogo = !state.isShowLogo
   },
   changeHeader: (state, header) => {
     if (header) state.header = header
@@ -52,6 +58,9 @@ const mutations = {
 const actions = {
   changeLayout({ commit }, layout) {
     commit('changeLayout', layout)
+  },
+  changeIsShowLogo({ commit }, isShowLogo) {
+    commit('changeIsShowLogo', isShowLogo)
   },
   changeHeader({ commit }, header) {
     commit('changeHeader', header)

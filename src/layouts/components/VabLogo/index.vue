@@ -2,12 +2,12 @@
   <div :class="'logo-container-' + layout">
     <router-link to="/">
       <!-- 这里是logo变更的位置 -->
-      <vab-remix-icon v-if="logo" class="logo" :icon-class="logo" />
+      <span class="customLogo"><img src="../../../../public/logo.png" alt=""></span>
       <span
         class="title"
         :class="{ 'hidden-xs-only': layout === 'horizontal' }"
         :title="title"
-      >
+        v-show="isShowLogo">
         {{ title }}
       </span>
     </router-link>
@@ -27,6 +27,7 @@
     computed: {
       ...mapGetters({
         logo: 'settings/logo',
+        isShowLogo: 'settings/isShowLogo',
         layout: 'settings/layout',
       }),
     },
@@ -59,6 +60,20 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     vertical-align: middle;
+  }
+  .customLogo{
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    color: #fff;
+    overflow: hidden;
+    position: absolute;
+    left: 12px;
+    top: 18px;
+    img{
+      width:100%;
+      height: 100%;
+    }
   }
 
   .logo-container-horizontal {

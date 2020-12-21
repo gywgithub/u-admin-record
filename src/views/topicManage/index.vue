@@ -118,10 +118,11 @@
         width="200"
         align="center"
       ></el-table-column>
-      <el-table-column show-overflow-tooltip label="操作" width="180px" align="center">
+      <el-table-column show-overflow-tooltip label="操作" width="220px" align="center">
         <template #default="{ row }">
           <el-button type="text" @click="goodsPutOn(row)">上架</el-button>
           <el-button type="text" @click="goodsOffShelf(row)">下架</el-button>
+          <el-button type="text" @click="addCurrShare(row)">添加分享</el-button>
           <el-button type="text" @click="goodsDelete(row)">删除</el-button>
         </template>
       </el-table-column>
@@ -148,7 +149,7 @@
           <el-timeline-item timestamp="2018/4/12" placement="top">
             <el-card>
               <div slot="header" class="clearfix ovfl">
-                <el-button style="float: right; padding: 3px 0;" type="text">删除</el-button>
+                <el-button style="float: right; padding: 3px 0;" type="text" v-if="currAcc == '张三'">删除</el-button>
               </div>
               <h4>更新 Github 模板</h4>
               <p>王小虎 提交于 2018/4/12 20:46</p>
@@ -157,7 +158,7 @@
           <el-timeline-item timestamp="2018/4/3" placement="top">
             <el-card>
               <div slot="header" class="clearfix ovfl">
-                <el-button style="float: right; padding: 3px 0;" type="text">删除</el-button>
+                <el-button style="float: right; padding: 3px 0;" type="text"  v-if="currAcc == '张三'">删除</el-button>
               </div>
               <h4>更新 Github 模板 </h4>
               <p>王小虎 提交于 2018/4/3 20:46</p>
@@ -166,7 +167,7 @@
           <el-timeline-item timestamp="2018/4/2" placement="top">
             <el-card>
               <div slot="header" class="clearfix ovfl">
-                <el-button style="float: right; padding: 3px 0;" type="text">删除</el-button>
+                <el-button style="float: right; padding: 3px 0;" type="text" v-if="currAcc == '张三'">删除</el-button>
               </div>
               <h4>更新 Github 模板</h4>
               <p>王小虎 提交于 2018/4/2 20:46</p>
@@ -177,23 +178,24 @@
     </el-tabs>
   </el-dialog>
     <el-dialog
-      title="分享人列表"
+      title="分享者列表"
       :visible.sync="isShowShares"
       :before-close="beforeCloseSharesDislog">
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+        <el-checkbox v-model="seeSelf" class="seeSelf" @click="changeShareList">只看自己</el-checkbox>
         <el-table
           :data="shareList"
           style="width: 100%">
           <el-table-column type="expand">
             <template slot-scope="props">
               <el-table
-                :data="shareList"
+                :data="selfShareList"
                 border
                 style="width: 100%">
                 <el-table-column
                   fixed
                   prop="name"
-                  label=""
+                  label="Ta的案例"
                   width="150"
                   align="center">
                 </el-table-column>
@@ -204,7 +206,7 @@
                   align="center">
                 </el-table-column>
                 <el-table-column
-                  label="分享人"
+                  label="分享者"
                   width="120"
                   align="center">
                   <template #default="{ row }">
@@ -243,7 +245,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="分享人"
+            label="分享者"
             prop="author"
             align="center">
           </el-table-column>
@@ -255,11 +257,23 @@
           <el-table-column
             label="操作"
             align="center">
+            <template slot="header" slot-scope="scope">
+              <el-tooltip class="item" effect="dark" content="仅支持编辑自己的分享" placement="top-start">
+                <el-link icon="el-icon-question" :underline="false"></el-link>
+              </el-tooltip>
+              操作
+            </template>
             <template #default="{ row }">
-              <el-button type="text">添加分享</el-button>
+              <el-button type="text" v-if="row.isEdit">添加分享</el-button>
+              <el-button type="text" disabled v-else>添加分享</el-button>
             </template>
           </el-table-column>
         </el-table>
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :total="1000">
+        </el-pagination>
       </el-col>
     </el-dialog>
   </div>
@@ -296,6 +310,7 @@
       return {
         imgShow: true,
         activities: [],
+        currAcc:"",
         activeName: 'first',
         currSharePeopleName: '',
         pickerOptions: {
@@ -350,11 +365,20 @@
         },
         isShowExperienceDetail: false, //是否展示分享详情
         isShowShares: false,
-        shareList:[{id : 1,name:'案例一',shareContent : [{},{},],author :"张三",status : "上架中" , createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县',},
-                    {id : 2,name:'案例二',author :"李四",status : "已下架", createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
-                    {id : 3,name:'案例三',author :"王五",status : "审核中", createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
-                    {id : 4,name:'案例四',author :"赵柳",status : "上架中", createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'}],
+        seeSelf: false,
+        shareListCopy:[{id : 1,name:'案例一',shareContent : [{},{},],author :"张三", isEdit:true,status : "上架中" , createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县',},
+            {id : 2,name:'案例二',author :"李四",status : "已下架", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
+            {id : 3,name:'案例三',author :"王五",status : "审核中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
+            {id : 4,name:'案例四',author :"赵柳",status : "上架中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'}],
+        shareList:[{id : 1,name:'案例一',shareContent : [{},{},],author :"张三", isEdit:true,status : "上架中" , createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县',},
+                    {id : 2,name:'案例二',author :"李四",status : "已下架", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
+                    {id : 3,name:'案例三',author :"王五",status : "审核中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
+                    {id : 4,name:'案例四',author :"赵柳",status : "上架中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'}],
         reverse: true,
+        selfShareList:[{id : 1,name:'案例一',shareContent : [{},{},],author :"张三", isEdit:true,status : "上架中" , createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县',},
+            {id : 2,name:'案例二',author :"李四",status : "已下架", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
+            {id : 3,name:'案例三',author :"王五",status : "审核中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
+            {id : 4,name:'案例四',author :"赵柳",status : "上架中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'}],
         list: [],
         imageList: [],
         listLoading: true,
@@ -380,6 +404,17 @@
     },
     beforeDestroy() {},
     mounted() {},
+    watch:{
+      seeSelf : function(){
+          if(this.seeSelf){
+              console.log("看自己");
+              this.shareList = [{id : 1,name:'案例一',shareContent : [{},{},],author :"张三", isEdit:true,status : "上架中" , createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'}];
+          }else{
+              console.log("quanbu ");
+              this.shareList = this.shareListCopy;
+          }
+      }
+    },
     methods: {
       load(tree, treeNode, resolve) {
           setTimeout(() => {
@@ -405,6 +440,9 @@
         })
         this.imageList = imageList
       },
+      changeShareList(){
+        this.seeSelf = !this.seeSelf;
+      },
       goodsDelete(){
           this.$baseMessage('删除成功', 'success')
       },
@@ -413,6 +451,9 @@
       },
       goodsOffShelf(){
           this.$baseMessage('下架成功', 'success')
+      },
+      addCurrShare(){
+          this.$baseMessage('点击添加分享', 'success')
       },
       handleClick(tab, event) {
           console.log(tab, event);
@@ -430,7 +471,7 @@
       handleEdit(row) {},
       async seeDetail(row) {
         //row.id
-          console.dir(row);
+        this.currAcc = row.author;
         let data = {};
         request({
           url: '/changeLog/getList',
@@ -443,7 +484,6 @@
         })
       },
       seeAllSharePeople(row){
-          console.dir(row);
           this.isShowShares = true;
           this.sharePeoples = this.shareList;
       },
@@ -521,5 +561,8 @@
   }
   ::v-deep .el-button {
     margin-left: 10px;
+  }
+  .seeSelf{
+    margin-bottom: 20px;
   }
 </style>

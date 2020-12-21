@@ -42,9 +42,11 @@
     methods: {
       ...mapActions({
         changeCollapse: 'settings/changeCollapse',
+        changeIsShowLogo: 'settings/changeIsShowLogo',
       }),
       handleCollapse() {
         this.changeCollapse()
+        this.changeIsShowLogo()
       },
       async refreshRoute() {
         this.$baseEventBus.$emit('reload-router-view')

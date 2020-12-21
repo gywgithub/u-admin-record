@@ -34,7 +34,7 @@
       <div
         v-if="device === 'mobile' && collapse === false"
         class="mask"
-        @click="handleFoldSideBar"
+        @click="handleSileBar"
       />
       <vab-side-bar />
       <div class="vab-main" :class="collapse ? 'is-collapse-main' : ''">
@@ -115,9 +115,14 @@
     methods: {
       ...mapActions({
         handleFoldSideBar: 'settings/foldSideBar',
+        changeIsShowLogo: 'settings/changeIsShowLogo',
       }),
       handleIsMobile() {
         return document.body.getBoundingClientRect().width - 1 < 992
+      },
+      handleSileBar(){
+          this.handleFoldSideBar();
+          this.changeIsShowLogo();
       },
       handleResize() {
         if (!document.hidden) {

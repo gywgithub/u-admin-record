@@ -63,8 +63,8 @@ export const asyncRoutes = [
         name: 'Index',
         component: () => import('@/views/createTopic/index'),
         meta: {
-          title: '创建分享',
-          icon: 'balance-scale',
+          title: '发起分享',
+          icon: 'rocket',
           permissions: ['admin'],
         },
       },
