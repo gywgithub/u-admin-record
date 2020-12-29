@@ -3,11 +3,13 @@
     :title="title"
     :visible.sync="dialogFormVisible"
     width="500px"
-    @close="close"
-  >
+    @close="close">
     <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-      <el-form-item label="权限码" prop="permission">
+      <el-form-item label="权限代码" prop="permission">
         <el-input v-model="form.permission" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="权限名称" prop="cname">
+        <el-input v-model="form.cname" autocomplete="off"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -26,10 +28,15 @@
       return {
         form: {
           id: '',
+          cname: '',
+          permission: '',
         },
         rules: {
           permission: [
-            { required: true, trigger: 'blur', message: '请输入权限码' },
+            { required: true, trigger: 'blur', message: '请输入权限代码' },
+          ],
+          cname: [
+            { required: true, trigger: 'blur', message: '请输入权限名称' },
           ],
         },
         title: '',

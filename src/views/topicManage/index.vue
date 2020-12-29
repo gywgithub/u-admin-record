@@ -16,6 +16,7 @@
               <el-option label="全部" value="all"></el-option>
               <el-option label="上架中" value="sj"></el-option>
               <el-option label="审核中" value="sh"></el-option>
+              <el-option label="已驳回" value="sh"></el-option>
               <el-option label="已下架" value="yx"></el-option>
             </el-select>
           </el-form-item>
@@ -118,11 +119,20 @@
         width="200"
         align="center"
       ></el-table-column>
-      <el-table-column show-overflow-tooltip label="操作" width="220px" align="center">
+      <el-table-column
+        show-overflow-tooltip
+        label="操作"
+        width="250px"
+        align="center">
+        <template slot="header" slot-scope="scope">
+          操作
+        </template>
         <template #default="{ row }">
+          <el-button type="text">查看</el-button>
           <el-button type="text" @click="goodsPutOn(row)">上架</el-button>
           <el-button type="text" @click="goodsOffShelf(row)">下架</el-button>
-          <el-button type="text" @click="addCurrShare(row)">添加分享</el-button>
+          <el-button type="text">通过</el-button>
+          <el-button type="text">驳回</el-button>
           <el-button type="text" @click="goodsDelete(row)">删除</el-button>
         </template>
       </el-table-column>
@@ -182,7 +192,16 @@
       :visible.sync="isShowShares"
       :before-close="beforeCloseSharesDislog">
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-        <el-checkbox v-model="seeSelf" class="seeSelf" @click="changeShareList">只看自己</el-checkbox>
+        <el-checkbox v-model="seeSelf" class="seeSelf" @click="changeShareList">只看前三名</el-checkbox>
+        <div style="float:right;">
+          <el-button icon="el-icon-circle-plus-outline" type="text" v-if="true" @click="addCurrShare(row)">
+            添加分享
+            <el-tooltip class="item" effect="dark" content="不能给自己添加分享" placement="top-start">
+              <el-link icon="el-icon-question" :underline="false"></el-link>
+            </el-tooltip>
+          </el-button>
+<!--          <el-button type="text" disabled  @click="addCurrShare(row)">添加分享</el-button>-->
+        </div>
         <el-table
           :data="shareList"
           style="width: 100%">
@@ -215,6 +234,12 @@
                   </template>
                 </el-table-column>
                 <el-table-column
+                  prop="singlecoll"
+                  label="点赞数"
+                  width="80"
+                  align="center">
+                </el-table-column>
+                <el-table-column
                   prop="pro"
                   label="省"
                   width="120"
@@ -234,11 +259,20 @@
                 </el-table-column>
                 <el-table-column
                   fixed="right"
-                  label="操作"
-                  width="100"
+                  label=""
+                  width="180"
                   align="center">
+                  <template slot="header" slot-scope="scope">
+                    操作
+                    <el-tooltip class="item" effect="dark" content="每位用户每月最多申诉3次" placement="top-start">
+                      <el-link icon="el-icon-question" :underline="false"></el-link>
+                    </el-tooltip>
+                  </template>
                   <template slot-scope="scope">
                     <el-button @click="seeDetail(scope.row)" type="text" size="small">查看</el-button>
+                    <el-button type="text" size="small">上架</el-button>
+                    <el-button type="text" size="small">下架</el-button>
+                    <el-button @click="report(scope.row)" type="text" size="small">申诉</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -250,24 +284,39 @@
             align="center">
           </el-table-column>
           <el-table-column
-            label="状态"
-            prop="status"
+            label="用户级别"
+            prop="levUser"
             align="center">
           </el-table-column>
           <el-table-column
-            label="操作"
+            label="总点赞数"
+            prop="coll"
             align="center">
             <template slot="header" slot-scope="scope">
-              <el-tooltip class="item" effect="dark" content="仅支持编辑自己的分享" placement="top-start">
+              总点赞数
+              <el-tooltip class="item" effect="dark" content="分享者所有分享案例点赞数累加之和" placement="top-start">
                 <el-link icon="el-icon-question" :underline="false"></el-link>
               </el-tooltip>
-              操作
-            </template>
-            <template #default="{ row }">
-              <el-button type="text" v-if="row.isEdit">添加分享</el-button>
-              <el-button type="text" disabled v-else>添加分享</el-button>
             </template>
           </el-table-column>
+<!--          <el-table-column-->
+<!--            label="操作"-->
+<!--            align="center">-->
+<!--            <template slot="header" slot-scope="scope">-->
+<!--              操作-->
+<!--            </template>-->
+<!--            <template #default="{ row }">-->
+<!--              <el-button type="text" v-if="!row.isEdit">上架此人</el-button>-->
+<!--              <el-button type="text" disabled v-else>下架此人</el-button>-->
+<!--              <el-switch-->
+<!--                class="mt5"-->
+<!--                v-model="row.isVisible"-->
+<!--                active-color="#409eff"-->
+<!--                inactive-color="#dcdfe6"-->
+<!--                @change="swichChange">-->
+<!--              </el-switch>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
         </el-table>
         <el-pagination
           background
@@ -275,6 +324,27 @@
           :total="1000">
         </el-pagination>
       </el-col>
+    </el-dialog>
+    <el-dialog
+      :title="title"
+      :visible.sync="reportVisible"
+      width="500px"
+      @close="close">
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="申诉原因" prop="reason">
+          <el-input
+            type="textarea"
+            :rows="2"
+            placeholder="请输入内容"
+            autocomplete="off"
+            v-model="form.reason">
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="close">取 消</el-button>
+        <el-button type="primary" @click="save">确 定</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -310,6 +380,22 @@
       return {
         imgShow: true,
         activities: [],
+        title: '申诉',
+        isOpenSwitch: true,
+        form: {
+            id: '',
+            cname: '',
+            reason: '',
+        },
+        rules: {
+            reason: [
+                { required: true, trigger: 'blur', message: '请输入申诉原因' },
+            ],
+            cname: [
+                { required: true, trigger: 'blur', message: '请输入权限名称' },
+            ],
+        },
+        reportVisible: false,
         currAcc:"",
         activeName: 'first',
         currSharePeopleName: '',
@@ -366,19 +452,19 @@
         isShowExperienceDetail: false, //是否展示分享详情
         isShowShares: false,
         seeSelf: false,
-        shareListCopy:[{id : 1,name:'案例一',shareContent : [{},{},],author :"张三", isEdit:true,status : "上架中" , createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县',},
-            {id : 2,name:'案例二',author :"李四",status : "已下架", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
-            {id : 3,name:'案例三',author :"王五",status : "审核中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
-            {id : 4,name:'案例四',author :"赵柳",status : "上架中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'}],
-        shareList:[{id : 1,name:'案例一',shareContent : [{},{},],author :"张三", isEdit:true,status : "上架中" , createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县',},
-                    {id : 2,name:'案例二',author :"李四",status : "已下架", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
-                    {id : 3,name:'案例三',author :"王五",status : "审核中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
-                    {id : 4,name:'案例四',author :"赵柳",status : "上架中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'}],
+        shareListCopy:[{id : 1,name:'案例一',levUser:"青铜",singlecoll:12,coll:214,isVisible:true,shareContent : [{},{},],author :"张三", isEdit:true,status : "上架中" , createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县',},
+            {id : 2,name:'案例二',author :"李四",levUser:"白银",singlecoll:8,coll:334,isVisible:false,status : "已下架", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
+            {id : 3,name:'案例三',author :"王五",levUser:"黄金",singlecoll:4,coll:34,isVisible:false,status : "审核中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
+            {id : 4,name:'案例四',author :"赵柳",levUser:"白金",singlecoll:11,coll:25,isVisible:true,status : "上架中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'}],
+        shareList:[{id : 1,name:'案例一',coll:344,levUser:"白金",singlecoll:3,isVisible:true,shareContent : [{},{},],author :"张三", isEdit:true,status : "上架中" , createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县',},
+                    {id : 2,name:'案例二',coll:234,levUser:"黄金",singlecoll:4,isVisible:false,author :"李四",status : "已下架", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
+                    {id : 3,name:'案例三',coll:134,levUser:"白银",singlecoll:7,isVisible:false,author :"王五",status : "审核中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
+                    {id : 4,name:'案例四',coll:34,levUser:"钻石",singlecoll:9,isVisible:true,author :"赵柳",status : "上架中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'}],
         reverse: true,
-        selfShareList:[{id : 1,name:'案例一',shareContent : [{},{},],author :"张三", isEdit:true,status : "上架中" , createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县',},
-            {id : 2,name:'案例二',author :"李四",status : "已下架", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
-            {id : 3,name:'案例三',author :"王五",status : "审核中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
-            {id : 4,name:'案例四',author :"赵柳",status : "上架中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'}],
+        selfShareList:[{id : 1,name:'案例一',coll:1334,levUser:"白银",singlecoll:12,isVisible:true,shareContent : [{},{},],author :"张三", isEdit:true,status : "上架中" , createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县',},
+            {id : 2,name:'案例二',author :"李四",coll:1334,levUser:"黄金",singlecoll:5,isVisible:false,status : "已下架", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
+            {id : 3,name:'案例三',author :"王五",coll:1334,levUser:"白金",singlecoll:11,isVisible:false,status : "审核中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
+            {id : 4,name:'案例四',author :"赵柳",coll:1334,levUser:"钻石",singlecoll:6,isVisible:true,status : "上架中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'}],
         list: [],
         imageList: [],
         listLoading: true,
@@ -407,8 +493,10 @@
     watch:{
       seeSelf : function(){
           if(this.seeSelf){
-              console.log("看自己");
-              this.shareList = [{id : 1,name:'案例一',shareContent : [{},{},],author :"张三", isEdit:true,status : "上架中" , createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'}];
+              console.log("看前三名");
+              this.shareList = [{id : 1,name:'案例一',coll:344,levUser:"钻石",singlecoll:3,isVisible:true,shareContent : [{},{},],author :"李六", isEdit:true,status : "上架中" , createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县',},
+                  {id : 2,name:'案例二',coll:234,singlecoll:4,levUser:"黄金",isVisible:false,author :"李四",status : "已下架", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
+                  {id : 3,name:'案例三',coll:134,singlecoll:7,levUser:"大师",isVisible:false,author :"王五",status : "审核中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'}];
           }else{
               console.log("quanbu ");
               this.shareList = this.shareListCopy;
@@ -416,6 +504,16 @@
       }
     },
     methods: {
+      report(){
+          this.reportVisible= true;
+      },
+      close(){
+          this.reportVisible= false;
+      },
+      save(){
+          this.$baseMessage('申诉成功', 'success')
+          this.reportVisible= false;
+      },
       load(tree, treeNode, resolve) {
           setTimeout(() => {
               resolve([
