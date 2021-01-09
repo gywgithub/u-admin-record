@@ -1,92 +1,96 @@
 <template>
   <div class="editor-container">
-    <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-      <el-form-item label="标题" prop="title">
-        <el-input v-model="form.title" maxlength="100" placeholder="最多100字"></el-input>
-      </el-form-item>
-<!--      <el-form-item label="标题" prop="selectDate">-->
-<!--        <el-date-picker-->
-<!--          v-model="form.selectDate"-->
-<!--          type="date"-->
-<!--          placeholder="选择日期">-->
-<!--        </el-date-picker>-->
-<!--      </el-form-item>-->
-      <el-form-item label="所属行业" prop="isSelectProfession">
-        <el-cascader
-          ref="mycascader"
-          :props="props"
-          v-model="form.isSelectProfession"
-          @change="getProfession"
-          :clearable="true"></el-cascader>
-      </el-form-item>
-      <el-form-item label="价值共享" prop="radio" class="vab-quill-content">
-<!--        <el-switch-->
-<!--          class="mt5"-->
-<!--          v-model="form.isOpenSwitch"-->
-<!--          active-color="#409eff"-->
-<!--          inactive-color="#dcdfe6"-->
-<!--          @change="swichChange">-->
-<!--        </el-switch>-->
-        <div class="mt8">
-          <el-radio-group v-model="form.radio">
-            <el-radio :label="2">
-              共享模式
-              <el-popover
-                placement="right"
-                title="规则"
-                width="300"
-                trigger="hover">
-                <p>1: 您的打赏中90%(100%-10%)的象币将按一定比例分享给每位分享者
-                  <el-tooltip class="item" effect="dark" content="算法： 每位分享者所得到的象币 = 发起者打赏象币的90% * 分享者个人获得的点赞数 / 所有分享者的总点赞数" placement="top-start">
-                    <el-link icon="el-icon-question" :underline="false"></el-link>
-                  </el-tooltip>
-                </p>
-                <p>2: 您自己将会得到自己打赏自己的10%(既上面的10%)象币，因为发起分享的人，属于分享者的一种特殊情况</p>
-                <p>3: 只要有人打赏你发起的分享，或打赏你名下分享者的经验时，你都将固定获得打赏人总象币的10%; &nbsp;&nbsp;&nbsp; <b style="color:red;">且是永久的 </b></p>
-                <el-button slot="reference" class="tipRule" icon="el-icon-question"></el-button>
-              </el-popover>
-            </el-radio>
-            <el-radio :label="1">
-              打赏模式
-              <el-popover
-                placement="right"
-                title="规则"
-                width="300"
-                trigger="hover">
-                <p>1: 您打赏的象币将按一定比例全部分享给每位分享者
-                  <el-tooltip class="item" effect="dark" content="算法： 每位分享者所得到的象币 = 发起者打赏象币的100% * 分享者个人获得的点赞数 / 所有分享者的总点赞数" placement="top-start">
-                    <el-link icon="el-icon-question" :underline="false"></el-link>
-                  </el-tooltip>
-                </p>
-                <el-button slot="reference" class="tipRule" icon="el-icon-question"></el-button>
-              </el-popover>
-            </el-radio>
-          </el-radio-group>
-          <div class="mt10">
-            打赏额度：
-            <el-input
-              placeholder="1人民币= 10象币"
-              suffix-icon="el-icon-potato-strips"
-              style="width:200px;"
-              type="text"
-              maxLength="6"
-              v-model="form.moneyVal">
-            </el-input>
-          </div>
-        </div>
-      </el-form-item>
-      <el-form-item label="详细描述" prop="content" class="vab-quill-content">
-        <vab-quill
-          v-model="form.content"
-          :min-height="400"
-          :options="options"
-        ></vab-quill>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="handleSee">预览效果</el-button>
-        <el-button type="primary" @click="handleSave">保存</el-button>
-      </el-form-item>
-    </el-form>
+    <el-row>
+      <el-col :span="24">
+        <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+          <el-form-item label="标题" prop="title">
+            <el-input v-model="form.title" maxlength="100" placeholder="最多100字"></el-input>
+          </el-form-item>
+          <!--      <el-form-item label="标题" prop="selectDate">-->
+          <!--        <el-date-picker-->
+          <!--          v-model="form.selectDate"-->
+          <!--          type="date"-->
+          <!--          placeholder="选择日期">-->
+          <!--        </el-date-picker>-->
+          <!--      </el-form-item>-->
+          <el-form-item label="所属行业" prop="isSelectProfession">
+            <el-cascader
+              ref="mycascader"
+              :props="props"
+              v-model="form.isSelectProfession"
+              @change="getProfession"
+              :clearable="true"></el-cascader>
+          </el-form-item>
+          <el-form-item label="价值共享" prop="radio" class="vab-quill-content">
+            <!--        <el-switch-->
+            <!--          class="mt5"-->
+            <!--          v-model="form.isOpenSwitch"-->
+            <!--          active-color="#409eff"-->
+            <!--          inactive-color="#dcdfe6"-->
+            <!--          @change="swichChange">-->
+            <!--        </el-switch>-->
+            <div class="mt8">
+              <el-radio-group v-model="form.radio">
+                <el-radio :label="2">
+                  共享模式
+                  <el-popover
+                    placement="right"
+                    title="规则"
+                    width="300"
+                    trigger="hover">
+                    <p>1: 您的打赏中90%(100%-10%)的象币将按一定比例分享给每位分享者
+                      <el-tooltip class="item" effect="dark" content="算法： 每位分享者所得到的象币 = 发起者打赏象币的90% * 分享者个人获得的点赞数 / 所有分享者的总点赞数" placement="top-start">
+                        <el-link icon="el-icon-question" :underline="false"></el-link>
+                      </el-tooltip>
+                    </p>
+                    <p>2: 您自己将会得到自己打赏自己的10%(既上面的10%)象币，因为发起分享的人，属于分享者的一种特殊情况</p>
+                    <p>3: 只要有人打赏你发起的分享，或打赏你名下分享者的经验时，你都将固定获得打赏人总象币的10%; &nbsp;&nbsp;&nbsp; <b style="color:red;">且是永久的 </b></p>
+                    <el-button slot="reference" class="tipRule" icon="el-icon-question"></el-button>
+                  </el-popover>
+                </el-radio>
+                <el-radio :label="1">
+                  打赏模式
+                  <el-popover
+                    placement="right"
+                    title="规则"
+                    width="300"
+                    trigger="hover">
+                    <p>1: 您打赏的象币将按一定比例全部分享给每位分享者
+                      <el-tooltip class="item" effect="dark" content="算法： 每位分享者所得到的象币 = 发起者打赏象币的100% * 分享者个人获得的点赞数 / 所有分享者的总点赞数" placement="top-start">
+                        <el-link icon="el-icon-question" :underline="false"></el-link>
+                      </el-tooltip>
+                    </p>
+                    <el-button slot="reference" class="tipRule" icon="el-icon-question"></el-button>
+                  </el-popover>
+                </el-radio>
+              </el-radio-group>
+              <div class="mt10">
+                打赏额度：
+                <el-input
+                  placeholder="1人民币= 10象币"
+                  suffix-icon="el-icon-potato-strips"
+                  style="width:200px;"
+                  type="text"
+                  maxLength="6"
+                  v-model="form.moneyVal">
+                </el-input>
+              </div>
+            </div>
+          </el-form-item>
+          <el-form-item label="详细描述" prop="content" class="vab-quill-content">
+            <vab-quill
+              v-model="form.content"
+              :min-height="400"
+              :options="options"
+            ></vab-quill>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="handleSee">预览效果</el-button>
+            <el-button type="primary" @click="handleSave">保存</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
     <el-dialog title="预览" :visible.sync="dialogTableVisible">
       <div style="min-height: 60vh">
         <h3 class="news-title">{{ form.title }}</h3>
@@ -104,24 +108,28 @@
         components: { vabQuill },
         data() {
             return {
+                topicTimeLine : [{id : 1, title : '子标题' , content : ' 为一个全局变量的仓库。但是和单纯的全局变量又有一些区别，主要体现在当 store 中的状态发生改变时，相应的 vue',timeValue:'2020-08-23 10:02:10'},
+                    {id : 2, title : '子标题' , content : '都应当存放在 store.js 里面，Vue 组件可以从 store.js 里面获取状态，可以把 store 通俗的理解',timeValue:'2020-08-23 08:25:30'},
+                    {id : 3, title : '子标题' , content : '中的状态发生改变时，相应的 vue 组件也会得到高效更新。',timeValue:'2020-08-23 06:00:12'}],
                 options: {
                     theme: 'snow',
                     bounds: document.body,
                     debug: 'warn',
                     modules: {
                         toolbar: [
-                            ['bold', 'italic', 'underline', 'strike'],
+                            ['bold', 'underline', 'strike'],
                             [{ header: [1, 2, 3, 4, 5, 6, false] }],
                             [{ size: ['small', false, 'large', 'huge'] }],
-                            [{ color: [] }, { background: [] }],
+                            // [{ color: [] }, { background: [] }],
+                            [{ color: [] }],
                             ['blockquote', 'code-block'],
                             [{ list: 'ordered' }, { list: 'bullet' }],
                             [{ script: 'sub' }, { script: 'super' }],
-                            [{ indent: '-1' }, { indent: '+1' }],
+                            // [{ indent: '-1' }, { indent: '+1' }],
                             [{ align: [] }],
-                            [{ direction: 'rtl' }],
+                            // [{ direction: 'rtl' }],
                             [{ font: [] }],
-                            ['clean'],
+                            // ['clean'],
                             ['link'],
                         ],
                     },
@@ -144,7 +152,7 @@
                                 }));
                             // 通过调用resolve将子节点数据返回，通知组件数据加载完成
                             resolve(nodes);
-                        }, 1000);
+                        }, 300);
                     }
                 },
                 form: {
@@ -197,6 +205,9 @@
                     }
                 })
             },
+            deleEditedContent(){
+
+            },
             swichChange(){
                 this.isOpenSwitch = this.form.isOpenSwitch;
             },
@@ -213,9 +224,13 @@
                         if (errorMsg) {
                             this.borderColor = '#F56C6C'
                         }
-                    })
+                    });
                     if (valid) {
-                        this.$baseMessage('submit!', 'success')
+                        this.$baseMessage('保存成功', 'success');
+                        let that = this;
+                        setTimeout(function(){
+                            that.$router.push('/topicManage/index')
+                        },1500)
                     } else {
                         return false
                     }
@@ -230,6 +245,15 @@
       font-size:14px;
       border:none;
       padding:0px;
+    }
+    .mainTitle{
+      text-align: center;
+      width:100%;
+      height:30px;
+      min-width: 200px;
+    }
+    .timeLineDele{
+      font-weight: bold;
     }
     .tipRule:hover{
       color:#606266;

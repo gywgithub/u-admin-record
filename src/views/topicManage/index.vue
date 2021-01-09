@@ -90,6 +90,13 @@
         align="center"
       ></el-table-column>
       <el-table-column
+        label="详情描述"
+        align="center">
+        <template #default="{ row }" >
+           <p class="contentTxt" title="长期以来，我们甚至无法在美国地图上找到它，，戒备森严 美国51区里到底有没有外星人？">长期以来，我们甚至无法在美国地图上找到它，，戒备森严 美国51区里到底有没有外星人？</p>
+        </template>
+      </el-table-column>
+      <el-table-column
         show-overflow-tooltip
         label="发起者"
         prop="author"
@@ -122,13 +129,14 @@
       <el-table-column
         show-overflow-tooltip
         label="操作"
-        width="250px"
+        width="280px"
         align="center">
         <template slot="header" slot-scope="scope">
           操作
         </template>
         <template #default="{ row }">
-          <el-button type="text">查看</el-button>
+          <el-button type="text" @click="seeToppic(row)">查看</el-button>
+          <el-button type="text" @click="editTopic(row)">编辑</el-button>
           <el-button type="text" @click="goodsPutOn(row)">上架</el-button>
           <el-button type="text" @click="goodsOffShelf(row)">下架</el-button>
           <el-button type="text">通过</el-button>
@@ -346,6 +354,20 @@
         <el-button type="primary" @click="save">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog
+        :visible.sync="seeTopic"
+        width="30%"
+        class="setTopCss"
+        :before-close="handleClose">
+        <span slot="title" class="dialog-title">
+            <span class="topiceTitle">美国51区是否有外星人？</span>
+        </span>
+        <p><span class="boldFix">发起人：</span>张盼伟</p>
+        <p><span class="boldFix">发起时间：</span>2020-05-35 13:25:45</p>
+        <p><span class="boldFix">状态：</span>上架</p>
+        <p><span class="boldFix">详细描述：</span>51区位于美国内华达州南部的一个区域，戒备森严使它在民间获得了“51禁区”的称号。长期以来，我们甚至无法在美国地图上找到它，美国51区里到底有没有外星人？</p>
+        <span slot="footer" class="dialog-footer"></span>
+    </el-dialog>
   </div>
 </template>
 
@@ -381,6 +403,7 @@
         imgShow: true,
         activities: [],
         title: '申诉',
+        seeTopic: false,
         isOpenSwitch: true,
         form: {
             id: '',
@@ -507,6 +530,9 @@
       report(){
           this.reportVisible= true;
       },
+      handleClose(){
+          this.seeTopic = false;
+      },
       close(){
           this.reportVisible= false;
       },
@@ -544,6 +570,12 @@
       goodsDelete(){
           this.$baseMessage('删除成功', 'success')
       },
+      seeToppic(e){
+          this.seeTopic = true;
+      },
+      editTopic(e){
+          this.$router.push('/createTopic/index')
+      },
       goodsPutOn(){
           this.$baseMessage('上架成功', 'success')
       },
@@ -551,7 +583,7 @@
           this.$baseMessage('下架成功', 'success')
       },
       addCurrShare(){
-          this.$baseMessage('点击添加分享', 'success')
+          this.$router.push('/addToShare/index')
       },
       handleClick(tab, event) {
           console.log(tab, event);
@@ -659,6 +691,30 @@
   }
   ::v-deep .el-button {
     margin-left: 10px;
+  }
+  ::v-deep .setTopCss .el-dialog__body{
+    padding-top:10px;
+    padding-bottom:10px;
+  }
+  .contentTxt{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display:-webkit-box;
+      -webkit-box-orient:vertical;
+      -webkit-line-clamp:2;
+  }
+  .setTopCss{
+    p{
+      padding:0px;
+      margin:0px;
+    }
+    .topiceTitle{
+      font-weight: bold;
+    }
+    .boldFix{
+       font-weight: bold;
+      line-height: 30px;
+    }
   }
   .seeSelf{
     margin-bottom: 20px;

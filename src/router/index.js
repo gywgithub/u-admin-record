@@ -71,6 +71,24 @@ export const asyncRoutes = [
     ],
   },
   {
+    path: '/addToShare',
+    component: Layout,
+    name: 'addToShare',
+    hidden: true,
+    children: [
+      {
+        path: 'index',
+        name: 'Index',
+        component: () => import('@/views/addToShare/index'),
+        meta: {
+          title: '添加分享',
+          icon: 'rocket',
+          permissions: ['admin'],
+        },
+      },
+    ],
+  },
+  {
     path: '/topicManage',
     component: Layout,
     name: 'TopicManage',
