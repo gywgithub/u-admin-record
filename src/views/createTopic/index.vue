@@ -38,13 +38,14 @@
                     title="规则"
                     width="300"
                     trigger="hover">
-                    <p>1: 您的打赏中90%(100%-10%)的象币将按一定比例分享给每位分享者
+                    <p>1: 您的打赏中90%(100%-10%)的象币将按一定比例90天内分享给每位分享者
                       <el-tooltip class="item" effect="dark" content="算法： 每位分享者所得到的象币 = 发起者打赏象币的90% * 分享者个人获得的点赞数 / 所有分享者的总点赞数" placement="top-start">
                         <el-link icon="el-icon-question" :underline="false"></el-link>
                       </el-tooltip>
                     </p>
                     <p>2: 您自己将会得到自己打赏自己的10%(既上面的10%)象币，因为发起分享的人，属于分享者的一种特殊情况</p>
                     <p>3: 只要有人打赏你发起的分享，或打赏你名下分享者的经验时，你都将固定获得打赏人总象币的10%; &nbsp;&nbsp;&nbsp; <b style="color:red;">且是永久的 </b></p>
+                    <p>4: 上架中的经验分享将在180天后，自动转为付费模式（0.1元/次）</p>
                     <el-button slot="reference" class="tipRule" icon="el-icon-question"></el-button>
                   </el-popover>
                 </el-radio>
@@ -55,11 +56,12 @@
                     title="规则"
                     width="300"
                     trigger="hover">
-                    <p>1: 您打赏的象币将按一定比例全部分享给每位分享者
+                    <p>1: 您打赏的象币将按一定比例90天内全部分享给每位分享者
                       <el-tooltip class="item" effect="dark" content="算法： 每位分享者所得到的象币 = 发起者打赏象币的100% * 分享者个人获得的点赞数 / 所有分享者的总点赞数" placement="top-start">
                         <el-link icon="el-icon-question" :underline="false"></el-link>
                       </el-tooltip>
                     </p>
+                    <p>2:上架中的经验分享将在180天后，自动转为付费模式（0.1元/次）</p>
                     <el-button slot="reference" class="tipRule" icon="el-icon-question"></el-button>
                   </el-popover>
                 </el-radio>
