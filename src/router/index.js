@@ -9,7 +9,7 @@ import Layout from '@/layouts'
 import EmptyLayout from '@/layouts/EmptyLayout'
 import { publicPath, routerMode } from '@/config'
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 export const constantRoutes = [
   {
     path: '/login',
@@ -32,8 +32,8 @@ export const constantRoutes = [
     name: '404',
     component: () => import('@/views/404'),
     hidden: true,
-  },
-]
+  }
+];
 
 export const asyncRoutes = [
   {
@@ -49,6 +49,22 @@ export const asyncRoutes = [
           title: '首页',
           icon: 'home',
           affix: true,
+        },
+      },
+    ],
+  },
+  {
+    path: '/test',
+    component: Layout,
+    redirect: 'test',
+    children: [
+      {
+        path: 'test',
+        name: 'Test',
+        component: () => import('@/views/test/index'),
+        meta: {
+          title: '测试',
+          icon: 'angry'
         },
       },
     ],
@@ -117,14 +133,14 @@ export const asyncRoutes = [
         name: 'UserManagement',
         component: () =>
           import('@/views/userManage/index'),
-        meta: { title: '用户管理' },
+        meta: { title: '用户管理', icon: 'user-friends' },
       },
       {
         path: 'roleManagement',
         name: 'RoleManagement',
         component: () =>
           import('@/views/roleManage/index'),
-        meta: { title: '角色管理' },
+        meta: { title: '角色管理', icon: 'user-secret' },
       }
     ],
   },
