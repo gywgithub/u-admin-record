@@ -1,7 +1,7 @@
 <template>
   <div class="index-container">
     <el-row :gutter="20">
-      <el-col :xs="24" :sm="24" :md="12" :lg="24" :xl="24">
+      <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
         <el-card shadow="never">
           <div slot="header">
             <span>访问量</span>
@@ -9,60 +9,37 @@
           <vab-chart
             :autoresize="true"
             theme="vab-echarts-theme"
-            :options="fwl"/>
+            :options="ssq"/>
         </el-card>
       </el-col>
       <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
         <el-card shadow="never">
           <div slot="header">
-            <span>新增用户</span>
+            <span>访问量2</span>
           </div>
           <vab-chart
             :autoresize="true"
             theme="vab-echarts-theme"
-            :options="sqs"/>
-          <div class="bottom">
-            <span>
-              总用户:
-              <vab-count
-                :start-val="config2.startVal"
-                :end-val="config2.endVal"
-                :duration="config2.duration"
-                :separator="config2.separator"
-                :prefix="config2.prefix"
-                :suffix="config2.suffix"
-                :decimals="config2.decimals"
-              />
-            </span>
-          </div>
+            :options="dlt"/>
         </el-card>
       </el-col>
-      <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
         <el-card shadow="never">
-          <div slot="header">
-            <span>用户常搜关键词</span>
+          <div slot="header" class="addHanndle">
+            <span>访问量3</span>
+            <el-select v-model="value" placeholder="请选择" style="float:right;">
+              <el-option
+                v-for="item in timeList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </div>
           <vab-chart
             :autoresize="true"
             theme="vab-echarts-theme"
-            :options="cy"
-            @zr:click="handleZrClick"
-            @click="handleClick"
-          />
-          <div class="bottom">
-            <span>
-              关键词总数量:
-              <vab-count
-                :start-val="config3.startVal"
-                :end-val="config3.endVal"
-                :duration="config3.duration"
-                :separator="config3.separator"
-                :prefix="config3.prefix"
-                :suffix="config3.suffix"
-                :decimals="config3.decimals"
-              />
-            </span>
-          </div>
+            :options="single"/>
         </el-card>
       </el-col>
     </el-row>
@@ -71,9 +48,6 @@
 
 <script>
     import VabChart from '@/plugins/echarts'
-    import { dependencies, devDependencies } from '../../../package.json'
-    import { getList } from '@/api/changeLog'
-    import { getNoticeList } from '@/api/notice'
     export default {
         name: 'Test',
         components: {
@@ -81,40 +55,40 @@
         },
         data() {
             return {
-                updateTime: process.env.VUE_APP_UPDATE_TIME,
-                nodeEnv: process.env.NODE_ENV,
-                dependencies: dependencies,
-                devDependencies: devDependencies,
-                config1: {
-                    startVal: 0,
-                    endVal: this.$baseLodash.random(20000, 60000),
-                    decimals: 0,
-                    prefix: '',
-                    suffix: '',
-                    separator: ',',
-                    duration: 8000,
-                },
-                config2: {
-                    startVal: 0,
-                    endVal: this.$baseLodash.random(1000, 20000),
-                    decimals: 0,
-                    prefix: '',
-                    suffix: '',
-                    separator: ',',
-                    duration: 8000,
-                },
-                config3: {
-                    startVal: 0,
-                    endVal: this.$baseLodash.random(1000, 20000),
-                    decimals: 0,
-                    prefix: '',
-                    suffix: '',
-                    separator: ',',
-                    duration: 8000,
-                },
-
+                value:1,
+                //ssq
+                ssqRedData:[68, 53, 49, 50, 43, 52, 63, 55, 48, 52, 62, 64, 44, 54, 43, 62],
+                ssqBlueData:[182, 166, 140, 143, 152, 192, 145, 149, 178, 147, 160, 155, 149, 179, 145, 160, 155, 166, 175, 166, 137, 185, 152, 142, 157, 164, 164, 140, 153, 129, 147, 166, 132],
+                //dlt
+                dltRedData:[330, 360, 355, 358, 361, 334, 371, 329, 346, 389, 357, 370],
+                dltBlueData:[321, 284, 313, 268, 307, 295, 310, 268, 280, 289, 303, 279, 286, 291, 267, 242, 279, 290, 309, 294, 278, 334, 307, 281, 291, 283, 294, 286, 380, 356, 325, 365, 382, 341, 372],
+                //single
+                singleRedData:[330, 360, 355, 358, 361, 334, 371, 329, 346, 389, 357, 370],
+                singleBlueData:[321, 284, 313, 268, 307, 295, 310, 268, 280, 289, 303, 279, 286, 291, 267, 242, 279, 290, 309, 294, 278, 334, 307, 281, 291, 283, 294, 286, 380, 356, 325, 365, 382, 341, 372],
+                timeList: [{
+                    value: 1,
+                    label: '7天'
+                }, {
+                    value: 2,
+                    label: '15天'
+                }, {
+                    value: 3,
+                    label: '30天'
+                }, {
+                    value: 4,
+                    label: '90天'
+                }, {
+                    value: 5,
+                    label: '180天'
+                }, {
+                    value: 6,
+                    label: '365天'
+                }, {
+                    value: 7,
+                    label: '无限'
+                }],
                 //访问量
-                fwl: {
+                ssq: {
                     title: {
                         text: '折线图堆叠'
                     },
@@ -122,7 +96,7 @@
                         trigger: 'axis'
                     },
                     legend: {
-                        data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
+                        data: ['邮件营销', '联盟广告']
                     },
                     grid: {
                         left: '3%',
@@ -137,379 +111,190 @@
                     },
                     xAxis: {
                         type: 'category',
-                        boundaryGap: false,
-                        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35']
+                        splitLine:{show:false}, //隐藏y轴网格线
+                        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33']
                     },
                     yAxis: {
-                        type: 'value'
+                        type: 'value',
+                        interval:50,//步长
+                        min:0, //起始
+                        max:250 //终止
                     },
                     series: [
                         {
                             name: '邮件营销',
                             type: 'line',
-                            stack: '总量',
-                            data: [120, 132, 101, 134, 90, 230, 210]
+                            smooth: true, //是否开启平滑曲线
+                            itemStyle : {
+                                normal : {
+                                    color:'#28B463',
+                                    lineStyle:{
+                                        color:'#28B463'
+                                    }
+                                }
+                            },
+                            data: []
                         },
                         {
                             name: '联盟广告',
                             type: 'line',
-                            stack: '总量',
-                            data: [220, 182, 191, 234, 290, 330, 310]
-                        },
-                        {
-                            name: '视频广告',
-                            type: 'line',
-                            stack: '总量',
-                            data: [150, 232, 201, 154, 190, 330, 410]
-                        },
-                        {
-                            name: '直接访问',
-                            type: 'line',
-                            stack: '总量',
-                            data: [320, 332, 301, 334, 390, 330, 320]
-                        },
-                        {
-                            name: '搜索引擎',
-                            type: 'line',
-                            stack: '总量',
-                            data: [820, 932, 901, 934, 1290, 1330, 1320]
+                            smooth: true, //是否开启平滑曲线
+                            itemStyle : {
+                                normal : {
+                                    color:'#FF3339', //折线节点的颜色(红色)
+                                    lineStyle:{
+                                        color:'#FF3339' //折线的颜色
+                                    }
+                                }
+                            },
+                            data: []
                         }
                     ]
                 },
-                //新增用户
-                sqs: {
-                    grid: {
-                        top: '4%',
-                        left: '2%',
-                        right: '4%',
-                        bottom: '0%',
-                        containLabel: true,
-                    },
-                    xAxis: [
-                        {
-                            type: 'category',
-                            data: [
-                                '2020-8-10',
-                                '2020-8-11',
-                                '2020-8-12',
-                                '2020-8-13',
-                                '2020-8-14',
-                            ],
-                            axisTick: {
-                                alignWithLabel: true,
-                            },
-                        },
-                    ],
-                    yAxis: [
-                        {
-                            type: 'value',
-                        },
-                    ],
-                    series: [
-                        {
-                            name: '新增用户',
-                            type: 'bar',
-                            barWidth: '60%',
-                            data: [10, 52, 20, 33, 39],
-                        },
-                    ],
-                },
-                //词云
-                cy: {
-                    grid: {
-                        top: '4%',
-                        left: '2%',
-                        right: '4%',
-                        bottom: '0%',
-                    },
-                    series: [
-                        {
-                            type: 'wordCloud',
-                            gridSize: 15,
-                            sizeRange: [12, 40],
-                            rotationRange: [0, 0],
-                            width: '100%',
-                            height: '100%',
-                            textStyle: {
-                                normal: {
-                                    color() {
-                                        const arr = [
-                                            '#1890FF',
-                                            '#36CBCB',
-                                            '#4ECB73',
-                                            '#FBD437',
-                                            '#F2637B',
-                                            '#975FE5',
-                                        ]
-                                        let index = Math.floor(Math.random() * arr.length)
-                                        return arr[index]
-                                    },
-                                },
-                            },
-                            data: [
-                                {
-                                    name: '移居',
-                                    value: 15000,
-                                },
-                                {
-                                    name: '购物',
-                                    value: 10081,
-                                },
-                                {
-                                    name: '养老',
-                                    value: 9386,
-                                },
-
-                                {
-                                    name: '买房',
-                                    value: 6500,
-                                },
-                                {
-                                    name: '买车',
-                                    value: 6000,
-                                },
-                                {
-                                    name: '养娃',
-                                    value: 4500,
-                                },
-                                {
-                                    name: '定居',
-                                    value: 3800,
-                                },
-                                {
-                                    name: 'never',
-                                    value: 3000,
-                                },
-                                {
-                                    name: '学习',
-                                    value: 2500,
-                                },
-                                {
-                                    name: '吃饭',
-                                    value: 2300,
-                                },
-                                {
-                                    name: '生子',
-                                    value: 2000,
-                                },
-                                {
-                                    name: '娶妻',
-                                    value: 1900,
-                                },
-                                {
-                                    name: '旅游',
-                                    value: 1800,
-                                },
-                                {
-                                    name: '睡觉',
-                                    value: 1700,
-                                },
-                            ],
-                        },
-                    ],
-                },
-                //中国地图
-                zgdt: {
+                dlt: {
                     title: {
-                        text: '2099年全国GDP分布',
-                        subtext: '数据来自vue-admin-beautiful杜撰',
+                        text: '折线图堆叠'
                     },
                     tooltip: {
-                        trigger: 'item',
+                        trigger: 'axis'
                     },
-                    dataRange: {
-                        orient: 'horizontal',
-                        min: 0,
-                        max: 55000,
-                        text: ['高', '低'],
-                        splitNumber: 0,
+                    legend: {
+                        data: ['邮件营销', '联盟广告']
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
+                        }
+                    },
+                    xAxis: {
+                        type: 'category',
+                        splitLine:{show:false}, //隐藏y轴网格线
+                        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35']
+                    },
+                    yAxis: {
+                        type: 'value',
+                        interval:50,//步长
+                        min:200, //起始
+                        max:450 //终止
                     },
                     series: [
                         {
-                            name: '2099年全国GDP分布',
-                            type: 'map',
-                            roam: false,
-                            zoom: 1.25,
-                            mapType: 'china',
-                            mapLocation: {
-                                x: 'center',
+                            name: '邮件营销',
+                            type: 'line',
+                            smooth: true, //是否开启平滑曲线
+                            itemStyle : {
+                                normal : {
+                                    color:'#28B463',
+                                    lineStyle:{
+                                        color:'#28B463'
+                                    }
+                                }
                             },
-                            selectedMode: 'multiple',
-                            itemStyle: {
-                                normal: {
-                                    label: {
-                                        show: false,
-                                    },
-                                },
-                                emphasis: {
-                                    label: {
-                                        show: true,
-                                    },
-                                },
-                            },
-                            data: [
-                                { name: '西藏', value: 605.83 },
-                                { name: '青海', value: 1670.44 },
-                                { name: '宁夏', value: 2102.21 },
-                                { name: '海南', value: 2522.66 },
-                                { name: '甘肃', value: 5020.37 },
-                                { name: '贵州', value: 5701.84 },
-                                { name: '新疆', value: 6610.05 },
-                                { name: '云南', value: 8893.12 },
-                                { name: '重庆', value: 10011.37 },
-                                { name: '吉林', value: 10568.83 },
-                                { name: '山西', value: 11237.55 },
-                                { name: '天津', value: 11307.28 },
-                                { name: '江西', value: 11702.82 },
-                                { name: '广西', value: 11720.87 },
-                                { name: '陕西', value: 12512.3 },
-                                { name: '黑龙江', value: 12582 },
-                                { name: '内蒙古', value: 14359.88 },
-                                { name: '安徽', value: 15300.65 },
-                                { name: '北京', value: 16251.93 },
-                                { name: '福建', value: 17560.18 },
-                                { name: '上海', value: 19195.69 },
-                                { name: '湖北', value: 19632.26 },
-                                { name: '湖南', value: 19669.56 },
-                                { name: '四川', value: 21026.68 },
-                                { name: '辽宁', value: 22226.7 },
-                                { name: '河北', value: 24515.76 },
-                                { name: '河南', value: 26931.03 },
-                                { name: '浙江', value: 32318.85 },
-                                { name: '山东', value: 45361.85, selected: true },
-                                { name: '江苏', value: 49110.27 },
-                                { name: '广东', value: 53210.28 },
-                            ],
+                            data: []
                         },
-                    ],
+                        {
+                            name: '联盟广告',
+                            type: 'line',
+                            smooth: true, //是否开启平滑曲线
+                            itemStyle : {
+                                normal : {
+                                    color:'#FF3339', //折线节点的颜色(红色)
+                                    lineStyle:{
+                                        color:'#FF3339' //折线的颜色
+                                    }
+                                }
+                            },
+                            data: []
+                        }
+                    ]
                 },
-
-                //更新日志
-                reverse: true,
-                activities: [],
-                noticeList: [],
-                //其他信息
-                userAgent: navigator.userAgent,
-                //卡片图标
-                iconList: [
-                    {
-                        icon: 'video',
-                        title: '视频播放器',
-                        link: '/vab/player',
-                        color: '#ffc069',
+                single: {
+                    title: {
+                        text: '折线图堆叠'
                     },
-                    {
-                        icon: 'table',
-                        title: '表格',
-                        link: '/vab/table/comprehensiveTable',
-                        color: '#5cdbd3',
+                    tooltip: {
+                        trigger: 'axis'
                     },
-                    {
-                        icon: 'laptop-code',
-                        title: '源码',
-                        link: 'https://github.com/chuzhixin/vue-admin-beautiful',
-                        color: '#b37feb',
+                    legend: {
+                        data: ['邮件营销', '联盟广告']
                     },
-                    {
-                        icon: 'book',
-                        title: '书籍',
-                        link: '',
-                        color: '#69c0ff',
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
                     },
-                    {
-                        icon: 'bullhorn',
-                        title: '公告',
-                        link: '',
-                        color: '#ff85c0',
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
+                        }
                     },
-                    {
-                        icon: 'gift',
-                        title: '礼物',
-                        link: '',
-                        color: '#ffd666',
+                    xAxis: {
+                        type: 'category',
+                        splitLine:{show:false}, //隐藏y轴网格线
+                        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35']
                     },
-
-                    {
-                        icon: 'balance-scale-left',
-                        title: '公平的世界',
-                        link: '',
-                        color: '#ff9c6e',
+                    yAxis: {
+                        type: 'value',
+                        interval:50,//步长
+                        min:200, //起始
+                        max:450 //终止
                     },
-                    {
-                        icon: 'coffee',
-                        title: '休息一下',
-                        link: '',
-                        color: '#95de64',
-                    },
-                ],
+                    series: [
+                        {
+                            name: '邮件营销',
+                            type: 'line',
+                            smooth: true, //是否开启平滑曲线
+                            itemStyle : {
+                                normal : {
+                                    color:'#28B463',
+                                    lineStyle:{
+                                        color:'#28B463'
+                                    }
+                                }
+                            },
+                            data: []
+                        },
+                        {
+                            name: '联盟广告',
+                            type: 'line',
+                            smooth: true, //是否开启平滑曲线
+                            itemStyle : {
+                                normal : {
+                                    color:'#FF3339', //折线节点的颜色(红色)
+                                    lineStyle:{
+                                        color:'#FF3339' //折线的颜色
+                                    }
+                                }
+                            },
+                            data: []
+                        }
+                    ]
+                },
             }
         },
         created() {
-            this.fetchData()
+
         },
         mounted() {
-            let base = +new Date(2020, 1, 1)
-            let oneDay = 24 * 3600 * 1000
-            let date = []
-
-            let data = [Math.random() * 1500]
-            let now = new Date(base)
-
-            const addData = (shift) => {
-                now = [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/')
-                date.push(now)
-                data.push(this.$baseLodash.random(20000, 60000))
-
-                if (shift) {
-                    date.shift()
-                    data.shift()
-                }
-
-                now = new Date(+new Date(now) + oneDay)
-            }
-
-            for (let i = 1; i < 6; i++) {
-                addData()
-            }
-            addData(true);
-            this.fwl.xAxis[0].data = date
-            this.fwl.series[0].data = data
+            //ssq
+            this.ssq.series[0].data = this.ssqBlueData;
+            this.ssq.series[1].data = this.ssqRedData;
+            //dlt
+            this.dlt.series[0].data = this.dltBlueData;
+            this.dlt.series[1].data = this.dltRedData;
+            //single
+            this.single.series[0].data = this.singleBlueData;
+            this.single.series[1].data = this.singleRedData;
         },
         methods: {
-            toTest(){
-                this.$router.push({ path: '/test' })
-            },
-            handleClick(e) {
-                this.$baseMessage(`点击了${e.name},这里可以写跳转`)
-            },
-            handleZrClick(e) {},
-            handleChangeTheme() {
-                this.$baseEventBus.$emit('theme')
-            },
-            async fetchData() {
-                const { data } = await getList()
-                data.map((item, index) => {
-                    if (index === data.length - 1) {
-                        item.color = '#0bbd87'
-                    }
-                })
-                this.activities = data
-                const res = await getNoticeList()
-                this.noticeList = res.data
-                /* getRepos({
-                token: "1061286824f978ea3cf98b7b8ea26fe27ba7cea1",
-              }).then((res) => {
-                const per_page = Math.ceil(res.data.stargazers_count / 100);
-                alert(per_page);
-                getStargazers({
-                  token: "1061286824f978ea3cf98b7b8ea26fe27ba7cea1",
-                  page: 1,
-                  per_page: res.per_page,
-                }).then((res) => {
-                  alert(JSON.stringify(res));
-                });
-              }); */
-            },
+
         },
     }
 </script>
@@ -518,7 +303,11 @@
     padding: 0 !important;
     margin: 0 !important;
     background: #f5f7f8 !important;
-
+    .addHanndle{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
     ::v-deep {
       .el-alert {
         padding: $base-padding;
@@ -543,7 +332,6 @@
 
     .card {
       min-height: 400px;
-
       ::v-deep {
         .el-card__body {
           .echarts {
