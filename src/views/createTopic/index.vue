@@ -4,7 +4,11 @@
       <el-col :span="24">
         <el-form ref="form" :model="form" :rules="rules" label-width="100px">
           <el-form-item label="标题" prop="title">
-            <el-input v-model="form.title" maxlength="100" placeholder="最多100字"></el-input>
+            <el-input
+              v-model="form.title"
+              maxlength="100"
+              placeholder="最多100字"
+            ></el-input>
           </el-form-item>
           <!--      <el-form-item label="标题" prop="selectDate">-->
           <!--        <el-date-picker-->
@@ -16,10 +20,11 @@
           <el-form-item label="所属行业" prop="isSelectProfession">
             <el-cascader
               ref="mycascader"
-              :props="props"
               v-model="form.isSelectProfession"
+              :props="props"
+              :clearable="true"
               @change="getProfession"
-              :clearable="true"></el-cascader>
+            ></el-cascader>
           </el-form-item>
           <el-form-item label="价值共享" prop="radio" class="vab-quill-content">
             <!--        <el-switch-->
@@ -37,16 +42,42 @@
                     placement="right"
                     title="规则"
                     width="300"
-                    trigger="hover">
-                    <p>1: 您的打赏中90%(100%-10%)的象币将按一定比例90天内分享给每位分享者
-                      <el-tooltip class="item" effect="dark" content="算法： 每位分享者所得到的象币 = 发起者打赏象币的90% * 分享者个人获得的点赞数 / 所有分享者的总点赞数" placement="top-start">
-                        <el-link icon="el-icon-question" :underline="false"></el-link>
+                    trigger="hover"
+                  >
+                    <p>
+                      1:
+                      您的打赏中90%(100%-10%)的象币将按一定比例90天内分享给每位分享者
+                      <el-tooltip
+                        class="item"
+                        effect="dark"
+                        content="算法： 每位分享者所得到的象币 = 发起者打赏象币的90% * 分享者个人获得的点赞数 / 所有分享者的总点赞数"
+                        placement="top-start"
+                      >
+                        <el-link
+                          icon="el-icon-question"
+                          :underline="false"
+                        ></el-link>
                       </el-tooltip>
                     </p>
-                    <p>2: 您自己将会得到自己打赏自己的10%(既上面的10%)象币，因为发起分享的人，属于分享者的一种特殊情况</p>
-                    <p>3: 只要有人打赏你发起的分享，或打赏你名下分享者的经验时，你都将固定获得打赏人总象币的10%; &nbsp;&nbsp;&nbsp; <b style="color:red;">且是永久的 </b></p>
-                    <p>4: 上架中的经验分享将在180天后，自动转为付费模式（0.1元/次）</p>
-                    <el-button slot="reference" class="tipRule" icon="el-icon-question"></el-button>
+                    <p>
+                      2:
+                      您自己将会得到自己打赏自己的10%(既上面的10%)象币，因为发起分享的人，属于分享者的一种特殊群体
+                    </p>
+                    <p>
+                      3:
+                      只要有人打赏您发起的分享，或打赏您名下分享者的经验时，您都将固定获得打赏人总象币的10%;
+                      &nbsp;&nbsp;&nbsp;
+                      <b style="color: red">且是永久的</b>
+                    </p>
+                    <p>
+                      4:
+                      上架中的经验分享将在180天后，自动转为付费模式（0.1元/次）
+                    </p>
+                    <el-button
+                      slot="reference"
+                      class="tipRule"
+                      icon="el-icon-question"
+                    ></el-button>
                   </el-popover>
                 </el-radio>
                 <el-radio :label="1">
@@ -55,31 +86,51 @@
                     placement="right"
                     title="规则"
                     width="300"
-                    trigger="hover">
-                    <p>1: 您打赏的象币将按一定比例90天内全部分享给每位分享者
-                      <el-tooltip class="item" effect="dark" content="算法： 每位分享者所得到的象币 = 发起者打赏象币的100% * 分享者个人获得的点赞数 / 所有分享者的总点赞数" placement="top-start">
-                        <el-link icon="el-icon-question" :underline="false"></el-link>
+                    trigger="hover"
+                  >
+                    <p>
+                      1: 您打赏的象币将按一定比例90天内全部分享给每位分享者
+                      <el-tooltip
+                        class="item"
+                        effect="dark"
+                        content="算法： 每位分享者所得到的象币 = 发起者打赏象币的100% * 分享者个人获得的点赞数 / 所有分享者的总点赞数"
+                        placement="top-start"
+                      >
+                        <el-link
+                          icon="el-icon-question"
+                          :underline="false"
+                        ></el-link>
                       </el-tooltip>
                     </p>
-                    <p>2:上架中的经验分享将在180天后，自动转为付费模式（0.1元/次）</p>
-                    <el-button slot="reference" class="tipRule" icon="el-icon-question"></el-button>
+                    <p>
+                      2:上架中的经验分享将在180天后，自动转为付费模式（0.1元/次）
+                    </p>
+                    <el-button
+                      slot="reference"
+                      class="tipRule"
+                      icon="el-icon-question"
+                    ></el-button>
                   </el-popover>
                 </el-radio>
               </el-radio-group>
               <div class="mt10">
                 打赏额度：
                 <el-input
+                  v-model="form.moneyVal"
                   placeholder="1人民币= 10象币"
                   suffix-icon="el-icon-potato-strips"
-                  style="width:200px;"
+                  style="width: 200px"
                   type="text"
-                  maxLength="6"
-                  v-model="form.moneyVal">
-                </el-input>
+                  max-length="6"
+                ></el-input>
               </div>
             </div>
           </el-form-item>
-          <el-form-item label="详细描述" prop="content" class="vab-quill-content">
+          <el-form-item
+            label="详细描述"
+            prop="content"
+            class="vab-quill-content"
+          >
             <vab-quill
               v-model="form.content"
               :min-height="400"
@@ -103,162 +154,178 @@
 </template>
 
 <script>
-    import vabQuill from '@/plugins/vabQuill'
-    let id = 0;
-    export default {
-        name: 'Editor',
-        components: { vabQuill },
-        data() {
-            return {
-                topicTimeLine : [{id : 1, title : '子标题' , content : ' 为一个全局变量的仓库。但是和单纯的全局变量又有一些区别，主要体现在当 store 中的状态发生改变时，相应的 vue',timeValue:'2020-08-23 10:02:10'},
-                    {id : 2, title : '子标题' , content : '都应当存放在 store.js 里面，Vue 组件可以从 store.js 里面获取状态，可以把 store 通俗的理解',timeValue:'2020-08-23 08:25:30'},
-                    {id : 3, title : '子标题' , content : '中的状态发生改变时，相应的 vue 组件也会得到高效更新。',timeValue:'2020-08-23 06:00:12'}],
-                options: {
-                    theme: 'snow',
-                    bounds: document.body,
-                    debug: 'warn',
-                    modules: {
-                        toolbar: [
-                            ['bold', 'underline', 'strike'],
-                            [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                            [{ size: ['small', false, 'large', 'huge'] }],
-                            // [{ color: [] }, { background: [] }],
-                            [{ color: [] }],
-                            ['blockquote', 'code-block'],
-                            [{ list: 'ordered' }, { list: 'bullet' }],
-                            [{ script: 'sub' }, { script: 'super' }],
-                            // [{ indent: '-1' }, { indent: '+1' }],
-                            [{ align: [] }],
-                            // [{ direction: 'rtl' }],
-                            [{ font: [] }],
-                            // ['clean'],
-                            ['link'],
-                        ],
-                    },
-                    placeholder: '最多500字.',
-                    readOnly: false,
-                },
-                borderColor: '#dcdfe6',
-                dialogTableVisible: false,
-                isOpenMoenyShare: false,
-                props: {
-                    lazy: true,
-                    lazyLoad (node, resolve) {
-                        const { level } = node;
-                        setTimeout(() => {
-                            const nodes = Array.from({ length: level + 1 })
-                                .map(item => ({
-                                    value: ++id,
-                                    label: `选项${id}`,
-                                    leaf: level >= 2
-                                }));
-                            // 通过调用resolve将子节点数据返回，通知组件数据加载完成
-                            resolve(nodes);
-                        }, 300);
-                    }
-                },
-                form: {
-                    title: '',
-                    content: '',
-                    isOpenSwitch:false,
-                    radio:2,
-                    moneyVal:'',
-                    isSelectProfession : ''
-                },
-                rules: {
-                    title: [
-                        {
-                            required: true,
-                            message: '请输入标题',
-                            trigger: 'blur',
-                        },
-                    ],
-                    isSelectProfession: [
-                        {
-                            required: true,
-                            message: '请选择所属行业',
-                            trigger: 'blur',
-                        },
-                    ],
-                    radio: [
-                        {
-                            required: true,
-                            trigger: 'blur',
-                        },
-                    ],
-                    content: [
-                        {
-                            required: true,
-                            message: '请输入内容',
-                            trigger: 'blur',
-                        },
-                    ],
-                },
+  import vabQuill from '@/plugins/vabQuill'
+  let id = 0
+  export default {
+    name: 'Editor',
+    components: { vabQuill },
+    data() {
+      return {
+        topicTimeLine: [
+          {
+            id: 1,
+            title: '子标题',
+            content:
+              ' 为一个全局变量的仓库。但是和单纯的全局变量又有一些区别，主要体现在当 store 中的状态发生改变时，相应的 vue',
+            timeValue: '2020-08-23 10:02:10',
+          },
+          {
+            id: 2,
+            title: '子标题',
+            content:
+              '都应当存放在 store.js 里面，Vue 组件可以从 store.js 里面获取状态，可以把 store 通俗的理解',
+            timeValue: '2020-08-23 08:25:30',
+          },
+          {
+            id: 3,
+            title: '子标题',
+            content: '中的状态发生改变时，相应的 vue 组件也会得到高效更新。',
+            timeValue: '2020-08-23 06:00:12',
+          },
+        ],
+        options: {
+          theme: 'snow',
+          bounds: document.body,
+          debug: 'warn',
+          modules: {
+            toolbar: [
+              ['bold', 'underline', 'strike'],
+              [{ header: [1, 2, 3, 4, 5, 6, false] }],
+              [{ size: ['small', false, 'large', 'huge'] }],
+              // [{ color: [] }, { background: [] }],
+              [{ color: [] }],
+              ['blockquote', 'code-block'],
+              [{ list: 'ordered' }, { list: 'bullet' }],
+              [{ script: 'sub' }, { script: 'super' }],
+              // [{ indent: '-1' }, { indent: '+1' }],
+              [{ align: [] }],
+              // [{ direction: 'rtl' }],
+              [{ font: [] }],
+              // ['clean'],
+              ['link'],
+            ],
+          },
+          placeholder: '最多500字.',
+          readOnly: false,
+        },
+        borderColor: '#dcdfe6',
+        dialogTableVisible: false,
+        isOpenMoenyShare: false,
+        props: {
+          lazy: true,
+          lazyLoad(node, resolve) {
+            const { level } = node
+            setTimeout(() => {
+              const nodes = Array.from({ length: level + 1 }).map((item) => ({
+                value: ++id,
+                label: `选项${id}`,
+                leaf: level >= 2,
+              }))
+              // 通过调用resolve将子节点数据返回，通知组件数据加载完成
+              resolve(nodes)
+            }, 300)
+          },
+        },
+        form: {
+          title: '',
+          content: '',
+          isOpenSwitch: false,
+          radio: 2,
+          moneyVal: '',
+          isSelectProfession: '',
+        },
+        rules: {
+          title: [
+            {
+              required: true,
+              message: '请输入标题',
+              trigger: 'blur',
+            },
+          ],
+          isSelectProfession: [
+            {
+              required: true,
+              message: '请选择所属行业',
+              trigger: 'blur',
+            },
+          ],
+          radio: [
+            {
+              required: true,
+              trigger: 'blur',
+            },
+          ],
+          content: [
+            {
+              required: true,
+              message: '请输入内容',
+              trigger: 'blur',
+            },
+          ],
+        },
+      }
+    },
+    methods: {
+      handleSee() {
+        this.$refs['form'].validate((valid) => {
+          this.$refs.form.validateField('content', (errorMsg) => {})
+          if (valid) {
+            this.dialogTableVisible = true
+          } else {
+            return false
+          }
+        })
+      },
+      deleEditedContent() {},
+      swichChange() {
+        this.isOpenSwitch = this.form.isOpenSwitch
+      },
+      getProfession(val) {
+        if (!this.$refs.mycascader.getCheckedNodes()[0].pathLabels) {
+          this.isSelectCity = ''
+        }
+        console.dir(this.$refs.mycascader.getCheckedNodes()[0].pathLabels)
+      },
+      handleSave() {
+        this.$refs['form'].validate((valid) => {
+          this.$refs.form.validateField('content', (errorMsg) => {
+            this.borderColor = '#dcdfe6'
+            if (errorMsg) {
+              this.borderColor = '#F56C6C'
             }
-        },
-        methods: {
-            handleSee() {
-                this.$refs['form'].validate((valid) => {
-                    this.$refs.form.validateField('content', (errorMsg) => {})
-                    if (valid) {
-                        this.dialogTableVisible = true
-                    } else {
-                        return false
-                    }
-                })
-            },
-            deleEditedContent(){
-
-            },
-            swichChange(){
-                this.isOpenSwitch = this.form.isOpenSwitch;
-            },
-            getProfession(val){
-                if(!this.$refs.mycascader.getCheckedNodes()[0].pathLabels){
-                    this.isSelectCity = '';
-                }
-                console.dir(this.$refs.mycascader.getCheckedNodes()[0].pathLabels);
-            },
-            handleSave() {
-                this.$refs['form'].validate((valid) => {
-                    this.$refs.form.validateField('content', (errorMsg) => {
-                        this.borderColor = '#dcdfe6'
-                        if (errorMsg) {
-                            this.borderColor = '#F56C6C'
-                        }
-                    });
-                    if (valid) {
-                        this.$baseMessage('保存成功', 'success');
-                        let that = this;
-                        setTimeout(function(){
-                            that.$router.push('/topicManage/index')
-                        },1500)
-                    } else {
-                        return false
-                    }
-                })
-            },
-        },
-    }
+          })
+          if (valid) {
+            this.$baseMessage('保存成功', 'success')
+            let that = this
+            setTimeout(function () {
+              that.$router.push('/topicManage/index')
+            }, 1500)
+          } else {
+            return false
+          }
+        })
+      },
+    },
+  }
 </script>
 <style lang="scss" scoped>
   .editor-container {
-    .tipRule{
-      font-size:14px;
-      border:none;
-      padding:0px;
+    .tipRule {
+      font-size: 14px;
+      border: none;
+      padding: 0px;
     }
-    .mainTitle{
+    .mainTitle {
       text-align: center;
-      width:100%;
-      height:30px;
+      width: 100%;
+      height: 30px;
       min-width: 200px;
     }
-    .timeLineDele{
+    .timeLineDele {
       font-weight: bold;
     }
-    .tipRule:hover{
-      color:#606266;
+    .tipRule:hover {
+      color: #606266;
     }
     .news {
       &-title {

@@ -1,12 +1,8 @@
 {
-  "name": "vue-admin-beautiful",
-  "version": "1.0.0",
-  "author": "vue-admin-beautiful",
+  "name": "u-admin-record",
+  "version": "0.0.1",
+  "author": "Havery",
   "participants": [],
-  "homepage": "https://chu1204505056.gitee.io/vue-admin-beautiful",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
