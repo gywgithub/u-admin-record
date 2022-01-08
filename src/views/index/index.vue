@@ -1,32 +1,6 @@
 <template>
   <div class="index-container">
     <el-row :gutter="20">
-      <el-col :xs="24" :sm="24" :md="12" :lg="24" :xl="24">
-        <el-card shadow="never">
-          <div slot="header">
-            <span>访问量</span>
-          </div>
-          <vab-chart
-            :autoresize="true"
-            theme="vab-echarts-theme"
-            :options="fwl"
-          />
-          <div class="bottom">
-            <span>
-              日均访问量:
-              <vab-count
-                :start-val="config1.startVal"
-                :end-val="config1.endVal"
-                :duration="config1.duration"
-                :separator="config1.separator"
-                :prefix="config1.prefix"
-                :suffix="config1.suffix"
-                :decimals="config1.decimals"
-              />
-            </span>
-          </div>
-        </el-card>
-      </el-col>
       <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
         <el-card shadow="never">
           <div slot="header">
@@ -109,7 +83,7 @@
             <h1 style="font-size: 30px">经验分享平台</h1>
           </div>
           <el-alert
-            title="寄语：感恩相遇，愿世间美好与我们环环相扣，加油！屏幕前的我们，打破桎梏，坚守初心。改变人生命运的机会并没有太多，我们并不是不优秀，我们也并不是一无是处，我们也希望驻足山巅被众人仰望，也许我们缺少的只是一个机会，缺少的只是生命中的导师，希望有一天别人看到的不仅仅是你的努力，还有你的功成名就，出人头地。"
+            title="寄语：感恩相遇，愿世间美好与我们环环相扣，屏幕前的我们，打破桎梏，坚守初心。改变人生命运的机会并没有太多，我们并不是不优秀，我们也并不是一无是处，我们也希望驻足山巅被众人仰望，也许我们缺少的只是一个机会，缺少的只是生命中的导师，希望有一天别人看到的不仅仅是你的努力，还有你的功成名就，出人头地。"
             type="warning"
             closable="false"
           ></el-alert>

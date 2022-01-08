@@ -14,26 +14,26 @@
         >
           <div class="title">hello !</div>
           <div class="title-tips">欢迎来到{{ title }}！</div>
-          <el-form-item style="margin-top: 40px" prop="username">
+          <el-form-item style="margin-top: 40px" prop="loginName">
             <span class="svg-container svg-container-admin">
               <vab-icon :icon="['fas', 'user']" />
             </span>
             <el-input
-              v-model.trim="form.username"
+              v-model.trim="form.loginName"
               v-focus
               placeholder="请输入用户名"
               tabindex="1"
               type="text"
             />
           </el-form-item>
-          <el-form-item prop="password">
+          <el-form-item prop="userPassword">
             <span class="svg-container">
               <vab-icon :icon="['fas', 'lock']" />
             </span>
             <el-input
               :key="passwordType"
               ref="password"
-              v-model.trim="form.password"
+              v-model.trim="form.userPassword"
               :type="passwordType"
               tabindex="2"
               placeholder="请输入密码"
@@ -81,15 +81,17 @@
     },
     data() {
       const validateusername = (rule, value, callback) => {
-        if ('' == value) {
-          callback(new Error('用户名不能为空'))
+        if (!this.checkAccount(value)) {
+          callback(new Error('账号格式错误'))
         } else {
           callback()
         }
       }
       const validatePassword = (rule, value, callback) => {
-        if (!isPassword(value)) {
-          callback(new Error('密码不能少于6位'))
+        //至少八个字符，至少一个大写字母，一个小写字母，一个数字和一个特殊字符
+        let regPwd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
+        if (!regPwd.test(value)) {
+          callback(new Error('密码格式错误'))
         } else {
           callback()
         }
@@ -98,18 +100,18 @@
         nodeEnv: process.env.NODE_ENV,
         title: this.$baseTitle,
         form: {
-          username: '',
-          password: '',
+          loginName: '15600117320',
+          userPassword: '123456zpwZPW',
         },
         rules: {
-          username: [
+          loginName: [
             {
               required: true,
               trigger: 'blur',
               validator: validateusername,
             },
           ],
-          password: [
+          userPassword: [
             {
               required: true,
               trigger: 'blur',
@@ -137,10 +139,49 @@
       document.body.style.overflow = 'auto'
     },
     mounted() {
-      this.form.username = 'admin'
-      this.form.password = '123456'
+      this.form.username = '15600117320'
+      this.form.password = '123456zpwZPW'
     },
     methods: {
+      // 字符串转base64
+      encode(str) {
+        // 对字符串进行编码
+        var encode = encodeURI(str)
+        // 对编码的字符串转化base64
+        var base64 = btoa(encode)
+        return base64
+      },
+      // base64转字符串
+      decode(base64) {
+        // 对base64转编码
+        var decode = atob(base64)
+        // 编码转字符串
+        var str = decodeURI(decode)
+        return str
+      },
+      checkAccount(user) {
+        let regEmail =
+          /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+        let regPhone =
+          /^1(3\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\d|9[0-35-9])\d{8}$/
+        if (regEmail.test(user) || regPhone.test(user)) {
+          return true
+        }
+        return false
+      },
+      randomString(e) {
+        e = e || 16
+        var t = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678',
+          a = t.length,
+          n = ''
+        for (let i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a))
+        return n
+      },
+      genPassword() {
+        let pwdEncodeStr = this.encode(this.form.userPassword)
+        let randomStr = this.randomString(32)
+        return randomStr + pwdEncodeStr
+      },
       handlePassword() {
         this.passwordType === 'password'
           ? (this.passwordType = '')
@@ -153,8 +194,12 @@
         this.$refs.form.validate((valid) => {
           if (valid) {
             this.loading = true
+            let params = {
+              loginName: this.form.loginName,
+              userPassword: this.genPassword(),
+            }
             this.$store
-              .dispatch('user/login', this.form)
+              .dispatch('user/login', params)
               .then(() => {
                 const routerPath =
                   this.redirect === '/404' || this.redirect === '/401'

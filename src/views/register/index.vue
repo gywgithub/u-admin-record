@@ -12,7 +12,7 @@
           :rules="registerRules"
           size="mini"
         >
-          <el-form-item prop="username">
+          <!-- <el-form-item prop="username">
             <el-input
               v-model.trim="form.username"
               v-focus
@@ -23,20 +23,18 @@
             >
               <vab-icon slot="prefix" :icon="['fas', 'user-alt']"></vab-icon>
             </el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item prop="phone">
             <el-input
               v-model.trim="form.phone"
               type="text"
-              placeholder="请输入手机号"
-              maxlength="11"
-              show-word-limit
+              placeholder="请输入手机号或邮箱"
               autocomplete="off"
             >
               <vab-icon slot="prefix" :icon="['fas', 'mobile-alt']"></vab-icon>
             </el-input>
           </el-form-item>
-          <el-form-item prop="phoneCode" style="position: relative">
+          <!-- <el-form-item prop="phoneCode" style="position: relative">
             <el-input
               v-model.trim="form.phoneCode"
               type="text"
@@ -55,12 +53,22 @@
             >
               {{ phoneCode }}
             </el-button>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item prop="password">
             <el-input
               v-model.trim="form.password"
               type="password"
               placeholder="设置密码"
+              autocomplete="new-password"
+            >
+              <vab-icon slot="prefix" :icon="['fas', 'unlock']"></vab-icon>
+            </el-input>
+          </el-form-item>
+          <el-form-item prop="passwordCheck">
+            <el-input
+              v-model.trim="form.passwordCheck"
+              type="password"
+              placeholder="确认密码"
               autocomplete="new-password"
             >
               <vab-icon slot="prefix" :icon="['fas', 'unlock']"></vab-icon>
@@ -96,23 +104,22 @@
       },
     },
     data() {
-      const validateusername = (rule, value, callback) => {
-        if ('' == value) {
-          callback(new Error('用户名不能为空'))
-        } else {
-          callback()
-        }
-      }
       const validatePassword = (rule, value, callback) => {
-        if (!isPassword(value)) {
-          callback(new Error('密码不能少于6位'))
+        //至少八个字符，至少一个大写字母，一个小写字母，一个数字和一个特殊字符
+        let regPwd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
+        if (!regPwd.test(value)) {
+          callback(new Error('密码格式错误'))
         } else {
-          callback()
+          if (this.form.passwordCheck != this.form.password) {
+            callback(new Error('密码不一致'))
+          } else {
+            callback()
+          }
         }
       }
       const validatePhone = (rule, value, callback) => {
-        if (!isPhone(value)) {
-          callback(new Error('请输入正确的手机号'))
+        if (!this.checkAccount(value)) {
+          callback(new Error('账号格式错误'))
         } else {
           callback()
         }
@@ -126,22 +133,30 @@
         title: this.$baseTitle,
         form: {},
         registerRules: {
-          username: [
-            { required: true, trigger: 'blur', message: '请输入用户名' },
-            { max: 20, trigger: 'blur', message: '最多不能超过20个字' },
-            { validator: validateusername, trigger: 'blur' },
-          ],
+          // username: [
+          //   { required: true, trigger: 'blur', message: '请输入用户名' },
+          //   { max: 20, trigger: 'blur', message: '最多不能超过20个字' },
+          //   { validator: validateusername, trigger: 'blur' },
+          // ],
           phone: [
-            { required: true, trigger: 'blur', message: '请输入手机号码' },
+            {
+              required: true,
+              trigger: 'blur',
+              message: '请输入手机号码或邮箱',
+            },
             { validator: validatePhone, trigger: 'blur' },
           ],
           password: [
             { required: true, trigger: 'blur', message: '请输入密码' },
             { validator: validatePassword, trigger: 'blur' },
           ],
-          phoneCode: [
-            { required: true, trigger: 'blur', message: '请输入手机验证码' },
+          passwordCheck: [
+            { required: true, trigger: 'blur', message: '请输入密码' },
+            { validator: validatePassword, trigger: 'blur' },
           ],
+          // phoneCode: [
+          //   { required: true, trigger: 'blur', message: '请输入手机验证码' },
+          // ],
         },
         loading: false,
         passwordType: 'password',
@@ -156,6 +171,45 @@
       clearInterval(this.getPhoneIntval)
     },
     methods: {
+      // 字符串转base64
+      encode(str) {
+        // 对字符串进行编码
+        var encode = encodeURI(str)
+        // 对编码的字符串转化base64
+        var base64 = btoa(encode)
+        return base64
+      },
+      // base64转字符串
+      decode(base64) {
+        // 对base64转编码
+        var decode = atob(base64)
+        // 编码转字符串
+        var str = decodeURI(decode)
+        return str
+      },
+      checkAccount(user) {
+        let regEmail =
+          /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+        let regPhone =
+          /^1(3\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\d|9[0-35-9])\d{8}$/
+        if (regEmail.test(user) || regPhone.test(user)) {
+          return true
+        }
+        return false
+      },
+      randomString(e) {
+        e = e || 16
+        var t = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678',
+          a = t.length,
+          n = ''
+        for (let i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a))
+        return n
+      },
+      genPassword() {
+        let pwdEncodeStr = this.encode(this.form.password)
+        let randomStr = this.randomString(32)
+        return randomStr + pwdEncodeStr
+      },
       getPhoneCode() {
         if (!isPhone(this.form.phone)) {
           //this.$baseMessage('请输入手机号', 'error')
@@ -180,13 +234,11 @@
         this.$refs['registerForm'].validate(async (valid) => {
           if (valid) {
             const param = {
-              username: this.form.username,
-              phone: this.form.phone,
-              password: this.form.password,
-              phoneCode: this.form.phoneCode,
+              loginName: this.form.phone,
+              userPassword: this.genPassword(),
             }
-            const { msg } = await register(param)
-            this.$baseMessage(msg, 'success')
+            const { message } = await register(param)
+            this.$baseMessage(message, 'success')
           }
         })
       },

@@ -7,7 +7,8 @@
           :inline="true"
           :model="ruleForm"
           :rules="rules"
-          class="demo-ruleForm">
+          class="demo-ruleForm"
+        >
           <el-form-item label="发起ID" prop="name">
             <el-input v-model="ruleForm.name"></el-input>
           </el-form-item>
@@ -23,8 +24,8 @@
           <el-form-item label="发起者" prop="nameType" class="ml10">
             <el-input
               v-model="ruleForm.nameType"
-              :placeholder="seachPeoplePla">
-            </el-input>
+              :placeholder="seachPeoplePla"
+            ></el-input>
           </el-form-item>
           <span>时间范围：</span>
           <el-date-picker
@@ -35,26 +36,39 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :picker-options="pickerOptions">
-          </el-date-picker>
+            :picker-options="pickerOptions"
+          ></el-date-picker>
           <el-button
             icon="el-icon-search"
             type="primary"
             size="small"
             native-type="submit"
-            @click="handleQuery">
+            @click="handleQuery"
+          >
             查询
           </el-button>
         </el-form>
       </el-col>
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-        <el-button icon="el-icon-folder-add" type="primary" @click="handleBatch($event,1)">
+        <el-button
+          icon="el-icon-folder-add"
+          type="primary"
+          @click="handleBatch($event, 1)"
+        >
           批量上架
         </el-button>
-        <el-button icon="el-icon-folder-remove" type="warning" @click="handleBatch($event,2)">
+        <el-button
+          icon="el-icon-folder-remove"
+          type="warning"
+          @click="handleBatch($event, 2)"
+        >
           批量下架
         </el-button>
-        <el-button icon="el-icon-delete" type="danger" @click="handleBatch($event,3)">
+        <el-button
+          icon="el-icon-delete"
+          type="danger"
+          @click="handleBatch($event, 3)"
+        >
           批量删除
         </el-button>
       </el-col>
@@ -78,7 +92,8 @@
         show-overflow-tooltip
         label="ID"
         width="120"
-        align="center">
+        align="center"
+      >
         <template #default="{ row }">
           {{ row.id }}
         </template>
@@ -89,11 +104,15 @@
         label="标题"
         align="center"
       ></el-table-column>
-      <el-table-column
-        label="详情描述"
-        align="center">
-        <template #default="{ row }" >
-           <p class="contentTxt" title="长期以来，我们甚至无法在美国地图上找到它，，戒备森严 美国51区里到底有没有外星人？">长期以来，我们甚至无法在美国地图上找到它，，戒备森严 美国51区里到底有没有外星人？</p>
+      <el-table-column label="详情描述" align="center">
+        <template #default="{ row }">
+          <p
+            class="contentTxt"
+            title="长期以来，我们甚至无法在美国地图上找到它，，戒备森严 美国51区里到底有没有外星人？"
+          >
+            长期以来，我们甚至无法在美国地图上找到它，，戒备森严
+            美国51区里到底有没有外星人？
+          </p>
         </template>
       </el-table-column>
       <el-table-column
@@ -106,15 +125,15 @@
         show-overflow-tooltip
         label="分享者"
         align="center"
-        width="180px">
+        width="180px"
+      >
         <template #default="{ row }">
-          <el-button type="text" @click="seeAllSharePeople(row)">查看</el-button>
+          <el-button type="text" @click="seeAllSharePeople(row)">
+            查看
+          </el-button>
         </template>
       </el-table-column>
-      <el-table-column
-        show-overflow-tooltip
-        label="状态"
-        align="center">
+      <el-table-column show-overflow-tooltip label="状态" align="center">
         <template #default="{ row }">
           {{ row.status | statusTextFilter }}
         </template>
@@ -130,10 +149,9 @@
         show-overflow-tooltip
         label="操作"
         width="280px"
-        align="center">
-        <template slot="header" slot-scope="scope">
-          操作
-        </template>
+        align="center"
+      >
+        <template slot="header" slot-scope="scope">操作</template>
         <template #default="{ row }">
           <el-button type="text" @click="seeToppic(row)">查看</el-button>
           <el-button type="text" @click="editTopic(row)">编辑</el-button>
@@ -155,132 +173,177 @@
       @size-change="handleSizeChange"
     ></el-pagination>
     <el-dialog
-    title="分享时间线"
-    :visible.sync="isShowExperienceDetail"
-    :before-close="beforeCloseDetail">
-    <span slot="title" class="dialog-title">
-      <b>分享详情</b>
-    </span>
-    <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-        <el-timeline>
-          <el-timeline-item timestamp="2018/4/12" placement="top">
-            <el-card>
-              <div slot="header" class="clearfix ovfl">
-                <el-button style="float: right; padding: 3px 0;" type="text" v-if="currAcc == '张三'">删除</el-button>
-              </div>
-              <h4>更新 Github 模板</h4>
-              <p>王小虎 提交于 2018/4/12 20:46</p>
-            </el-card>
-          </el-timeline-item>
-          <el-timeline-item timestamp="2018/4/3" placement="top">
-            <el-card>
-              <div slot="header" class="clearfix ovfl">
-                <el-button style="float: right; padding: 3px 0;" type="text"  v-if="currAcc == '张三'">删除</el-button>
-              </div>
-              <h4>更新 Github 模板 </h4>
-              <p>王小虎 提交于 2018/4/3 20:46</p>
-            </el-card>
-          </el-timeline-item>
-          <el-timeline-item timestamp="2018/4/2" placement="top">
-            <el-card>
-              <div slot="header" class="clearfix ovfl">
-                <el-button style="float: right; padding: 3px 0;" type="text" v-if="currAcc == '张三'">删除</el-button>
-              </div>
-              <h4>更新 Github 模板</h4>
-              <p>王小虎 提交于 2018/4/2 20:46</p>
-            </el-card>
-          </el-timeline-item>
-        </el-timeline>
-      </el-col>
-    </el-tabs>
-  </el-dialog>
+      title="分享时间线"
+      :visible.sync="isShowExperienceDetail"
+      :before-close="beforeCloseDetail"
+    >
+      <span slot="title" class="dialog-title">
+        <b>分享详情</b>
+      </span>
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+          <el-timeline>
+            <el-timeline-item timestamp="2018/4/12" placement="top">
+              <el-card>
+                <div slot="header" class="clearfix ovfl">
+                  <el-button
+                    v-if="currAcc == '张三'"
+                    style="float: right; padding: 3px 0"
+                    type="text"
+                  >
+                    删除
+                  </el-button>
+                </div>
+                <h4>更新 Github 模板</h4>
+                <p>王小虎 提交于 2018/4/12 20:46</p>
+              </el-card>
+            </el-timeline-item>
+            <el-timeline-item timestamp="2018/4/3" placement="top">
+              <el-card>
+                <div slot="header" class="clearfix ovfl">
+                  <el-button
+                    v-if="currAcc == '张三'"
+                    style="float: right; padding: 3px 0"
+                    type="text"
+                  >
+                    删除
+                  </el-button>
+                </div>
+                <h4>更新 Github 模板</h4>
+                <p>王小虎 提交于 2018/4/3 20:46</p>
+              </el-card>
+            </el-timeline-item>
+            <el-timeline-item timestamp="2018/4/2" placement="top">
+              <el-card>
+                <div slot="header" class="clearfix ovfl">
+                  <el-button
+                    v-if="currAcc == '张三'"
+                    style="float: right; padding: 3px 0"
+                    type="text"
+                  >
+                    删除
+                  </el-button>
+                </div>
+                <h4>更新 Github 模板</h4>
+                <p>王小虎 提交于 2018/4/2 20:46</p>
+              </el-card>
+            </el-timeline-item>
+          </el-timeline>
+        </el-col>
+      </el-tabs>
+    </el-dialog>
     <el-dialog
       title="分享者列表"
       :visible.sync="isShowShares"
-      :before-close="beforeCloseSharesDislog">
+      :before-close="beforeCloseSharesDislog"
+    >
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-        <el-checkbox v-model="seeSelf" class="seeSelf" @click="changeShareList">只看前三名</el-checkbox>
-        <div style="float:right;">
-          <el-button icon="el-icon-circle-plus-outline" type="text" v-if="true" @click="addCurrShare(row)">
+        <el-checkbox v-model="seeSelf" class="seeSelf" @click="changeShareList">
+          只看前三名
+        </el-checkbox>
+        <div style="float: right">
+          <el-button
+            v-if="true"
+            icon="el-icon-circle-plus-outline"
+            type="text"
+            @click="addCurrShare(row)"
+          >
             添加分享
-            <el-tooltip class="item" effect="dark" content="不能给自己添加分享" placement="top-start">
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="不能给自己添加分享"
+              placement="top-start"
+            >
               <el-link icon="el-icon-question" :underline="false"></el-link>
             </el-tooltip>
           </el-button>
-<!--          <el-button type="text" disabled  @click="addCurrShare(row)">添加分享</el-button>-->
+          <!--          <el-button type="text" disabled  @click="addCurrShare(row)">添加分享</el-button>-->
         </div>
-        <el-table
-          :data="shareList"
-          style="width: 100%">
+        <el-table :data="shareList" style="width: 100%">
           <el-table-column type="expand">
             <template slot-scope="props">
-              <el-table
-                :data="selfShareList"
-                border
-                style="width: 100%">
+              <el-table :data="selfShareList" border style="width: 100%">
                 <el-table-column
                   fixed
                   prop="name"
                   label="Ta的案例"
                   width="150"
-                  align="center">
-                </el-table-column>
+                  align="center"
+                ></el-table-column>
                 <el-table-column
                   prop="updateTime"
                   label="最后更新时间"
                   width="120"
-                  align="center">
-                </el-table-column>
-                <el-table-column
-                  label="分享者"
-                  width="120"
-                  align="center">
+                  align="center"
+                ></el-table-column>
+                <el-table-column label="分享者" width="120" align="center">
                   <template #default="{ row }">
-                      <!--{{ row.author}}-->
-                     张三
+                    <!--{{ row.author}}-->
+                    张三
                   </template>
                 </el-table-column>
                 <el-table-column
                   prop="singlecoll"
                   label="点赞数"
                   width="80"
-                  align="center">
-                </el-table-column>
+                  align="center"
+                ></el-table-column>
                 <el-table-column
                   prop="pro"
                   label="省"
                   width="120"
-                  align="center">
-                </el-table-column>
+                  align="center"
+                ></el-table-column>
                 <el-table-column
                   prop="city"
                   label="市"
                   width="120"
-                  align="center">
-                </el-table-column>
+                  align="center"
+                ></el-table-column>
                 <el-table-column
                   prop="createTime"
                   label="创建时间"
                   width="120"
-                  align="center">
-                </el-table-column>
+                  align="center"
+                ></el-table-column>
                 <el-table-column
                   fixed="right"
                   label=""
                   width="180"
-                  align="center">
+                  align="center"
+                >
                   <template slot="header" slot-scope="scope">
                     操作
-                    <el-tooltip class="item" effect="dark" content="每位用户每月最多申诉3次" placement="top-start">
-                      <el-link icon="el-icon-question" :underline="false"></el-link>
+                    <el-tooltip
+                      class="item"
+                      effect="dark"
+                      content="每位用户每月最多申诉3次"
+                      placement="top-start"
+                    >
+                      <el-link
+                        icon="el-icon-question"
+                        :underline="false"
+                      ></el-link>
                     </el-tooltip>
                   </template>
                   <template slot-scope="scope">
-                    <el-button @click="seeDetail(scope.row)" type="text" size="small">查看</el-button>
+                    <el-button
+                      type="text"
+                      size="small"
+                      @click="seeDetail(scope.row)"
+                    >
+                      查看
+                    </el-button>
                     <el-button type="text" size="small">上架</el-button>
                     <el-button type="text" size="small">下架</el-button>
-                    <el-button @click="report(scope.row)" type="text" size="small">申诉</el-button>
+                    <el-button
+                      type="text"
+                      size="small"
+                      @click="report(scope.row)"
+                    >
+                      申诉
+                    </el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -289,64 +352,67 @@
           <el-table-column
             label="分享者"
             prop="author"
-            align="center">
-          </el-table-column>
+            align="center"
+          ></el-table-column>
           <el-table-column
             label="用户级别"
             prop="levUser"
-            align="center">
-          </el-table-column>
-          <el-table-column
-            label="总点赞数"
-            prop="coll"
-            align="center">
+            align="center"
+          ></el-table-column>
+          <el-table-column label="总点赞数" prop="coll" align="center">
             <template slot="header" slot-scope="scope">
               总点赞数
-              <el-tooltip class="item" effect="dark" content="分享者所有分享案例点赞数累加之和" placement="top-start">
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="分享者所有分享案例点赞数累加之和"
+                placement="top-start"
+              >
                 <el-link icon="el-icon-question" :underline="false"></el-link>
               </el-tooltip>
             </template>
           </el-table-column>
-<!--          <el-table-column-->
-<!--            label="操作"-->
-<!--            align="center">-->
-<!--            <template slot="header" slot-scope="scope">-->
-<!--              操作-->
-<!--            </template>-->
-<!--            <template #default="{ row }">-->
-<!--              <el-button type="text" v-if="!row.isEdit">上架此人</el-button>-->
-<!--              <el-button type="text" disabled v-else>下架此人</el-button>-->
-<!--              <el-switch-->
-<!--                class="mt5"-->
-<!--                v-model="row.isVisible"-->
-<!--                active-color="#409eff"-->
-<!--                inactive-color="#dcdfe6"-->
-<!--                @change="swichChange">-->
-<!--              </el-switch>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
+          <!--          <el-table-column-->
+          <!--            label="操作"-->
+          <!--            align="center">-->
+          <!--            <template slot="header" slot-scope="scope">-->
+          <!--              操作-->
+          <!--            </template>-->
+          <!--            <template #default="{ row }">-->
+          <!--              <el-button type="text" v-if="!row.isEdit">上架此人</el-button>-->
+          <!--              <el-button type="text" disabled v-else>下架此人</el-button>-->
+          <!--              <el-switch-->
+          <!--                class="mt5"-->
+          <!--                v-model="row.isVisible"-->
+          <!--                active-color="#409eff"-->
+          <!--                inactive-color="#dcdfe6"-->
+          <!--                @change="swichChange">-->
+          <!--              </el-switch>-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
         </el-table>
         <el-pagination
           background
           layout="prev, pager, next"
-          :total="1000">
-        </el-pagination>
+          :total="1000"
+        ></el-pagination>
       </el-col>
     </el-dialog>
     <el-dialog
       :title="title"
       :visible.sync="reportVisible"
       width="500px"
-      @close="close">
+      @close="close"
+    >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="申诉原因" prop="reason">
           <el-input
+            v-model="form.reason"
             type="textarea"
             :rows="2"
             placeholder="请输入内容"
             autocomplete="off"
-            v-model="form.reason">
-          </el-input>
+          ></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -355,18 +421,31 @@
       </div>
     </el-dialog>
     <el-dialog
-        :visible.sync="seeTopic"
-        width="30%"
-        class="setTopCss"
-        :before-close="handleClose">
-        <span slot="title" class="dialog-title">
-            <span class="topiceTitle">美国51区是否有外星人？</span>
-        </span>
-        <p><span class="boldFix">发起人：</span>张盼伟</p>
-        <p><span class="boldFix">发起时间：</span>2020-05-35 13:25:45</p>
-        <p><span class="boldFix">状态：</span>上架</p>
-        <p><span class="boldFix">详细描述：</span>51区位于美国内华达州南部的一个区域，戒备森严使它在民间获得了“51禁区”的称号。长期以来，我们甚至无法在美国地图上找到它，美国51区里到底有没有外星人？</p>
-        <span slot="footer" class="dialog-footer"></span>
+      :visible.sync="seeTopic"
+      width="30%"
+      class="setTopCss"
+      :before-close="handleClose"
+    >
+      <span slot="title" class="dialog-title">
+        <span class="topiceTitle">美国51区是否有外星人？</span>
+      </span>
+      <p>
+        <span class="boldFix">发起人：</span>
+        张盼伟
+      </p>
+      <p>
+        <span class="boldFix">发起时间：</span>
+        2020-05-35 13:25:45
+      </p>
+      <p>
+        <span class="boldFix">状态：</span>
+        上架
+      </p>
+      <p>
+        <span class="boldFix">详细描述：</span>
+        51区位于美国内华达州南部的一个区域，戒备森严使它在民间获得了“51禁区”的称号。长期以来，我们甚至无法在美国地图上找到它，美国51区里到底有没有外星人？
+      </p>
+      <span slot="footer" class="dialog-footer"></span>
     </el-dialog>
   </div>
 </template>
@@ -406,20 +485,20 @@
         seeTopic: false,
         isOpenSwitch: true,
         form: {
-            id: '',
-            cname: '',
-            reason: '',
+          id: '',
+          cname: '',
+          reason: '',
         },
         rules: {
-            reason: [
-                { required: true, trigger: 'blur', message: '请输入申诉原因' },
-            ],
-            cname: [
-                { required: true, trigger: 'blur', message: '请输入权限名称' },
-            ],
+          reason: [
+            { required: true, trigger: 'blur', message: '请输入申诉原因' },
+          ],
+          cname: [
+            { required: true, trigger: 'blur', message: '请输入权限名称' },
+          ],
         },
         reportVisible: false,
-        currAcc:"",
+        currAcc: '',
         activeName: 'first',
         currSharePeopleName: '',
         pickerOptions: {
@@ -475,19 +554,208 @@
         isShowExperienceDetail: false, //是否展示分享详情
         isShowShares: false,
         seeSelf: false,
-        shareListCopy:[{id : 1,name:'案例一',levUser:"青铜",singlecoll:12,coll:214,isVisible:true,shareContent : [{},{},],author :"张三", isEdit:true,status : "上架中" , createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县',},
-            {id : 2,name:'案例二',author :"李四",levUser:"白银",singlecoll:8,coll:334,isVisible:false,status : "已下架", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
-            {id : 3,name:'案例三',author :"王五",levUser:"黄金",singlecoll:4,coll:34,isVisible:false,status : "审核中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
-            {id : 4,name:'案例四',author :"赵柳",levUser:"白金",singlecoll:11,coll:25,isVisible:true,status : "上架中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'}],
-        shareList:[{id : 1,name:'案例一',coll:344,levUser:"白金",singlecoll:3,isVisible:true,shareContent : [{},{},],author :"张三", isEdit:true,status : "上架中" , createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县',},
-                    {id : 2,name:'案例二',coll:234,levUser:"黄金",singlecoll:4,isVisible:false,author :"李四",status : "已下架", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
-                    {id : 3,name:'案例三',coll:134,levUser:"白银",singlecoll:7,isVisible:false,author :"王五",status : "审核中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
-                    {id : 4,name:'案例四',coll:34,levUser:"钻石",singlecoll:9,isVisible:true,author :"赵柳",status : "上架中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'}],
+        shareListCopy: [
+          {
+            id: 1,
+            name: '案例一',
+            levUser: '青铜',
+            singlecoll: 12,
+            coll: 214,
+            isVisible: true,
+            shareContent: [{}, {}],
+            author: '张三',
+            isEdit: true,
+            status: '上架中',
+            createTime: '2020-04-12',
+            updateTime: '2020-04-12',
+            city: '保定',
+            pro: '河北',
+            ear: '唐县',
+          },
+          {
+            id: 2,
+            name: '案例二',
+            author: '李四',
+            levUser: '白银',
+            singlecoll: 8,
+            coll: 334,
+            isVisible: false,
+            status: '已下架',
+            isEdit: false,
+            createTime: '2020-04-12',
+            updateTime: '2020-04-12',
+            city: '保定',
+            pro: '河北',
+            ear: '唐县',
+          },
+          {
+            id: 3,
+            name: '案例三',
+            author: '王五',
+            levUser: '黄金',
+            singlecoll: 4,
+            coll: 34,
+            isVisible: false,
+            status: '审核中',
+            isEdit: false,
+            createTime: '2020-04-12',
+            updateTime: '2020-04-12',
+            city: '保定',
+            pro: '河北',
+            ear: '唐县',
+          },
+          {
+            id: 4,
+            name: '案例四',
+            author: '赵柳',
+            levUser: '白金',
+            singlecoll: 11,
+            coll: 25,
+            isVisible: true,
+            status: '上架中',
+            isEdit: false,
+            createTime: '2020-04-12',
+            updateTime: '2020-04-12',
+            city: '保定',
+            pro: '河北',
+            ear: '唐县',
+          },
+        ],
+        shareList: [
+          {
+            id: 1,
+            name: '案例一',
+            coll: 344,
+            levUser: '白金',
+            singlecoll: 3,
+            isVisible: true,
+            shareContent: [{}, {}],
+            author: '张三',
+            isEdit: true,
+            status: '上架中',
+            createTime: '2020-04-12',
+            updateTime: '2020-04-12',
+            city: '保定',
+            pro: '河北',
+            ear: '唐县',
+          },
+          {
+            id: 2,
+            name: '案例二',
+            coll: 234,
+            levUser: '黄金',
+            singlecoll: 4,
+            isVisible: false,
+            author: '李四',
+            status: '已下架',
+            isEdit: false,
+            createTime: '2020-04-12',
+            updateTime: '2020-04-12',
+            city: '保定',
+            pro: '河北',
+            ear: '唐县',
+          },
+          {
+            id: 3,
+            name: '案例三',
+            coll: 134,
+            levUser: '白银',
+            singlecoll: 7,
+            isVisible: false,
+            author: '王五',
+            status: '审核中',
+            isEdit: false,
+            createTime: '2020-04-12',
+            updateTime: '2020-04-12',
+            city: '保定',
+            pro: '河北',
+            ear: '唐县',
+          },
+          {
+            id: 4,
+            name: '案例四',
+            coll: 34,
+            levUser: '钻石',
+            singlecoll: 9,
+            isVisible: true,
+            author: '赵柳',
+            status: '上架中',
+            isEdit: false,
+            createTime: '2020-04-12',
+            updateTime: '2020-04-12',
+            city: '保定',
+            pro: '河北',
+            ear: '唐县',
+          },
+        ],
         reverse: true,
-        selfShareList:[{id : 1,name:'案例一',coll:1334,levUser:"白银",singlecoll:12,isVisible:true,shareContent : [{},{},],author :"张三", isEdit:true,status : "上架中" , createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县',},
-            {id : 2,name:'案例二',author :"李四",coll:1334,levUser:"黄金",singlecoll:5,isVisible:false,status : "已下架", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
-            {id : 3,name:'案例三',author :"王五",coll:1334,levUser:"白金",singlecoll:11,isVisible:false,status : "审核中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
-            {id : 4,name:'案例四',author :"赵柳",coll:1334,levUser:"钻石",singlecoll:6,isVisible:true,status : "上架中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'}],
+        selfShareList: [
+          {
+            id: 1,
+            name: '案例一',
+            coll: 1334,
+            levUser: '白银',
+            singlecoll: 12,
+            isVisible: true,
+            shareContent: [{}, {}],
+            author: '张三',
+            isEdit: true,
+            status: '上架中',
+            createTime: '2020-04-12',
+            updateTime: '2020-04-12',
+            city: '保定',
+            pro: '河北',
+            ear: '唐县',
+          },
+          {
+            id: 2,
+            name: '案例二',
+            author: '李四',
+            coll: 1334,
+            levUser: '黄金',
+            singlecoll: 5,
+            isVisible: false,
+            status: '已下架',
+            isEdit: false,
+            createTime: '2020-04-12',
+            updateTime: '2020-04-12',
+            city: '保定',
+            pro: '河北',
+            ear: '唐县',
+          },
+          {
+            id: 3,
+            name: '案例三',
+            author: '王五',
+            coll: 1334,
+            levUser: '白金',
+            singlecoll: 11,
+            isVisible: false,
+            status: '审核中',
+            isEdit: false,
+            createTime: '2020-04-12',
+            updateTime: '2020-04-12',
+            city: '保定',
+            pro: '河北',
+            ear: '唐县',
+          },
+          {
+            id: 4,
+            name: '案例四',
+            author: '赵柳',
+            coll: 1334,
+            levUser: '钻石',
+            singlecoll: 6,
+            isVisible: true,
+            status: '上架中',
+            isEdit: false,
+            createTime: '2020-04-12',
+            updateTime: '2020-04-12',
+            city: '保定',
+            pro: '河北',
+            ear: '唐县',
+          },
+        ],
         list: [],
         imageList: [],
         listLoading: true,
@@ -508,54 +776,103 @@
         return this.$baseTableHeight()
       },
     },
+    watch: {
+      seeSelf: function () {
+        if (this.seeSelf) {
+          console.log('看前三名')
+          this.shareList = [
+            {
+              id: 1,
+              name: '案例一',
+              coll: 344,
+              levUser: '钻石',
+              singlecoll: 3,
+              isVisible: true,
+              shareContent: [{}, {}],
+              author: '李六',
+              isEdit: true,
+              status: '上架中',
+              createTime: '2020-04-12',
+              updateTime: '2020-04-12',
+              city: '保定',
+              pro: '河北',
+              ear: '唐县',
+            },
+            {
+              id: 2,
+              name: '案例二',
+              coll: 234,
+              singlecoll: 4,
+              levUser: '黄金',
+              isVisible: false,
+              author: '李四',
+              status: '已下架',
+              isEdit: false,
+              createTime: '2020-04-12',
+              updateTime: '2020-04-12',
+              city: '保定',
+              pro: '河北',
+              ear: '唐县',
+            },
+            {
+              id: 3,
+              name: '案例三',
+              coll: 134,
+              singlecoll: 7,
+              levUser: '大师',
+              isVisible: false,
+              author: '王五',
+              status: '审核中',
+              isEdit: false,
+              createTime: '2020-04-12',
+              updateTime: '2020-04-12',
+              city: '保定',
+              pro: '河北',
+              ear: '唐县',
+            },
+          ]
+        } else {
+          console.log('quanbu ')
+          this.shareList = this.shareListCopy
+        }
+      },
+    },
     created() {
       this.fetchData()
     },
     beforeDestroy() {},
     mounted() {},
-    watch:{
-      seeSelf : function(){
-          if(this.seeSelf){
-              console.log("看前三名");
-              this.shareList = [{id : 1,name:'案例一',coll:344,levUser:"钻石",singlecoll:3,isVisible:true,shareContent : [{},{},],author :"李六", isEdit:true,status : "上架中" , createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县',},
-                  {id : 2,name:'案例二',coll:234,singlecoll:4,levUser:"黄金",isVisible:false,author :"李四",status : "已下架", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'},
-                  {id : 3,name:'案例三',coll:134,singlecoll:7,levUser:"大师",isVisible:false,author :"王五",status : "审核中", isEdit:false,createTime : "2020-04-12",updateTime : "2020-04-12",city : '保定',pro:"河北",ear:'唐县'}];
-          }else{
-              console.log("quanbu ");
-              this.shareList = this.shareListCopy;
-          }
-      }
-    },
     methods: {
-      report(){
-          this.reportVisible= true;
+      report() {
+        this.reportVisible = true
       },
-      handleClose(){
-          this.seeTopic = false;
+      handleClose() {
+        this.seeTopic = false
       },
-      close(){
-          this.reportVisible= false;
+      close() {
+        this.reportVisible = false
       },
-      save(){
-          this.$baseMessage('申诉成功', 'success')
-          this.reportVisible= false;
+      save() {
+        this.$baseMessage('申诉成功', 'success')
+        this.reportVisible = false
       },
       load(tree, treeNode, resolve) {
-          setTimeout(() => {
-              resolve([
-                  {
-                      id: 31,
-                      date: '2016-05-01',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1519 弄'
-                  }, {
-                      id: 32,
-                      date: '2016-05-01',
-                      name: '王小虎',
-                      address: '上海市普陀区金沙江路 1519 弄'
-                  }
-              ])
-          }, 1000)
+        setTimeout(() => {
+          resolve([
+            {
+              id: 31,
+              date: '2016-05-01',
+              name: '王小虎',
+              address: '上海市普陀区金沙江路 1519 弄',
+            },
+            {
+              id: 32,
+              date: '2016-05-01',
+              name: '王小虎',
+              address: '上海市普陀区金沙江路 1519 弄',
+            },
+          ])
+        }, 1000)
       },
       tableSortChange() {
         const imageList = []
@@ -564,29 +881,29 @@
         })
         this.imageList = imageList
       },
-      changeShareList(){
-        this.seeSelf = !this.seeSelf;
+      changeShareList() {
+        this.seeSelf = !this.seeSelf
       },
-      goodsDelete(){
-          this.$baseMessage('删除成功', 'success')
+      goodsDelete() {
+        this.$baseMessage('删除成功', 'success')
       },
-      seeToppic(e){
-          this.seeTopic = true;
+      seeToppic(e) {
+        this.seeTopic = true
       },
-      editTopic(e){
-          this.$router.push('/createTopic/index')
+      editTopic(e) {
+        this.$router.push('/createTopic/index')
       },
-      goodsPutOn(){
-          this.$baseMessage('上架成功', 'success')
+      goodsPutOn() {
+        this.$baseMessage('上架成功', 'success')
       },
-      goodsOffShelf(){
-          this.$baseMessage('下架成功', 'success')
+      goodsOffShelf() {
+        this.$baseMessage('下架成功', 'success')
       },
-      addCurrShare(){
-          this.$router.push('/addToShare/index')
+      addCurrShare() {
+        this.$router.push('/addToShare/index')
       },
       handleClick(tab, event) {
-          console.log(tab, event);
+        console.log(tab, event)
       },
       beforeCloseDetail() {
         this.isShowExperienceDetail = false
@@ -601,55 +918,47 @@
       handleEdit(row) {},
       async seeDetail(row) {
         //row.id
-        this.currAcc = row.author;
-        let data = {};
+        this.currAcc = row.author
+        let data = {}
         request({
           url: '/changeLog/getList',
           method: 'post',
           data,
         }).then((res) => {
-          this.activities = res.data;
-          this.currSharePeopleName = row.name;
+          this.activities = res.data
+          this.currSharePeopleName = row.name
           this.isShowExperienceDetail = true
         })
       },
-      seeAllSharePeople(row){
-          this.isShowShares = true;
-          this.sharePeoples = this.shareList;
+      seeAllSharePeople(row) {
+        this.isShowShares = true
+        this.sharePeoples = this.shareList
       },
-      handleBatch(row,type) {
-          let msg = '';
-          if(type===1) {
-              msg = '确定要上架当前项吗'
-          }
-          if(type===2) {
-              msg = '确定要下架当前项吗'
-          }
-          if(type===3) {
-              msg = '你确定要删除当前项吗'
-          }
+      handleBatch(row, type) {
+        let msg = ''
+        if (type === 1) {
+          msg = '确定要上架当前项吗'
+        }
+        if (type === 2) {
+          msg = '确定要下架当前项吗'
+        }
+        if (type === 3) {
+          msg = '你确定要删除当前项吗'
+        }
         if (row.id) {
-          this.$baseConfirm(
-              msg,
-            { title: '提示' },
-            async () => {
-              const { msg } = await doDelete({ ids: row.id })
-              this.$baseMessage('未选中任何行', 'success')
-              this.fetchData()
-            }
-          )
+          this.$baseConfirm(msg, { title: '提示' }, async () => {
+            const { msg } = await doDelete({ ids: row.id })
+            this.$baseMessage('未选中任何行', 'success')
+            this.fetchData()
+          })
         } else {
           if (this.selectRows.length > 0) {
             const ids = this.selectRows.map((item) => item.id).join()
-            this.$baseConfirm(
-                msg,
-              { title: '提示' },
-              async () => {
-                const { msg } = await doDelete({ ids: ids })
-                this.$baseMessage('成功', 'success')
-                this.fetchData()
-              }
-            )
+            this.$baseConfirm(msg, { title: '提示' }, async () => {
+              const { msg } = await doDelete({ ids: ids })
+              this.$baseMessage('成功', 'success')
+              this.fetchData()
+            })
           } else {
             this.$baseMessage('未选中任何行', 'error')
             return false
@@ -692,31 +1001,31 @@
   ::v-deep .el-button {
     margin-left: 10px;
   }
-  ::v-deep .setTopCss .el-dialog__body{
-    padding-top:10px;
-    padding-bottom:10px;
+  ::v-deep .setTopCss .el-dialog__body {
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
-  .contentTxt{
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display:-webkit-box;
-      -webkit-box-orient:vertical;
-      -webkit-line-clamp:2;
+  .contentTxt {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
-  .setTopCss{
-    p{
-      padding:0px;
-      margin:0px;
+  .setTopCss {
+    p {
+      padding: 0px;
+      margin: 0px;
     }
-    .topiceTitle{
+    .topiceTitle {
       font-weight: bold;
     }
-    .boldFix{
-       font-weight: bold;
+    .boldFix {
+      font-weight: bold;
       line-height: 30px;
     }
   }
-  .seeSelf{
+  .seeSelf {
     margin-bottom: 20px;
   }
 </style>

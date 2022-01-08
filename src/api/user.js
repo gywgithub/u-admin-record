@@ -7,7 +7,15 @@ export async function login(data) {
     data = await encryptedData(data)
   }
   return request({
-    url: '/login',
+    url: '/user/login',
+    method: 'post',
+    data,
+  })
+}
+
+export function register(data) {
+  return request({
+    url: '/user/register',
     method: 'post',
     data,
   })
@@ -26,13 +34,6 @@ export function getUserInfo(accessToken) {
 export function logout() {
   return request({
     url: '/logout',
-    method: 'post',
-  })
-}
-
-export function register() {
-  return request({
-    url: '/register',
     method: 'post',
   })
 }

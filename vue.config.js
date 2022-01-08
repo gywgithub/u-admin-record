@@ -54,7 +54,16 @@ module.exports = {
       warnings: true,
       errors: true,
     },
-    after: mockServer(),
+    proxy: {
+      '/api': {
+        target: 'http://10.255.52.94:8080/', //开发环境
+        // target: 'http://10.255.90.25/api', //生产环境
+        ws: true,
+        changeOrigin: true,
+        pathRewrite: { '^/api': '' },
+      },
+    },
+    // after: mockServer(),
   },
   configureWebpack() {
     return {

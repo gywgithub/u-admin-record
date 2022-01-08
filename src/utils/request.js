@@ -22,12 +22,12 @@ let loadingInstance
  * @author chuzhixin 1204505056@qq.com （不想保留author可删除）
  * @description 处理code异常
  * @param {*} code
- * @param {*} msg
+ * @param {*} message
  */
-const handleCode = (code, msg) => {
+const handleCode = (code, message) => {
   switch (code) {
     case invalidCode:
-      Vue.prototype.$baseMessage(msg || `后端接口${code}异常`, 'error')
+      Vue.prototype.$baseMessage(message || `后端接口${code}异常`, 'error')
       store.dispatch('user/resetAccessToken').catch(() => {})
       if (loginInterception) {
         location.reload()
@@ -37,7 +37,7 @@ const handleCode = (code, msg) => {
       router.push({ path: '/401' }).catch(() => {})
       break
     default:
-      Vue.prototype.$baseMessage(msg || `后端接口${code}异常`, 'error')
+      Vue.prototype.$baseMessage(message || `后端接口${code}异常`, 'error')
       break
   }
 }
@@ -81,7 +81,7 @@ instance.interceptors.response.use(
     if (loadingInstance) loadingInstance.close()
 
     const { data, config } = response
-    const { code, msg } = data
+    const { code, message } = data
     // 操作正常Code数组
     const codeVerificationArray = isArray(successCode)
       ? [...successCode]
@@ -90,10 +90,10 @@ instance.interceptors.response.use(
     if (codeVerificationArray.includes(code)) {
       return data
     } else {
-      handleCode(code, msg)
+      handleCode(code, message)
       return Promise.reject(
         'vue-admin-beautiful请求异常拦截:' +
-          JSON.stringify({ url: config.url, code, msg }) || 'Error'
+          JSON.stringify({ url: config.url, code, message }) || 'Error'
       )
     }
   },
@@ -102,7 +102,7 @@ instance.interceptors.response.use(
     const { response, message } = error
     if (error.response && error.response.data) {
       const { status, data } = response
-      handleCode(status, data.msg || message)
+      handleCode(status, data.message || message)
       return Promise.reject(error)
     } else {
       let { message } = error
