@@ -1,5 +1,5 @@
 <template>
-  <div class="vue-admin-beautiful-wrapper" :class="classObj">
+  <div class="elephant-admin-wrapper" :class="classObj">
     <div
       v-if="'horizontal' === layout"
       class="layout-container-horizontal"
@@ -82,7 +82,7 @@
       const userAgent = navigator.userAgent
       if (userAgent.includes('Juejin')) {
         this.$baseAlert(
-          'vue-admin-beautiful不支持在掘金内置浏览器演示，请手动复制以下地址到浏览器中查看http://mpfhrd48.sanxing.uz7.cn/vue-admin-beautiful'
+          'elephant-admin不支持在掘金内置浏览器演示，请手动复制以下地址到浏览器中查看http://mpfhrd48.sanxing.uz7.cn/elephant-admin'
         )
       }
       const isMobile = this.handleIsMobile()
@@ -120,9 +120,9 @@
       handleIsMobile() {
         return document.body.getBoundingClientRect().width - 1 < 992
       },
-      handleSileBar(){
-          this.handleFoldSideBar();
-          this.changeIsShowLogo();
+      handleSileBar() {
+        this.handleFoldSideBar()
+        this.changeIsShowLogo()
       },
       handleResize() {
         if (!document.hidden) {
@@ -155,7 +155,8 @@
     overflow: hidden;
   }
 
-  .vue-admin-beautiful-wrapper {
+  .elephant-admin-wrapper {
+    min-width: 1920px;
     position: relative;
     width: 100%;
     height: 100%;
@@ -254,6 +255,7 @@
           }
 
           .app-main-container {
+            padding: $base-vab-main-padding;
             width: calc(100% - #{$base-padding} - #{$base-padding});
             margin: $base-padding auto;
             background: $base-color-white;

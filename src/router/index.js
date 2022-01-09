@@ -1,14 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { publicPath, routerMode } from '@/config'
-import whiteList from './modules/whiteList/'
+import whiteList from './modules/whiteList'
+import dashboard from './modules/dashboard'
 import share from './modules/share'
 import setting from './modules/setting'
 import everyone from './modules/everyone'
 
 Vue.use(VueRouter)
 export const constantRoutes = [...whiteList]
-export const asyncRoutes = [...share, ...setting, ...everyone]
+export const asyncRoutes = [...dashboard, ...share, ...setting, ...everyone]
 
 const router = new VueRouter({
   base: publicPath,

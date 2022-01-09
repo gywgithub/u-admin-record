@@ -94,7 +94,7 @@
       this.$baseEventBus.$on('theme', () => {
         this.handleOpenThemeBar()
       })
-      const theme = localStorage.getItem('vue-admin-beautiful-theme')
+      const theme = localStorage.getItem('elephant-admin-theme')
       if (null !== theme) {
         this.theme = JSON.parse(theme)
         this.handleSetTheme()
@@ -119,7 +119,7 @@
       handleSetTheme() {
         let { name, layout, header, tabsBar } = this.theme
         localStorage.setItem(
-          'vue-admin-beautiful-theme',
+          'elephant-admin-theme',
           `{
             "name":"${name}",
             "layout":"${layout}",
@@ -132,7 +132,7 @@
         this.changeTabsBar(tabsBar)
         document.getElementsByTagName(
           'body'
-        )[0].className = `vue-admin-beautiful-theme-${name}`
+        )[0].className = `elephant-admin-theme-${name}`
         this.drawerVisible = false
       },
       handleSaveTheme() {
@@ -142,8 +142,8 @@
         let { name } = this.theme
         document
           .getElementsByTagName('body')[0]
-          .classList.remove(`vue-admin-beautiful-theme-${name}`)
-        localStorage.removeItem('vue-admin-beautiful-theme')
+          .classList.remove(`elephant-admin-theme-${name}`)
+        localStorage.removeItem('elephant-admin-theme')
         this.$refs['form'].resetFields()
         Object.assign(this.$data, this.$options.data())
         this.changeHeader(defaultLayout)
@@ -154,28 +154,7 @@
         this.drawerVisible = false
       },
       handleGetCode() {
-        const url =
-          'https://github.com/chuzhixin/vue-admin-beautiful/tree/master/src/views'
-        let path = this.$route.path + '/index.vue'
-        if (path === '/vab/menu1/menu1-1/menu1-1-1/index.vue') {
-          path = '/vab/nested/menu1/menu1-1/menu1-1-1/index.vue'
-        }
-        if (path === '/vab/icon/awesomeIcon/index.vue') {
-          path = '/vab/icon/index.vue'
-        }
-        if (path === '/vab/icon/remixIcon/index.vue') {
-          path = '/vab/icon/remixIcon.vue'
-        }
-        if (path === '/vab/icon/colorfulIcon/index.vue') {
-          path = '/vab/icon/colorfulIcon.vue'
-        }
-        if (path === '/vab/table/comprehensiveTable/index.vue') {
-          path = '/vab/table/index.vue'
-        }
-        if (path === '/vab/table/inlineEditTable/index.vue') {
-          path = '/vab/table/inlineEditTable.vue'
-        }
-        window.open(url + path)
+        window.open('https://github.com/chuzhixin')
       },
     },
   }

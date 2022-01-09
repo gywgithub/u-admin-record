@@ -6,13 +6,12 @@
 import defaultSettings from '@/config'
 
 const { tabsBar, logo, layout, header, themeBar } = defaultSettings
-const theme =
-  JSON.parse(localStorage.getItem('vue-admin-beautiful-theme')) || ''
+const theme = JSON.parse(localStorage.getItem('elephant-admin-theme')) || ''
 const state = {
   tabsBar: theme.tabsBar || tabsBar,
   logo,
   collapse: false,
-  isShowLogo : true,
+  isShowLogo: true,
   layout: theme.layout || layout,
   header: theme.header || header,
   device: 'desktop',
@@ -33,7 +32,7 @@ const mutations = {
     if (layout) state.layout = layout
   },
   changeIsShowLogo: (state, isShowLogo) => {
-    console.log("99999999999999");
+    console.log('99999999999999')
     state.isShowLogo = !state.isShowLogo
   },
   changeHeader: (state, header) => {

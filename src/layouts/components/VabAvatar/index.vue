@@ -2,7 +2,11 @@
   <el-dropdown @command="handleCommand">
     <span class="avatar-dropdown">
       <!--<el-avatar class="user-avatar" :src="avatar"></el-avatar>-->
-      <img class="user-avatar" :src="avatar" alt="" />
+      <img
+        class="user-avatar"
+        src="https://i.gtimg.cn/club/item/face/img/2/15922_100.gif"
+        alt=""
+      />
       <div class="user-name">
         {{ username }}
         <i class="el-icon-arrow-down el-icon--right"></i>
@@ -37,10 +41,10 @@
             this.personalCenter()
             break
           case 'github':
-            window.open('https://github.com/chuzhixin/vue-admin-beautiful')
+            window.open('https://github.com/chuzhixin/elephant-admin')
             break
           case 'gitee':
-            window.open('https://gitee.com/chu1204505056/vue-admin-beautiful')
+            window.open('https://gitee.com/chu1204505056/elephant-admin')
             break
         }
       },

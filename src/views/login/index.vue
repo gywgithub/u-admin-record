@@ -200,12 +200,10 @@
             }
             this.$store
               .dispatch('user/login', params)
-              .then(() => {
-                const routerPath =
-                  this.redirect === '/404' || this.redirect === '/401'
-                    ? '/'
-                    : this.redirect
-                this.$router.push(routerPath).catch(() => {})
+              .then((res) => {
+                this.$router.push({
+                  path: '/dashboard/index',
+                })
                 this.loading = false
               })
               .catch(() => {

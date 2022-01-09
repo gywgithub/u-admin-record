@@ -92,7 +92,7 @@ instance.interceptors.response.use(
     } else {
       handleCode(code, message)
       return Promise.reject(
-        'vue-admin-beautiful请求异常拦截:' +
+        'elephant-admin请求异常拦截:' +
           JSON.stringify({ url: config.url, code, message }) || 'Error'
       )
     }

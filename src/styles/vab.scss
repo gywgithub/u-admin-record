@@ -140,7 +140,8 @@ html {
 
     /* 大图展示结束 */
 
-    .vue-admin-beautiful-wrapper {
+    .elephant-admin-wrapper {
+      min-width: 1920px;
       .app-main-container {
         @include base-scrollbar;
 
