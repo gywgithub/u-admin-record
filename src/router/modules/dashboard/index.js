@@ -7,7 +7,7 @@ export default [
     children: [
       {
         path: 'index',
-        name: 'Index',
+        name: 'Dashboard',
         hidden: false,
         component: () => import('@/views/dashboard/index'),
         meta: {

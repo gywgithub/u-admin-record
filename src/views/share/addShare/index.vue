@@ -19,7 +19,8 @@
               ref="mycascader"
               v-model="form.isSelectProfession"
               style="width: 100%"
-              :props="props"
+              :props="customProp"
+              :options="categoryList"
               :clearable="true"
               @change="getProfession"
             ></el-cascader>
@@ -142,12 +143,16 @@
 
 <script>
   import vabQuill from '@/plugins/vabQuill'
+  import { getIndustryCategoryReq } from '@/api/share/addShare'
   let id = 0
   export default {
     name: 'AddShare',
     components: { vabQuill },
     data() {
       return {
+        categoryList: [],
+        customProp: { value: 'code', label: 'name' },
+        activeNames: 1,
         topicTimeLine: [
           {
             id: 1,
@@ -198,21 +203,6 @@
         borderColor: '#dcdfe6',
         dialogTableVisible: false,
         isOpenMoenyShare: false,
-        props: {
-          lazy: true,
-          lazyLoad(node, resolve) {
-            const { level } = node
-            setTimeout(() => {
-              const nodes = Array.from({ length: level + 1 }).map((item) => ({
-                value: ++id,
-                label: `选项${id}`,
-                leaf: level >= 2,
-              }))
-              // 通过调用resolve将子节点数据返回，通知组件数据加载完成
-              resolve(nodes)
-            }, 300)
-          },
-        },
         form: {
           title: '',
           content: '',
@@ -262,7 +252,52 @@
         },
       }
     },
+    mounted() {
+      this.init()
+    },
     methods: {
+      init() {
+        this.initData()
+      },
+      initData() {
+        this.getIndustryList()
+      },
+      getIndustryList() {
+        getIndustryCategoryReq().then((res) => {
+          if (res.success) {
+            this.categoryList = this.listToTree(res.data)
+          } else {
+            this.$baseMessage(res.message, 'error')
+          }
+        })
+      },
+      listToTree(list) {
+        let map = {}
+        list.forEach((item) => {
+          if (!map[item.id]) {
+            map[item.id] = item
+          }
+        })
+
+        list.forEach((item) => {
+          if (item.parentId !== 0) {
+            if (map[item.parentId].children) {
+              map[item.parentId].children.push(item)
+            } else {
+              map[item.parentId].children = [item]
+            }
+          }
+        })
+
+        return list.filter((item) => {
+          if (item.parentId === 0) {
+            return item
+          }
+        })
+      },
+      handleChange() {
+        console.dir(123)
+      },
       handleSee() {
         this.$refs['form'].validate((valid) => {
           if (valid) {
@@ -285,8 +320,7 @@
       handleSave() {
         this.$refs['form'].validate((valid) => {
           if (valid) {
-            // this.$baseMessage('保存成功', 'success')
-            this.$router.push('/share/editShare')
+            this.$router.push('/share/editor')
           } else {
             return false
           }

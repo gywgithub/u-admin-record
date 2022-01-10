@@ -45,12 +45,12 @@
         </template>
       </el-table-column>
     </el-table>
-    <edit ref="edit" @fetch-data="fetchData"></edit>
+    <edit ref="edit"></edit>
   </div>
 </template>
 
 <script>
-  import { getList, doDelete } from '@/api/roleManagement'
+  import { doDelete } from '@/api/roleManagement'
   import Edit from './components/RoleManagementEdit'
 
   export default {
@@ -123,7 +123,6 @@
           this.$baseConfirm('你确定要删除当前项吗', null, async () => {
             const { msg } = await doDelete({ ids: row.id })
             this.$baseMessage(msg, 'success')
-            this.fetchData()
           })
         } else {
           if (this.selectRows.length > 0) {
@@ -131,7 +130,6 @@
             this.$baseConfirm('你确定要删除选中项吗', null, async () => {
               const { msg } = await doDelete({ ids })
               this.$baseMessage(msg, 'success')
-              this.fetchData()
             })
           } else {
             this.$baseMessage('未选中任何行', 'error')

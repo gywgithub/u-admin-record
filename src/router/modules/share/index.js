@@ -51,6 +51,17 @@ export default [
           permissions: ['admin'],
         },
       },
+      {
+        path: 'editor',
+        name: 'Editor',
+        hidden: true,
+        component: () => import('@/views/share/editor/index'),
+        meta: {
+          title: '编辑内容',
+          icon: 'rocket',
+          permissions: ['admin'],
+        },
+      },
     ],
   },
 ]

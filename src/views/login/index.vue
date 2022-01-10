@@ -203,6 +203,7 @@
               .then((res) => {
                 this.$router.push({
                   path: '/dashboard/index',
+                  name: 'Dashboard',
                 })
                 this.loading = false
               })

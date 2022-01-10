@@ -103,7 +103,7 @@
   import VabChart from '@/plugins/echarts'
   import { dependencies, devDependencies } from '../../../package.json'
   export default {
-    name: 'Index',
+    name: 'Dashboard',
     components: {
       VabChart,
     },

@@ -30,6 +30,7 @@
     <el-table
       v-loading="listLoading"
       :data="list"
+      :border="true"
       :element-loading-text="elementLoadingText"
       @selection-change="setSelectRows"
     >
@@ -154,9 +155,20 @@
       },
       async fetchData() {
         this.listLoading = true
-        const { data, totalCount } = await getList(this.queryForm)
-        this.list = data
-        this.total = totalCount
+        let arr = []
+        for (let i = 0; i < 199; i++) {
+          let temp = {}
+          temp['id'] = i + 1
+          temp['username'] = '李四'
+          temp['password'] =
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXNzd29yZCI6ImY0OTc5N'
+          temp['email'] = '1102389812@qq.com'
+          temp['permissions'] = ['删除', '新增', '编辑', '修改']
+          temp['datatime'] = '2020-12-23 12:21:22'
+          arr.push(temp)
+        }
+        this.list = arr
+        this.total = 200
         setTimeout(() => {
           this.listLoading = false
         }, 300)

@@ -1,4 +1,7 @@
 import Vue from 'vue'
+import 'normalize.css/normalize.css'
+import '@/styles/business-style.css'
+import '@/styles/business-style-Impl.css'
 import App from './App'
 import store from './store'
 import router from './router'
