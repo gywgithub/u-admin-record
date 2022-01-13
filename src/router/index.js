@@ -6,10 +6,17 @@ import dashboard from './modules/dashboard'
 import share from './modules/share'
 import setting from './modules/setting'
 import everyone from './modules/everyone'
+import templateCollections from './modules/template'
 
 Vue.use(VueRouter)
 export const constantRoutes = [...whiteList]
-export const asyncRoutes = [...dashboard, ...share, ...setting, ...everyone]
+export const asyncRoutes = [
+  ...dashboard,
+  ...share,
+  ...setting,
+  ...templateCollections,
+  ...everyone,
+]
 
 const router = new VueRouter({
   base: publicPath,
