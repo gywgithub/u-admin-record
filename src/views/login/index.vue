@@ -202,7 +202,7 @@
               .dispatch('user/login', params)
               .then((res) => {
                 this.$router.push({
-                  path: '/dashboard',
+                  path: '/dashboard/index',
                   name: 'Dashboard',
                 })
                 this.loading = false

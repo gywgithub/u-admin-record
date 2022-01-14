@@ -4,4 +4,7 @@ src/assets
 src/icons
 public
 dist
-node_modules
+src/lib
+build/*.js
+node_modules/*
+static/*

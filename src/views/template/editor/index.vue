@@ -1,6 +1,13 @@
 <template>
   <div class="temp-editor">
-    <tinymce-editor></tinymce-editor>
+    <el-row :gutter="20">
+      <el-col :span="12">
+        <tinymce-editor v-model="content" :height="300"></tinymce-editor>
+      </el-col>
+      <el-col :span="12">
+        <div class="editor-content" v-html="content" />
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -10,7 +17,9 @@
     name: 'TempEditor',
     components: { tinymceEditor },
     data() {
-      return {}
+      return {
+        content: '',
+      }
     },
     computed: {},
     watch: {},
@@ -19,4 +28,11 @@
   }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  .tinymceEditorStyle {
+    width: 50%;
+  }
+  .editor-content {
+    margin-top: 20px;
+  }
+</style>
