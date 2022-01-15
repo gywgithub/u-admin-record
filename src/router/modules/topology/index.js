@@ -1,21 +1,22 @@
 import Layout from "@/layouts";
 export default [
 	{
-		path: "/dashboard",
+		path: "/topology",
 		component: Layout,
-		redirect: "/dashboard/index",
+		redirect: "/topology/index",
 		meta: {
-			title: "首页",
+			title: "拓扑图",
 			icon: "home",
 		},
+		hidden: true,
 		children: [
 			{
 				path: "index",
-				name: "Dashboard",
-				hidden: false,
-				component: () => import("@/views/dashboard/index"),
+				name: "Index",
+				hidden: true,
+				component: () => import("@/views/topology/index"),
 				meta: {
-					title: "首页",
+					title: "拓扑图",
 					icon: "home",
 					affix: true,
 				},

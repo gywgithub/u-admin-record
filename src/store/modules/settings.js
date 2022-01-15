@@ -3,81 +3,81 @@
  * @description 所有全局配置的状态管理，如无必要请勿修改
  */
 
-import defaultSettings from '@/config'
+import defaultSettings from "@/config";
 
-const { tabsBar, logo, layout, header, themeBar } = defaultSettings
-const theme = JSON.parse(localStorage.getItem('elephant-admin-theme')) || ''
+const { tabsBar, logo, layout, header, themeBar } = defaultSettings;
+const theme = JSON.parse(localStorage.getItem("elephant-admin-theme")) || "";
 const state = {
-  tabsBar: theme.tabsBar || tabsBar,
-  logo,
-  collapse: false,
-  isShowLogo: true,
-  layout: theme.layout || layout,
-  header: theme.header || header,
-  device: 'desktop',
-  themeBar,
-}
+	tabsBar: theme.tabsBar || tabsBar,
+	logo,
+	collapse: false,
+	isShowLogo: true,
+	layout: theme.layout || layout,
+	header: theme.header || header,
+	device: "desktop",
+	themeBar,
+};
 const getters = {
-  collapse: (state) => state.collapse,
-  isShowLogo: (state) => state.isShowLogo,
-  device: (state) => state.device,
-  header: (state) => state.header,
-  layout: (state) => state.layout,
-  logo: (state) => state.logo,
-  tabsBar: (state) => state.tabsBar,
-  themeBar: (state) => state.themeBar,
-}
+	collapse: (state) => state.collapse,
+	isShowLogo: (state) => state.isShowLogo,
+	device: (state) => state.device,
+	header: (state) => state.header,
+	layout: (state) => state.layout,
+	logo: (state) => state.logo,
+	tabsBar: (state) => state.tabsBar,
+	themeBar: (state) => state.themeBar,
+};
 const mutations = {
-  changeLayout: (state, layout) => {
-    if (layout) state.layout = layout
-  },
-  changeIsShowLogo: (state, isShowLogo) => {
-    console.log('99999999999999')
-    state.isShowLogo = !state.isShowLogo
-  },
-  changeHeader: (state, header) => {
-    if (header) state.header = header
-  },
-  changeTabsBar: (state, tabsBar) => {
-    if (tabsBar) state.tabsBar = tabsBar
-  },
-  changeCollapse: (state) => {
-    state.collapse = !state.collapse
-  },
-  foldSideBar: (state) => {
-    state.collapse = true
-  },
-  openSideBar: (state) => {
-    state.collapse = false
-  },
-  toggleDevice: (state, device) => {
-    state.device = device
-  },
-}
+	changeLayout: (state, layout) => {
+		if (layout) state.layout = layout;
+	},
+	changeIsShowLogo: (state, isShowLogo) => {
+		console.log("99999999999999");
+		state.isShowLogo = !state.isShowLogo;
+	},
+	changeHeader: (state, header) => {
+		if (header) state.header = header;
+	},
+	changeTabsBar: (state, tabsBar) => {
+		if (tabsBar) state.tabsBar = tabsBar;
+	},
+	changeCollapse: (state) => {
+		state.collapse = !state.collapse;
+	},
+	foldSideBar: (state) => {
+		state.collapse = true;
+	},
+	openSideBar: (state) => {
+		state.collapse = false;
+	},
+	toggleDevice: (state, device) => {
+		state.device = device;
+	},
+};
 const actions = {
-  changeLayout({ commit }, layout) {
-    commit('changeLayout', layout)
-  },
-  changeIsShowLogo({ commit }, isShowLogo) {
-    commit('changeIsShowLogo', isShowLogo)
-  },
-  changeHeader({ commit }, header) {
-    commit('changeHeader', header)
-  },
-  changeTabsBar({ commit }, tabsBar) {
-    commit('changeTabsBar', tabsBar)
-  },
-  changeCollapse({ commit }) {
-    commit('changeCollapse')
-  },
-  foldSideBar({ commit }) {
-    commit('foldSideBar')
-  },
-  openSideBar({ commit }) {
-    commit('openSideBar')
-  },
-  toggleDevice({ commit }, device) {
-    commit('toggleDevice', device)
-  },
-}
-export default { state, getters, mutations, actions }
+	changeLayout({ commit }, layout) {
+		commit("changeLayout", layout);
+	},
+	changeIsShowLogo({ commit }, isShowLogo) {
+		commit("changeIsShowLogo", isShowLogo);
+	},
+	changeHeader({ commit }, header) {
+		commit("changeHeader", header);
+	},
+	changeTabsBar({ commit }, tabsBar) {
+		commit("changeTabsBar", tabsBar);
+	},
+	changeCollapse({ commit }) {
+		commit("changeCollapse");
+	},
+	foldSideBar({ commit }) {
+		commit("foldSideBar");
+	},
+	openSideBar({ commit }) {
+		commit("openSideBar");
+	},
+	toggleDevice({ commit }, device) {
+		commit("toggleDevice", device);
+	},
+};
+export default { state, getters, mutations, actions };
