@@ -5,7 +5,7 @@ export default [
 		component: Layout,
 		redirect: "noRedirect",
 		name: "Share",
-		meta: { title: "分享管理", icon: "share-alt", permissions: ["admin"] },
+		meta: { title: "经验管理", icon: "share-alt", permissions: ["admin"] },
 		children: [
 			{
 				path: "shareList",
@@ -13,7 +13,7 @@ export default [
 				hidden: false,
 				component: () => import("@/views/share/shareList/index"),
 				meta: {
-					title: "我的分享",
+					title: "我的经验",
 					icon: "arrows-alt",
 					permissions: ["admin"],
 				},
@@ -24,7 +24,7 @@ export default [
 				hidden: false,
 				component: () => import("@/views/share/addShare/index"),
 				meta: {
-					title: "发起分享",
+					title: "发起经验",
 					icon: "arrow-alt-circle-up",
 					permissions: ["admin"],
 				},
@@ -35,7 +35,7 @@ export default [
 				hidden: false,
 				component: () => import("@/views/share/seekShare/index"),
 				meta: {
-					title: "寻找分享",
+					title: "寻找经验",
 					icon: "arrow-circle-down",
 					permissions: ["admin"],
 				},
@@ -46,7 +46,7 @@ export default [
 				hidden: true,
 				component: () => import("@/views/share/editShare/index"),
 				meta: {
-					title: "编辑分享",
+					title: "编辑经验",
 					icon: "rocket",
 					permissions: ["admin"],
 				},
@@ -82,7 +82,7 @@ export default [
 				component: () =>
 					import("@/views/share/components/shareSuccess/index"),
 				meta: {
-					title: "分享成功",
+					title: "经验成功",
 					icon: "rocket",
 					permissions: ["admin"],
 				},

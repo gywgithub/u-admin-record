@@ -9,7 +9,7 @@ export default {
 	computed: {},
 	watch: {},
 	data() {
-		return { pn: "话题大厅" };
+		return { pn: "经验大厅" };
 	},
 	mounted() {},
 	methods: {},

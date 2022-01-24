@@ -55,9 +55,9 @@
 					width="300"
 					trigger="hover"
 				>
-					<p>1:当前目录仅作用于当前的分享</p>
+					<p>1:当前目录仅作用于当前的经验</p>
 					<p>
-						2:您可以以目录的方式划分分享
+						2:您可以以目录的方式划分经验
 						<el-tooltip
 							class="item"
 							effect="dark"
@@ -155,7 +155,7 @@ export default {
 			dialogVisible: false,
 			unModalFaceBack: false,
 			dialognodeNameVisible: false,
-			remarkDialogTitle: "当前分享",
+			remarkDialogTitle: "当前经验",
 			nodeNameDialogTitle: "新增",
 			nodeTreeType: 1,
 			treeData: [

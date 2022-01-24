@@ -21,13 +21,13 @@
 							:picker-options="pickerOptions"
 						></el-date-picker>
 					</el-form-item>
-					<el-form-item label="分享类型" prop="shareType">
+					<el-form-item label="经验类型" prop="shareType">
 						<el-select v-model="ruleForm.shareType">
 							<el-option label="发起的" value="fq"></el-option>
 							<el-option label="征求的" value="zq"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="分享状态" prop="status">
+					<el-form-item label="经验状态" prop="status">
 						<el-select v-model="ruleForm.status">
 							<el-option label="全部" value="all"></el-option>
 							<el-option label="上架中" value="sj"></el-option>
@@ -113,7 +113,7 @@
 			></el-table-column>
 			<el-table-column
 				show-overflow-tooltip
-				label="分享者"
+				label="经验者"
 				align="center"
 				width="180px"
 			>
@@ -173,12 +173,12 @@
 			@size-change="handleSizeChange"
 		></el-pagination>
 		<el-dialog
-			title="分享时间线"
+			title="经验时间线"
 			:visible.sync="isShowExperienceDetail"
 			:before-close="beforeCloseDetail"
 		>
 			<span slot="title" class="dialog-title">
-				<b>分享详情</b>
+				<b>经验详情</b>
 			</span>
 			<el-tabs v-model="activeName" @tab-click="handleClick">
 				<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
@@ -233,7 +233,7 @@
 			</el-tabs>
 		</el-dialog>
 		<el-dialog
-			title="分享者列表"
+			title="经验者列表"
 			:visible.sync="isShowShares"
 			:before-close="beforeCloseSharesDislog"
 		>
@@ -252,11 +252,11 @@
 						type="text"
 						@click="addCurrShare(row)"
 					>
-						添加分享
+						添加经验
 						<el-tooltip
 							class="item"
 							effect="dark"
-							content="不能给自己添加分享"
+							content="不能给自己添加经验"
 							placement="top-start"
 						>
 							<el-link
@@ -265,7 +265,7 @@
 							></el-link>
 						</el-tooltip>
 					</el-button>
-					<!--          <el-button type="text" disabled  @click="addCurrShare(row)">添加分享</el-button>-->
+					<!--          <el-button type="text" disabled  @click="addCurrShare(row)">添加经验</el-button>-->
 				</div>
 				<el-table :data="shareList" style="width: 100%">
 					<el-table-column type="expand">
@@ -289,7 +289,7 @@
 									align="center"
 								></el-table-column>
 								<el-table-column
-									label="分享者"
+									label="经验者"
 									width="120"
 									align="center"
 								>
@@ -369,7 +369,7 @@
 						</template>
 					</el-table-column>
 					<el-table-column
-						label="分享者"
+						label="经验者"
 						prop="author"
 						align="center"
 					></el-table-column>
@@ -388,7 +388,7 @@
 							<el-tooltip
 								class="item"
 								effect="dark"
-								content="分享者所有分享案例点赞数累加之和"
+								content="经验者所有经验案例点赞数累加之和"
 								placement="top-start"
 							>
 								<el-link
@@ -583,7 +583,7 @@ export default {
 			formRules: {
 				status: [{ required: false, message: "", trigger: "blur" }],
 			},
-			isShowExperienceDetail: false, //是否展示分享详情
+			isShowExperienceDetail: false, //是否展示经验详情
 			isShowShares: false,
 			seeSelf: false,
 			shareListCopy: [

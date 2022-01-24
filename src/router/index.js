@@ -8,13 +8,11 @@ import setting from "./modules/setting";
 import everyone from "./modules/everyone";
 import templateCollections from "./modules/template";
 import topology from "./modules/topology";
-import hall from "./modules/hall";
 
 Vue.use(VueRouter);
 export const constantRoutes = [...whiteList];
 export const asyncRoutes = [
 	...dashboard,
-	...hall,
 	...share,
 	...setting,
 	...topology,

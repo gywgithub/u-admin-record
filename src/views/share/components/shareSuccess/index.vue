@@ -12,13 +12,13 @@
 			</div>
 			<el-row>
 				<el-button type="primary" round @click="hrefPath(1)"
-					>我的分享</el-button
+					>我的经验</el-button
 				>
 				<el-button type="success" round @click="hrefPath(2)"
-					>发起分享</el-button
+					>发起经验</el-button
 				>
 				<el-button type="info" round @click="hrefPath(3)"
-					>诉求分享</el-button
+					>诉求经验</el-button
 				>
 				<el-button type="warning" round @click="hrefPath(4)"
 					>相关拓扑图</el-button
@@ -36,7 +36,7 @@ export default {
 	watch: {},
 	data() {
 		return {
-			pn: "分享成功",
+			pn: "经验成功",
 			currShareData: {},
 		};
 	},

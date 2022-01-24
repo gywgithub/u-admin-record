@@ -8,6 +8,13 @@ export default [
 		meta: { title: "系统管理", icon: "users-cog", permissions: ["admin"] },
 		children: [
 			{
+				path: "citeDashboard",
+				name: "CiteDashboard",
+				component: () =>
+					import("@/views/systemManage/citeDashboard/index"),
+				meta: { title: "引述", icon: "user-friends" },
+			},
+			{
 				path: "userManagement",
 				name: "UserManagement",
 				component: () =>

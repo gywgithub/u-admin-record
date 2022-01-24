@@ -5,7 +5,7 @@ export default [
 		component: Layout,
 		redirect: "/dashboard/index",
 		meta: {
-			title: "首页",
+			title: "经验大厅",
 			icon: "home",
 		},
 		children: [
@@ -15,7 +15,7 @@ export default [
 				hidden: false,
 				component: () => import("@/views/dashboard/index"),
 				meta: {
-					title: "首页",
+					title: "经验大厅",
 					icon: "home",
 					affix: true,
 				},
