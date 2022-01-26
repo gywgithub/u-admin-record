@@ -32,7 +32,6 @@ const mutations = {
 		if (layout) state.layout = layout;
 	},
 	changeIsShowLogo: (state, isShowLogo) => {
-		console.log("99999999999999");
 		state.isShowLogo = !state.isShowLogo;
 	},
 	changeHeader: (state, header) => {

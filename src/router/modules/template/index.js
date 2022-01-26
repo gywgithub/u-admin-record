@@ -5,7 +5,11 @@ export default [
 		component: Layout,
 		redirect: "/template/tinymce",
 		name: "Share",
-		meta: { title: "测试模板", icon: "rocket", permissions: ["admin"] },
+		meta: {
+			title: "测试",
+			icon: "drafting-compass",
+			permissions: ["admin"],
+		},
 		children: [
 			{
 				path: "tinymce",
@@ -19,13 +23,13 @@ export default [
 				},
 			},
 			{
-				path: "tinymce2",
-				name: "Tinymce2",
+				path: "d3",
+				name: "D3",
 				hidden: false,
-				component: () => import("@/views/template/editor/index"),
+				component: () => import("@/views/template/d3/index"),
 				meta: {
-					title: "tinymce富文本2",
-					icon: "rocket",
+					title: "D3.js",
+					icon: "dove",
 					permissions: ["admin"],
 				},
 			},

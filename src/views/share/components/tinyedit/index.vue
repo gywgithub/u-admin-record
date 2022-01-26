@@ -83,7 +83,7 @@
 				node-key="id"
 				class="mb20"
 				show-checkbox
-				:default-expanded-keys="[]"
+				:default-expanded-keys="[1]"
 				:default-checked-keys="[99]"
 				@check-change="handleCheckChange"
 				@node-drag-start="handleDragStart"

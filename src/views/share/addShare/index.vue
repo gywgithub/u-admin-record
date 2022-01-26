@@ -12,24 +12,88 @@
 					</el-col>
 				</el-row>
 			</el-form-item>
-			<el-form-item label="所属类别" prop="isSelectProfession">
+			<el-form-item label="行业" prop="isSelectProfession">
 				<el-row>
 					<el-col :span="6">
 						<el-cascader
 							ref="mycascader"
 							v-model="form.isSelectProfession"
-							style="width: 80%"
+							style="width: 76%"
 							:props="customProp"
 							filterable
 							:options="categoryList"
 							:clearable="true"
-							placeholder="输入文字可搜素"
+							placeholder="输入文字可搜索"
 							@change="getProfession"
 						></el-cascader>
+						<el-popover
+							placement="right"
+							title="规则"
+							width="300"
+							class="ml10"
+							trigger="click"
+						>
+							<p>1: 该经验将推送在同行业中或直接搜索该经验</p>
+							<p>
+								2: 填写此项，奖励将固定提升0.05（0.1元/次 =>
+								0.15元/次）
+							</p>
+							<p>3: 该奖励与所属地址奖励可累加获得</p>
+							<el-button
+								slot="reference"
+								class="tipRule"
+								icon="el-icon-question"
+							></el-button>
+						</el-popover>
 						<el-link
 							type="primary"
 							@click="openInTreeList"
-							class="ml20"
+							class="ml10"
+							:underline="false"
+							>未找到?</el-link
+						>
+					</el-col>
+				</el-row>
+			</el-form-item>
+			<el-form-item label="地址" prop="address">
+				<el-row>
+					<el-col :span="6">
+						<el-cascader
+							ref="mycascader2"
+							v-model="form.address"
+							style="width: 76%"
+							:props="customProp"
+							filterable
+							:options="categoryList"
+							:clearable="true"
+							placeholder="输入文字可搜索"
+						></el-cascader>
+						<el-popover
+							placement="right"
+							title="规则"
+							width="300"
+							class="ml10"
+							trigger="click"
+						>
+							<p>
+								1: 该经验将根据用户地理位置，提升推送权重
+								地理位置越接近，推送权重越大或直接搜索该经验
+							</p>
+							<p>
+								2: 填写此项，奖励将固定提升0.05（0.1元/次 =>
+								0.15元/次）
+							</p>
+							<p>3: 该奖励与所属行业奖励可累加获得</p>
+							<el-button
+								slot="reference"
+								class="tipRule"
+								icon="el-icon-question"
+							></el-button>
+						</el-popover>
+						<el-link
+							type="primary"
+							@click="openAddAreaDig"
+							class="ml10"
 							:underline="false"
 							>未找到?</el-link
 						>
@@ -213,23 +277,101 @@
 				:rules="treeNewNameRules"
 				:label-position="labelNodePos"
 				class="disf"
-				label-width="70px"
+				label-width="100px"
 			>
-				<el-form-item label="新名称" prop="treeNodeAddName">
+				<el-form-item label="主分类" prop="newindustryName">
 					<el-row>
-						<el-col :span="12">
+						<el-col :span="24">
+							<el-cascader
+								style="width: 300px"
+								ref="newindustryCascader"
+								v-model="treeNewNameForm.newindustryName"
+								:props="newindustryCustomProp"
+								filterable
+								:options="categoryList"
+								:clearable="true"
+								placeholder="输入文字可搜索"
+								@change="getProfession"
+							></el-cascader>
+						</el-col>
+					</el-row>
+				</el-form-item>
+				<el-form-item label="子行业名称" prop="treeNodeAddName">
+					<el-row>
+						<el-col :span="24">
 							<el-input
 								v-model="treeNewNameForm.treeNodeAddName"
+								style="width: 300px"
 								placeholder=""
 							></el-input></el-col
 					></el-row>
 				</el-form-item>
-				<el-form-item class="mt40"
-					><el-button
-						type="primary"
-						@click="addNodeName('treeNewform')"
-						>确 定</el-button
-					></el-form-item
+				<div class="newindustryTips mb20" v-show="newindustryTipShow">
+					<p>1、每位用户15天内，只能提交一次</p>
+					<p>2、提交审核通过后，该经验将自动划分到您新增的行业中</p>
+					<p>3、审核未通过，该经验将自动划分到主分类行业中</p>
+				</div>
+				<el-button
+					type="primary"
+					style="margin-left: 200px"
+					@click="addNodeName('treeNewform')"
+					>确 定</el-button
+				>
+			</el-form>
+		</el-dialog>
+		<el-dialog
+			:title="areaNameDialogTitle"
+			:visible.sync="dialogAreaNameVisible"
+			:close-on-click-modal="areaUnModalFaceBack"
+			width="520px"
+			:before-close="handleAreaCloseAddName"
+		>
+			<el-form
+				ref="treeNewAreaform"
+				:model="treeNewAreaNameForm"
+				:rules="treeNewAreaNameRules"
+				:label-position="labelAreaNodePos"
+				class="disf"
+				label-width="100px"
+			>
+				<el-form-item label="主地址" prop="newAreaName">
+					<el-row>
+						<el-col :span="24">
+							<el-cascader
+								style="width: 300px"
+								ref="newindustryCascader"
+								v-model="treeNewAreaNameForm.newAreaName"
+								:props="newAreaCustomProp"
+								filterable
+								:options="categoryList"
+								:clearable="true"
+								placeholder="输入文字可搜索"
+							></el-cascader>
+						</el-col>
+					</el-row>
+				</el-form-item>
+				<el-form-item label="子地址名称" prop="treeNodeAddAreaName">
+					<el-row>
+						<el-col :span="24">
+							<el-input
+								v-model="
+									treeNewAreaNameForm.treeNodeAddAreaName
+								"
+								style="width: 300px"
+								placeholder=""
+							></el-input></el-col
+					></el-row>
+				</el-form-item>
+				<div class="newindustryTips mb20" v-show="newAreaTipShow">
+					<p>1、每位用户15天内，只能提交一次</p>
+					<p>2、提交审核通过后，该经验将自动划分到您新增的地址中</p>
+					<p>3、提交审核未通过，该经验将自动划分到主地址中</p>
+				</div>
+				<el-button
+					type="primary"
+					style="margin-left: 200px"
+					@click="addAreaNameSub('treeNewAreaform')"
+					>确 定</el-button
 				>
 			</el-form>
 		</el-dialog>
@@ -251,15 +393,56 @@ export default {
 	data() {
 		return {
 			categoryList: [],
+			newindustryTipShow: false,
+			newAreaTipShow: false,
 			filterText: "",
 			customProp: { value: "code", label: "name" },
+			newindustryCustomProp: {
+				value: "code",
+				label: "name",
+				checkStrictly: true,
+			},
+			newAreaCustomProp: {
+				value: "code",
+				label: "name",
+				checkStrictly: true,
+			},
 			activeNames: 1,
 			addNodeData: {},
+			treeNewAreaNameForm: {
+				treeNodeAddAreaName: "",
+				newAreaName: "",
+			},
+			treeNewAreaNameRules: {
+				newindustryName: [
+					{
+						required: true,
+						message: "请选择",
+						trigger: "change",
+					},
+				],
+				treeNodeAddName: [
+					{
+						required: true,
+						message: "请输入",
+						trigger: "change",
+					},
+				],
+			},
 			treeNewNameForm: {
 				treeNodeAddName: "",
+				newindustryName: "",
 			},
+			labelAreaNodePos: "right",
 			labelNodePos: "right",
 			treeNewNameRules: {
+				newindustryName: [
+					{
+						required: true,
+						message: "请选择",
+						trigger: "change",
+					},
+				],
 				treeNodeAddName: [
 					{
 						required: true,
@@ -270,9 +453,12 @@ export default {
 			},
 			dialogVisible: false,
 			unModalFaceBack: false,
+			areaUnModalFaceBack: false,
 			dialognodeNameVisible: false,
-			remarkDialogTitle: "自定义类别",
-			nodeNameDialogTitle: "新增类别",
+			dialogAreaNameVisible: false,
+			remarkDialogTitle: "自定义行业",
+			nodeNameDialogTitle: "新增行业",
+			areaNameDialogTitle: "新增地区",
 			treeData: [
 				{
 					id: 2,
@@ -413,6 +599,7 @@ export default {
 				isOpenSwitch: false,
 				shareMode: 2,
 				isSelectProfession: "",
+				address: "",
 			},
 			moreForm: {
 				cause: "",
@@ -423,13 +610,6 @@ export default {
 					{
 						required: true,
 						message: "请输入",
-						trigger: "change",
-					},
-				],
-				isSelectProfession: [
-					{
-						required: true,
-						message: "请选择",
 						trigger: "change",
 					},
 				],
@@ -475,6 +655,9 @@ export default {
 		handleCloseAddName() {
 			this.dialognodeNameVisible = false;
 		},
+		handleAreaCloseAddName() {
+			this.dialogAreaNameVisible = false;
+		},
 		handleCheckChange(data, checked, indeterminate) {
 			console.log(data, checked, indeterminate);
 		},
@@ -505,7 +688,26 @@ export default {
 		addNodeName(formName) {
 			this.$refs[formName].validate((valid) => {
 				if (valid) {
-					this.addNode(this.addNodeData);
+					if (this.newindustryTipShow) {
+						this.newindustryTipShow = false;
+						this.dialognodeNameVisible = false;
+					} else {
+						this.newindustryTipShow = true;
+					}
+				} else {
+					return false;
+				}
+			});
+		},
+		addAreaNameSub(formName) {
+			this.$refs[formName].validate((valid) => {
+				if (valid) {
+					if (this.newAreaTipShow) {
+						this.newAreaTipShow = false;
+						this.dialogAreaNameVisible = false;
+					} else {
+						this.newAreaTipShow = true;
+					}
 				} else {
 					return false;
 				}
@@ -620,7 +822,7 @@ export default {
 		},
 		open() {
 			this.$confirm(
-				"新增类别审核通过后将立即通知您，不过您现在仍然可以使用它?",
+				"新增行业审核通过后将立即通知您，不过您现在仍然可以使用它?",
 				"提示",
 				{
 					confirmButtonText: "确定",
@@ -675,7 +877,11 @@ export default {
 			this.isOpenSwitch = this.form.isOpenSwitch;
 		},
 		openInTreeList() {
-			this.dialogVisible = true;
+			//this.dialogVisible = true; //打开树结构
+			this.dialognodeNameVisible = true; //打开弹窗
+		},
+		openAddAreaDig() {
+			this.dialogAreaNameVisible = true; //打开弹窗
 		},
 		getProfession(val) {
 			if (!this.$refs.mycascader.getCheckedNodes()[0].pathLabels) {
@@ -708,7 +914,21 @@ export default {
 ::v-deep .custom-tree-node .el-button {
 	margin-left: 10px;
 }
+::v-deep .el-cascader__tags .el-tag {
+	margin-left: 5px;
+}
 .add-share {
+	.newindustryTips {
+		margin-left: 100px;
+		p {
+			margin: 0px;
+			padding: 0px;
+			color: #f56c6c;
+			margin-top: 8px;
+			font-size: 13px;
+			font-weight: bold;
+		}
+	}
 	.tipRule {
 		font-size: 14px;
 		border: none;
