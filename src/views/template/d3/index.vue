@@ -22,34 +22,34 @@ export default {
 		return {
 			data: [99, 71, 78, 25, 36, 92],
 			line: "",
-			treeHeight: 580,
-			treewidth: 1366,
+			treeHeight: 600,
+			treewidth: 1566,
 			treeData: {
-				name: "root",
+				name: "衣服衣服",
 				children: [
 					{
-						name: "二级节点1",
+						name: "上衣",
 						children: [
 							{
 								name: "A",
-								value: "叶子节点",
+								value: "短袖",
 							},
 							{
 								name: "B",
-								value: "叶子节点",
+								value: "羽绒服",
 							},
 						],
 					},
 					{
-						name: "二级节点2",
+						name: "下衣",
 						children: [
 							{
 								name: "C",
-								value: "叶子节点",
+								value: "短裤",
 							},
 							{
 								name: "D",
-								value: "叶子节点",
+								value: "长裤",
 							},
 						],
 					},
@@ -121,17 +121,21 @@ export default {
 					return `translate(${d.x}, ${d.y})`;
 				});
 
-			//画圆
+			//画矩形
 			nodes
 				.append("rect")
 				.attr("width", 100)
 				.attr("height", 45)
+				.attr("x", "-50px")
+				.attr("rx", "5px")
 				.attr("fill", "#c03027");
 
 			//插入文字
 			nodes
 				.append("text")
-				.attr("dx", 0)
+				.attr("dy", "28px")
+				.attr("style", "text-anchor:middle")
+				.style("fill", "#ffffff")
 				.text((d) => {
 					return d.data.name;
 				});
@@ -160,6 +164,11 @@ export default {
 <style lang="scss" scoped>
 svg {
 	margin: 25px;
+}
+.tMax {
+	overflow: hidden; //超出的文本隐藏
+	text-overflow: ellipsis; //溢出用省略号显示
+	white-space: nowrap; //溢出不换行
 }
 path {
 	fill: none;
