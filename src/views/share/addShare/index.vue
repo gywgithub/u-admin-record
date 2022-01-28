@@ -34,10 +34,7 @@
 							trigger="click"
 						>
 							<p>1: 该经验将推送在同行业中或直接搜索该经验</p>
-							<p>
-								2: 填写此项，奖励将固定提升0.05（0.1元/次 =>
-								0.15元/次）
-							</p>
+							<p>2: 奖励固定提升0.05（0.1元/次 => 0.15元/次）</p>
 							<p>3: 该奖励与所属地址奖励可累加获得</p>
 							<el-button
 								slot="reference"
@@ -79,10 +76,7 @@
 								1: 该经验将根据用户地理位置，提升推送权重
 								地理位置越接近，推送权重越大或直接搜索该经验
 							</p>
-							<p>
-								2: 填写此项，奖励将固定提升0.05（0.1元/次 =>
-								0.15元/次）
-							</p>
+							<p>2: 奖励固定提升0.05（0.1元/次 => 0.15元/次）</p>
 							<p>3: 该奖励与所属行业奖励可累加获得</p>
 							<el-button
 								slot="reference"
@@ -458,7 +452,7 @@ export default {
 			dialogAreaNameVisible: false,
 			remarkDialogTitle: "自定义行业",
 			nodeNameDialogTitle: "新增行业",
-			areaNameDialogTitle: "新增地区",
+			areaNameDialogTitle: "新增地址",
 			treeData: [
 				{
 					id: 2,

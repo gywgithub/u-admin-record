@@ -31,9 +31,8 @@ const FileManagerPlugin = require("filemanager-webpack-plugin");
 const dayjs = require("dayjs");
 const date = dayjs().format("YYYY_M_D");
 const time = dayjs().format("YYYY-M-D HH:mm:ss");
-const productionGzipExtensions = ["html", "js", "css", "svg"];
 process.env.VUE_APP_TITLE = title || "elephant-admin";
-process.env.VUE_APP_AUTHOR = author || "chuzhixin 1204505056@qq.com";
+process.env.VUE_APP_AUTHOR = author || "1104365373@qq.com";
 process.env.VUE_APP_UPDATE_TIME = time;
 process.env.VUE_APP_VERSION = version;
 
@@ -42,6 +41,7 @@ const mockServer = () => {
 	if (process.env.NODE_ENV === "development") return require("./mock");
 	else return "";
 };
+console.dir(mockServer);
 
 module.exports = {
 	publicPath,
@@ -181,8 +181,8 @@ module.exports = {
 	runtimeCompiler: true,
 	productionSourceMap: false,
 	css: {
-		requireModuleExtension: true,
-		sourceMap: true,
+		extract: true,
+		sourceMap: false,
 		loaderOptions: {
 			scss: {
 				/*sass-loader 8.0语法 */
