@@ -1,43 +1,38 @@
-import Vue from 'vue'
+import Vue from "vue";
+import Clipboard from "v-clipboard";
 
-import 'normalize.css/normalize.css' // A modern alternative to CSS resets
+import "normalize.css/normalize.css"; // A modern alternative to CSS resets
+import "@/styles/business-style.css";
+import "@/styles/business-style-Impl.css";
+import "@/styles/index.scss"; // global css
 
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
-import locale from 'element-ui/lib/locale/lang/en' // lang i18n
+import ElementUI from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
+import { Sortable, Swap } from "sortablejs/modular/sortable.esm";
 
-import '@/styles/index.scss' // global css
+import App from "./App";
+import store from "./store";
+import router from "./router";
+import business from "./utils/modules/business";
+import "@/directive/dialog"; //拖拽
 
-import App from './App'
-import store from './store'
-import router from './router'
+import "@/icons"; // icon
+import "@/permission"; // permission control
+import ctrol from "@/utils/controls";
 
-import '@/icons' // icon
-import '@/permission' // permission control
+Vue.prototype.$_ = (this || (0, eval)("this")).$_z;
+Vue.prototype.$b = business;
 
-/**
- * If you don't want to use mock-server
- * you want to use MockJs for mock api
- * you can execute: mockXHR()
- *
- * Currently MockJs will be used in the production environment,
- * please remove it before going online ! ! !
- */
-if (process.env.NODE_ENV === 'production') {
-  const { mockXHR } = require('../mock')
-  mockXHR()
-}
+Vue.use(Clipboard);
+Vue.use(ElementUI);
+Vue.use(ctrol);
+Sortable.mount(new Swap());
 
-// set ElementUI lang to EN
-Vue.use(ElementUI, { locale })
-// 如果想要中文版 element-ui，按如下方式声明
-// Vue.use(ElementUI)
-
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
-  el: '#app',
-  router,
-  store,
-  render: h => h(App)
-})
+	el: "#app",
+	router,
+	store,
+	render: (h) => h(App),
+});
