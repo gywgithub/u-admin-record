@@ -15,7 +15,7 @@ const install = (Vue, opts = {}) => {
 			loading = Loading.service({
 				lock: true,
 				text: text || loadingText,
-				spinner: "vab-loading-type" + index,
+				spinner: "loading" + index,
 				background: "hsla(0,0%,100%,.8)",
 			});
 		}

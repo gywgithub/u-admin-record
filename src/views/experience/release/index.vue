@@ -94,11 +94,7 @@
 					</el-col>
 				</el-row>
 			</el-form-item>
-			<el-form-item
-				label="价值共享"
-				prop="shareMode"
-				class="vab-quill-content"
-			>
+			<el-form-item label="价值共享" prop="shareMode">
 				<div class="mt8">
 					<el-radio-group v-model="form.shareMode">
 						<el-radio :label="1">
@@ -237,11 +233,7 @@
 					</el-radio-group>
 				</div>
 			</el-form-item>
-			<el-form-item
-				label="简单描述"
-				prop="content"
-				class="vab-quill-content"
-			>
+			<el-form-item label="简单描述" prop="content">
 				<el-row>
 					<el-col :span="8">
 						<el-input
@@ -660,12 +652,11 @@ export default {
 			isOpenMoenyShare: false,
 			noUnder: false,
 			form: {
-				title: "",
-				content: "",
-				isOpenSwitch: false,
-				shareMode: 1,
-				isSelectProfession: "",
-				address: "",
+				title: "", //标题
+				content: "", //描述
+				shareMode: 1, //共享模式
+				isSelectProfession: "", //行业
+				address: "", //省市区
 			},
 			moreForm: {
 				cause: "",
@@ -939,9 +930,6 @@ export default {
 			});
 		},
 		deleEditedContent() {},
-		swichChange() {
-			this.isOpenSwitch = this.form.isOpenSwitch;
-		},
 		openInTreeList() {
 			//this.dialogVisible = true; //打开树结构
 			this.dialognodeNameVisible = true; //打开弹窗

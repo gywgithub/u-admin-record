@@ -2,12 +2,6 @@
 	<div class="release-success">
 		<div class="succcess-main">
 			<div class="mb20">
-				<p class="sucmsg">
-					<vab-icon
-						:icon="['fas', 'check']"
-						class="font38"
-					></vab-icon>
-				</p>
 				<p class="sucmsg">提交成功，请耐心等待审核...</p>
 			</div>
 			<el-row>

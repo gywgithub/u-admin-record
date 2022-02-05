@@ -17,11 +17,7 @@
 					</el-col>
 				</el-row>
 			</el-form-item>
-			<el-form-item
-				label="价值收益"
-				prop="shareMode"
-				class="vab-quill-content"
-			>
+			<el-form-item label="价值模式" prop="shareMode">
 				<div class="mt8">
 					<el-radio-group
 						v-model="form.shareMode"
@@ -34,7 +30,7 @@
 								title="规则"
 								trigger="click"
 							>
-								<p>1: 该经验所有用户均为一般推送权重</p>
+								<p>1: 该经验推送所有用户（权重：一般）</p>
 								<p>2: 打赏额度无最低要求</p>
 								<p>
 									3:
@@ -56,7 +52,7 @@
 							>
 								<p>
 									1:
-									该经验对特定行业的用户为高级推送权重，其它用户为一般推送权重
+									该经验推送特定行业的用户（权重：高级），其它用户（权重：一般）
 								</p>
 								<p>2: 打赏额度最低100象币</p>
 								<p>
@@ -195,7 +191,7 @@
 				</el-row>
 			</el-form-item>
 			<el-form-item
-				label="付费模式"
+				label="付费类型"
 				prop="monenyMode"
 				v-show="form.shareMode == '3'"
 			>
@@ -310,7 +306,7 @@
 					</el-col>
 				</el-row>
 			</el-form-item>
-			<el-form-item label="描述" prop="content" class="vab-quill-content">
+			<el-form-item label="描述" prop="content">
 				<el-row>
 					<el-col :span="8">
 						<el-input
@@ -353,7 +349,7 @@
 					<el-descriptions-item>
 						<template slot="label">
 							<i class="el-icon-refresh"></i>
-							价值收益
+							价值模式
 						</template>
 						{{
 							form.shareMode == 1

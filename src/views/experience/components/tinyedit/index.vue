@@ -70,6 +70,7 @@
 							></el-link>
 						</el-tooltip>
 					</p>
+					<p>3:目录所有层级总数量最大为45</p>
 					<el-button
 						slot="reference"
 						class="tipRule"
@@ -83,6 +84,7 @@
 				node-key="id"
 				class="mb20"
 				show-checkbox
+				:check-strictly="true"
 				:default-expanded-keys="[1]"
 				:default-checked-keys="[99]"
 				@check-change="handleCheckChange"
@@ -115,7 +117,7 @@
 				:label-position="labelNodePos"
 				class="disf"
 			>
-				<el-form-item label="新名称" prop="treeNodeAddName">
+				<el-form-item label="目录名称" prop="treeNodeAddName">
 					<el-row>
 						<el-col :span="12">
 							<el-input
@@ -149,6 +151,7 @@ export default {
 			treeNewNameForm: {
 				treeNodeAddName: "",
 			},
+			dynamicList: [{ id: 99, name: "默认目录", parentId: 0 }],
 			treeNewNameRules: {},
 			dyHeight: 450,
 			labelNodePos: "right",
@@ -163,7 +166,7 @@ export default {
 					id: 1,
 					nativeNode: true,
 					disabled: true,
-					label: "根目录",
+					label: "目录列表",
 					children: [
 						{
 							id: 99,
@@ -174,13 +177,13 @@ export default {
 						{
 							id: 2,
 							label: "1",
-							disabled: true,
+							disabled: false,
 							nativeNode: true,
 							children: [
 								{
 									id: 3,
 									label: "1-1",
-									disabled: true,
+									disabled: false,
 									nativeNode: true,
 									isAddNode: true,
 									children: [
@@ -324,7 +327,11 @@ export default {
 							type="text"
 							on-click={() => this.append(data)}
 						>
-							{node.data.id == 99 ? "" : "新增"}
+							{node.data.id == 99
+								? ""
+								: node.data.nativeNode
+								? "新增"
+								: ""}
 						</el-button>
 						<el-button
 							size="mini"
@@ -368,6 +375,7 @@ export default {
 				let cout = this.childNodeCount++;
 				const newChild = {
 					id: cout,
+					nativeNode: false,
 					label: this.treeNewNameForm.treeNodeAddName,
 					children: [],
 				};
@@ -375,6 +383,11 @@ export default {
 					this.$set(data, "children", []);
 				}
 				data.children.push(newChild);
+				let parentList = {
+					name: this.treeNewNameForm.treeNodeAddName,
+					parentId: data.id,
+				};
+				this.dynamicList.push(parentList);
 				this.$baseMessage("添加成功", "success");
 			} else {
 				//编辑
@@ -405,14 +418,33 @@ export default {
 		reviewreeValue() {
 			let selected = this.$refs.cateTree.getCheckedNodes();
 			if (selected.length == 1) {
-				this.dialogVisible = false;
-				this.$router.push("/experience/releaseSuccess");
+				let storageObj = JSON.parse(
+					localStorage.getItem("tempShareObject")
+				);
+				console.log(storageObj.content);
+				// insertList: this.dynamicList, //用户新增的目录
+				let params = {
+					selectCatalog: selected, //用户勾选的目录
+					richText: this.content, //富文本内容
+					content: storageObj.content, //描述
+					title: storageObj.title, //标题
+					shareMode: storageObj.shareMode, //共享模式
+					industryId: storageObj.isSelectProfession, //行业
+					address: storageObj.address, //省市区
+				};
+				this.submitExperience(params);
 			} else if (selected.length == 0) {
 				this.$baseMessage("请选择目录", "error");
 			} else {
 				this.$baseMessage("只能选择一个目录", "error");
 			}
 			console.dir(selected);
+		},
+		submitExperience(data) {
+			console.log("------------------------------------------------");
+			console.dir(data);
+			//this.dialogVisible = false;
+			//this.$router.push("/experience/releaseSuccess");
 		},
 		//过滤接收对象下拉树回调函数
 		filterNode(value, data) {
