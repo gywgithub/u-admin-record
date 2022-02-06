@@ -39,10 +39,21 @@
 					>
 						<el-select v-model="ruleForm.status">
 							<el-option label="全部" value="all"></el-option>
+							<el-option label="未上架" value="wsj"></el-option>
 							<el-option label="上架中" value="sj"></el-option>
+							<el-option label="已下架" value="xg"></el-option>
+							<el-option label="未审核" value="sj"></el-option>
 							<el-option label="审核中" value="sh"></el-option>
-							<el-option label="已驳回" value="sh"></el-option>
-							<el-option label="已下架" value="yx"></el-option>
+							<el-option label="审核通过" value="sh"></el-option>
+							<el-option
+								label="审核未通过"
+								value="shwtg"
+							></el-option>
+							<el-option label="强制下架" value="qxg"></el-option>
+							<el-option
+								label="人工处理中"
+								value="re"
+							></el-option>
 						</el-select>
 					</el-form-item>
 					<el-button
@@ -402,6 +413,7 @@
 </template>
 
 <script>
+import { getInitDataReq } from "@/api/experience";
 import elephantTable from "@/components/template/elephantTable";
 import request from "@/utils/request";
 export default {
@@ -716,7 +728,7 @@ export default {
 					id: 2,
 					name: "描述",
 					label: "描述",
-					prop: "descript",
+					prop: "content",
 					sort: false,
 					align: "center",
 					filterData: [],
@@ -725,7 +737,7 @@ export default {
 					id: 3,
 					name: "发起者",
 					label: "发起者",
-					prop: "author",
+					prop: "userName",
 					sort: false,
 					align: "center",
 					filterData: [],
@@ -734,7 +746,7 @@ export default {
 					id: 4,
 					name: "经验者",
 					label: "经验者",
-					prop: "experiencer",
+					prop: "customLook",
 					sort: false,
 					align: "center",
 					filterData: [],
@@ -753,7 +765,7 @@ export default {
 					id: 6,
 					name: "创建时间",
 					label: "创建时间",
-					prop: "datetime",
+					prop: "createTime",
 					sort: false,
 					align: "center",
 					filterData: [],
@@ -762,7 +774,7 @@ export default {
 					id: 7,
 					name: "操作",
 					label: "操作",
-					prop: "hanndle",
+					prop: "customHanndle",
 					sort: false,
 					fixed: false,
 					align: "center",
@@ -839,8 +851,66 @@ export default {
 		this.fetchData();
 	},
 	beforeDestroy() {},
-	mounted() {},
+	mounted() {
+		this.initData();
+	},
 	methods: {
+		initData() {
+			//初始化表格数据
+			let userIdstr = JSON.parse(localStorage.getItem("userInfo"));
+			getInitDataReq({ userId: userIdstr.userId }).then((res) => {
+				if (res.success) {
+					let userName = res.data.userName;
+					let json = res.data.experienceList;
+					for (let i = 0; i < json.length; i++) {
+						json[i].userName = userName;
+						json[i].customLook = "";
+						json[i].customHanndle = [
+							"详情",
+							"编辑",
+							"上架",
+							"下架",
+							"删除",
+							"驳回",
+							"通过",
+						];
+					}
+
+					for (let j = 0; j < json.length; j++) {
+						json[j].customLook =
+							"<span class='linkText'>查看</span>";
+						if (json[j].status == 1) {
+							json[j].status = "未审核";
+						} else if (json[j].status == 2) {
+							json[j].status = "审核中";
+						} else if (json[j].status == 3) {
+							json[j].status = "审核通过";
+						} else if (json[j].status == 4) {
+							json[j].status = "审核未通过";
+						} else if (json[j].status == 5) {
+							json[j].status = "未上架";
+						} else if (json[j].status == 6) {
+							json[j].status = "上架中";
+						} else if (json[j].status == 7) {
+							json[j].status = "已下架";
+						} else if (json[j].status == 8) {
+							json[j].status = "强制下架";
+						} else if (json[j].status == 9) {
+							json[j].status = "人工处理中";
+						}
+						let hanndleStr = "";
+						for (let i = 0; i < json[j].customHanndle.length; i++) {
+							hanndleStr +=
+								"<span class='linkText ml10'>" +
+								json[j].customHanndle[i] +
+								"</span>";
+						}
+						json[j].customHanndle = hanndleStr;
+					}
+					this.tableData = json;
+				}
+			});
+		},
 		//分页控件获取数据
 		pageFn({ pageSize, pageNo }) {
 			console.dir(pageSize);
@@ -1002,42 +1072,7 @@ export default {
 		handleQuery() {
 			this.fetchData();
 		},
-		async fetchData() {
-			let arr = [];
-			for (let i = 0; i < 90; i++) {
-				let temp = {};
-				temp["id"] = i + 1;
-				temp["title"] = "中国石化";
-				temp["status"] = "上架中";
-				temp["author"] = "张三";
-				temp["datetime"] = "2022-01-22 15:22:11";
-				temp["experiencer"] = "张三";
-				temp["hanndle"] = [
-					"详情",
-					"编辑",
-					"上架",
-					"下架",
-					"删除",
-					"驳回",
-					"通过",
-				];
-				temp["descript"] =
-					"长期以来，我们甚至无法在美国地图上找到，戒备森严 美国51区里到底有没有外星人？";
-				arr.push(temp);
-			}
-			for (let j = 0; j < arr.length; j++) {
-				arr[j].experiencer = `<span class="linkText">查看</span>`;
-				let hanndleStr = "";
-				for (let i = 0; i < arr[j].hanndle.length; i++) {
-					hanndleStr +=
-						"<span class='linkText ml10'>" +
-						arr[j].hanndle[i] +
-						"</span>";
-				}
-				arr[j].hanndle = hanndleStr;
-			}
-			this.tableData = arr;
-		},
+		async fetchData() {},
 	},
 };
 </script>

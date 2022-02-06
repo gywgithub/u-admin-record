@@ -440,6 +440,8 @@
 </template>
 
 <script>
+import { getIndustryCategoryReq } from "@/api/release";
+
 export default {
 	name: "Release",
 	components: {},
@@ -852,15 +854,15 @@ export default {
 			return draggingNode.data.label.indexOf("三级 3-2-2") === -1;
 		},
 		getIndustryList() {
-			// getIndustryCategoryReq().then((res) => {
-			// 	if (res.success) {
-			// 		let editTreeList = this.transFiled(res.data);
-			// 		this.treeData = this.listToTree(editTreeList);
-			// 		this.categoryList = this.listToTree(res.data);
-			// 	} else {
-			// 		this.$baseMessage(res.message, "error");
-			// 	}
-			// });
+			getIndustryCategoryReq().then((res) => {
+				if (res.success) {
+					let editTreeList = this.transFiled(res.data);
+					this.treeData = this.listToTree(editTreeList);
+					this.categoryList = this.listToTree(res.data);
+				} else {
+					this.$baseMessage(res.message, "error");
+				}
+			});
 		},
 		transFiled(data) {
 			let arr = [];

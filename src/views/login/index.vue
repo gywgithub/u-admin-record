@@ -150,7 +150,10 @@ export default {
 					this.$store
 						.dispatch("user/login", params)
 						.then((res) => {
-							localStorage.setItem("userId", res.data.userId);
+							localStorage.setItem(
+								"userInfo",
+								JSON.stringify(res.data.userInfo)
+							);
 							// this.$router.push({ path: this.redirect || "/" });
 							this.$router.push({ path: "/" });
 							this.loading = false;

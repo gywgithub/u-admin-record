@@ -139,6 +139,7 @@
 </template>
 
 <script>
+import { releaseExperienceReq } from "@/api/release";
 import tinymceEditor from "@/components/Tinymce";
 export default {
 	name: "TinyEditor",
@@ -423,14 +424,22 @@ export default {
 				);
 				console.log(storageObj.content);
 				// insertList: this.dynamicList, //用户新增的目录
+				let userId = JSON.parse(
+					localStorage.getItem("userInfo")
+				).userId;
 				let params = {
-					selectCatalog: selected, //用户勾选的目录
-					richText: this.content, //富文本内容
+					userId: userId,
 					content: storageObj.content, //描述
 					title: storageObj.title, //标题
 					shareMode: storageObj.shareMode, //共享模式
-					industryId: storageObj.isSelectProfession, //行业
-					address: storageObj.address, //省市区
+					industryId: storageObj.isSelectProfession[1], //行业
+					provinceId: storageObj.address[0],
+					cityId: storageObj.address[1],
+					countyId: "",
+					townId: "",
+					villageId: "",
+					selectCatalog: selected[0], //用户勾选的目录
+					richTextCode: this.content, //富文本内容
 				};
 				this.submitExperience(params);
 			} else if (selected.length == 0) {
@@ -441,10 +450,12 @@ export default {
 			console.dir(selected);
 		},
 		submitExperience(data) {
-			console.log("------------------------------------------------");
-			console.dir(data);
-			//this.dialogVisible = false;
-			//this.$router.push("/experience/releaseSuccess");
+			releaseExperienceReq(data).then((res) => {
+				if (res.success) {
+					this.dialogVisible = false;
+					this.$router.push("/experience/releaseSuccess");
+				}
+			});
 		},
 		//过滤接收对象下拉树回调函数
 		filterNode(value, data) {
