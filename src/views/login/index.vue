@@ -63,45 +63,25 @@
 </template>
 
 <script>
-import { validUsername } from "@/utils/validate";
-
 export default {
 	name: "Login",
 	data() {
-		const validateUsername = (rule, value, callback) => {
-			if (!validUsername(value)) {
-				callback(new Error("Please enter the correct user name"));
-			} else {
-				callback();
-			}
-		};
-		const validatePassword = (rule, value, callback) => {
-			if (value.length < 6) {
-				callback(
-					new Error("The password can not be less than 6 digits")
-				);
-			} else {
-				callback();
-			}
-		};
 		return {
 			loginForm: {
-				username: "admin",
-				password: "111111",
+				username: "15600117320",
+				password: "123456zpwZPW",
 			},
 			loginRules: {
 				username: [
 					{
 						required: true,
-						trigger: "blur",
-						validator: validateUsername,
+						trigger: "change",
 					},
 				],
 				password: [
 					{
 						required: true,
-						trigger: "blur",
-						validator: validatePassword,
+						trigger: "change",
 					},
 				],
 			},
@@ -129,14 +109,50 @@ export default {
 				this.$refs.password.focus();
 			});
 		},
+		// 字符串转base64
+		encode(str) {
+			// 对字符串进行编码
+			var encode = encodeURI(str);
+			// 对编码的字符串转化base64
+			var base64 = btoa(encode);
+			return base64;
+		},
+		// base64转字符串
+		decode(base64) {
+			// 对base64转编码
+			var decode = atob(base64);
+			// 编码转字符串
+			var str = decodeURI(decode);
+			return str;
+		},
+		randomString(e) {
+			e = e || 16;
+			var t = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678",
+				a = t.length,
+				n = "";
+			for (let i = 0; i < e; i++)
+				n += t.charAt(Math.floor(Math.random() * a));
+			return n;
+		},
+		genPassword() {
+			let pwdEncodeStr = this.encode(this.loginForm.password);
+			let randomStr = this.randomString(32);
+			return randomStr + pwdEncodeStr;
+		},
 		handleLogin() {
 			this.$refs.loginForm.validate((valid) => {
 				if (valid) {
 					this.loading = true;
+					let params = {
+						loginName: this.loginForm.username,
+						userPassword: this.genPassword(),
+					};
 					this.$store
-						.dispatch("user/login", this.loginForm)
-						.then(() => {
-							this.$router.push({ path: this.redirect || "/" });
+						.dispatch("user/login", params)
+						.then((res) => {
+							localStorage.setItem("userId", res.data.userId);
+							// this.$router.push({ path: this.redirect || "/" });
+							this.$router.push({ path: "/" });
 							this.loading = false;
 						})
 						.catch(() => {
