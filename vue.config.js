@@ -6,7 +6,7 @@ function resolve(dir) {
 	return path.join(__dirname, dir);
 }
 
-const name = defaultSettings.title || "vue Admin Template"; // page title
+const name = defaultSettings.title || "vue Admin Record"; // page title
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -38,7 +38,7 @@ module.exports = {
 		},
 		proxy: {
 			"/api": {
-				target: "http://192.168.124.11:8080",
+				target: "http://10.255.52.94:8080",
 				ws: true,
 				changeOrigin: true,
 				pathRewrite: { "^/api": "" },
