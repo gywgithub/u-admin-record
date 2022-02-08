@@ -24,10 +24,13 @@
 		>
 			<el-table-column
 				v-if="isOpenSelect"
-				type="selection"
+				:type="columnType"
 				align="center"
 				width="55"
 			>
+				<!-- <template>
+					<component v-bind:is="nestedComponent"></component>
+				</template> -->
 			</el-table-column>
 			<el-table-column
 				v-for="(item, index) in oldList"
@@ -106,6 +109,7 @@
 	</div>
 </template>
 <script>
+import elephantTable from "@/components/template/elephantTable";
 import Sortable from "sortablejs";
 import Vue from "vue";
 export default {
@@ -114,6 +118,10 @@ export default {
 		tabledynamicRef: {
 			type: String,
 			default: "",
+		},
+		columnType: {
+			type: String,
+			default: "selection",
 		},
 		source: /* 表格数据 */ {
 			type: Array,
@@ -143,6 +151,10 @@ export default {
 			default: false,
 		},
 		columnCustom: /* 是否开启列自定义内容 */ {
+			type: Boolean,
+			default: false,
+		},
+		nestedCustom: /* 嵌套内容 */ {
 			type: Boolean,
 			default: false,
 		},
@@ -208,6 +220,7 @@ export default {
 	},
 	data() {
 		return {
+			nestedComponent: "elephantTable",
 			oldList: [],
 			newList: [],
 			activeSortType: "",
@@ -529,6 +542,7 @@ export default {
 		},
 	},
 	components: {
+		elephantTable,
 		"render-html": {
 			props: {
 				html: String,

@@ -7,6 +7,7 @@
 			:source="tableSourceData"
 			:title-data="tableSourceTitleData"
 			:mathKey="randomKey"
+			:columnType="columnType"
 			:tabledynamicRef="commonDynamicRef"
 			row-key="Id"
 			:set-table-height="tableHeight"
@@ -18,6 +19,7 @@
 			:cumtomSummaryArray="summaryArray"
 			:rowCustom="isOpenRowCustom"
 			:columnCustom="isOpenColumnCustom"
+			:nestedCustom="isOpenNestedCustom"
 			:isOpenCustomFilter="commIsOpenCustomFilter"
 			:defaultShowFailed="openDefaultRender"
 			@commonSelect="checkRow"
@@ -59,9 +61,17 @@ export default {
 			type: String,
 			default: "",
 		},
+		columnType: {
+			type: String,
+			default: "selection",
+		},
 		randomKey: {
 			type: Number,
 			required: false,
+		},
+		isOpenNestedCustom: /* 嵌套内容 */ {
+			type: Boolean,
+			default: false,
 		},
 		commIsOpenCustomFilter: /* 是否开启自定义过滤数据 */ {
 			type: Boolean,

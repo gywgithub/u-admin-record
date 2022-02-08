@@ -11,7 +11,7 @@
 				>
 					<el-form-item label="日期" prop="shareDate">
 						<el-date-picker
-							v-model="ruleForm.shareDate"
+							v-model="ruleForm.queryDate"
 							type="daterange"
 							align="right"
 							unlink-panels
@@ -26,10 +26,13 @@
 						prop="shareType"
 						label-width="90px"
 					>
-						<el-select v-model="ruleForm.shareType">
-							<el-option label="全部" value="all"></el-option>
-							<el-option label="发起的" value="fq"></el-option>
-							<el-option label="征求的" value="zq"></el-option>
+						<el-select v-model="ruleForm.type">
+							<el-option
+								v-for="(item, index) in experienceTypeList"
+								:key="index"
+								:label="item.text"
+								:value="item.value"
+							></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item
@@ -38,21 +41,11 @@
 						label-width="90px"
 					>
 						<el-select v-model="ruleForm.status">
-							<el-option label="全部" value="all"></el-option>
-							<el-option label="未上架" value="wsj"></el-option>
-							<el-option label="上架中" value="sj"></el-option>
-							<el-option label="已下架" value="xg"></el-option>
-							<el-option label="未审核" value="sj"></el-option>
-							<el-option label="审核中" value="sh"></el-option>
-							<el-option label="审核通过" value="sh"></el-option>
 							<el-option
-								label="审核未通过"
-								value="shwtg"
-							></el-option>
-							<el-option label="强制下架" value="qxg"></el-option>
-							<el-option
-								label="人工处理中"
-								value="re"
+								v-for="(item, index) in experienceStatusList"
+								:key="index"
+								:label="item.text"
+								:value="item.value"
 							></el-option>
 						</el-select>
 					</el-form-item>
@@ -254,7 +247,7 @@
 								></el-table-column>
 								<el-table-column
 									prop="createTime"
-									label="创建时间"
+									label="发布时间"
 									width="120"
 									align="center"
 								></el-table-column>
@@ -389,23 +382,31 @@
 			:before-close="handleClose"
 		>
 			<span slot="title" class="dialog-title">
-				<span class="topiceTitle">美国51区是否有外星人？</span>
+				<span class="topiceTitle">{{ baseExperienceInfo.title }}</span>
 			</span>
 			<p>
-				<span class="boldFix">发起人：</span>
-				张盼伟
+				<span class="boldFix">发布人：</span>
+				{{ baseExperienceInfo.userName }}
 			</p>
 			<p>
-				<span class="boldFix">发起时间：</span>
-				2020-05-35 13:25:45
+				<span class="boldFix">发布状态：</span>
+				{{ baseExperienceInfo.status }}
 			</p>
 			<p>
-				<span class="boldFix">状态：</span>
-				上架
+				<span class="boldFix">所属分类：</span>
+				制造业/烟草制品
 			</p>
 			<p>
-				<span class="boldFix">详细描述：</span>
-				51区位于美国内华达州南部的一个区域，戒备森严使它在民间获得了“51禁区”的称号。长期以来，我们甚至无法在美国地图上找到它，美国51区里到底有没有外星人？
+				<span class="boldFix">价值模式：</span>
+				{{ baseExperienceInfo.shareMode }}
+			</p>
+			<p>
+				<span class="boldFix">简单描述：</span>
+				{{ baseExperienceInfo.content }}
+			</p>
+			<p>
+				<span class="boldFix">发布时间：</span>
+				{{ baseExperienceInfo.createTime }}
 			</p>
 			<span slot="footer" class="dialog-footer"></span>
 		</el-dialog>
@@ -413,7 +414,11 @@
 </template>
 
 <script>
-import { getInitDataReq } from "@/api/experience";
+import {
+	getInitDataReq,
+	getFormInitDataReq,
+	deleteDataReq,
+} from "@/api/experience";
 import elephantTable from "@/components/template/elephantTable";
 import request from "@/utils/request";
 export default {
@@ -422,10 +427,20 @@ export default {
 	filters: {},
 	data() {
 		return {
+			experienceTypeList: [],
+			experienceStatusList: [],
 			imgShow: true,
 			activities: [],
 			title: "申诉",
 			seeTopic: false,
+			baseExperienceInfo: {
+				title: "",
+				userName: "",
+				status: "",
+				shareMode: "",
+				content: "",
+				createTime: "",
+			},
 			isOpenSwitch: true,
 			form: {
 				id: "",
@@ -493,9 +508,9 @@ export default {
 			value2: "",
 			seachPeoplePla: "请输入发起者姓名",
 			ruleForm: {
-				name: "",
-				nameType: "",
-				status: "all",
+				queryDate: [],
+				type: "",
+				status: "",
 			},
 			formRules: {
 				status: [{ required: false, message: "", trigger: "blur" }],
@@ -707,6 +722,8 @@ export default {
 			],
 			list: [],
 			tableListTotal: 300,
+			queryPageNo: 1,
+			queryPageSize: 100,
 			resetPageNo: 1,
 			resetPageSize: 100,
 			isSelectTable: true,
@@ -717,17 +734,26 @@ export default {
 			tableTitleData: [
 				{
 					id: 1,
-					name: "标题",
-					label: "标题",
+					name: "主标题",
+					label: "主标题",
 					prop: "title",
 					sort: false,
 					align: "center",
 					filterData: [],
 				},
 				{
+					id: 8,
+					name: "价值模式",
+					label: "价值模式",
+					prop: "shareMode",
+					sort: false,
+					align: "center",
+					filterData: [],
+				},
+				{
 					id: 2,
-					name: "描述",
-					label: "描述",
+					name: "简单描述",
+					label: "简单描述",
 					prop: "content",
 					sort: false,
 					align: "center",
@@ -735,8 +761,8 @@ export default {
 				},
 				{
 					id: 3,
-					name: "发起者",
-					label: "发起者",
+					name: "发布者",
+					label: "发布者",
 					prop: "userName",
 					sort: false,
 					align: "center",
@@ -744,17 +770,26 @@ export default {
 				},
 				{
 					id: 4,
-					name: "经验者",
-					label: "经验者",
+					name: "参与者",
+					label: "参与者",
 					prop: "customLook",
 					sort: false,
 					align: "center",
 					filterData: [],
 				},
 				{
+					id: 9,
+					name: "文章列表",
+					label: "文章列表",
+					prop: "customList",
+					sort: false,
+					align: "center",
+					filterData: [],
+				},
+				{
 					id: 5,
-					name: "状态",
-					label: "状态",
+					name: "发布状态",
+					label: "发布状态",
 					prop: "status",
 					sort: false,
 					sortType: "string",
@@ -763,8 +798,8 @@ export default {
 				},
 				{
 					id: 6,
-					name: "创建时间",
-					label: "创建时间",
+					name: "发布时间",
+					label: "发布时间",
 					prop: "createTime",
 					sort: false,
 					align: "center",
@@ -848,78 +883,41 @@ export default {
 		},
 	},
 	created() {
-		this.fetchData();
-	},
-	beforeDestroy() {},
-	mounted() {
 		this.initData();
 	},
+	beforeDestroy() {},
+	mounted() {},
 	methods: {
 		initData() {
-			//初始化表格数据
-			let userIdstr = JSON.parse(localStorage.getItem("userInfo"));
-			getInitDataReq({ userId: userIdstr.userId }).then((res) => {
+			this.initFormData();
+			this.fetchData();
+		},
+		//初始化表单数据
+		initFormData() {
+			getFormInitDataReq().then((res) => {
 				if (res.success) {
-					let userName = res.data.userName;
-					let json = res.data.experienceList;
-					for (let i = 0; i < json.length; i++) {
-						json[i].userName = userName;
-						json[i].customLook = "";
-						json[i].customHanndle = [
-							"详情",
-							"编辑",
-							"上架",
-							"下架",
-							"删除",
-							"驳回",
-							"通过",
-						];
-					}
-
-					for (let j = 0; j < json.length; j++) {
-						json[j].customLook =
-							"<span class='linkText'>查看</span>";
-						if (json[j].status == 1) {
-							json[j].status = "未审核";
-						} else if (json[j].status == 2) {
-							json[j].status = "审核中";
-						} else if (json[j].status == 3) {
-							json[j].status = "审核通过";
-						} else if (json[j].status == 4) {
-							json[j].status = "审核未通过";
-						} else if (json[j].status == 5) {
-							json[j].status = "未上架";
-						} else if (json[j].status == 6) {
-							json[j].status = "上架中";
-						} else if (json[j].status == 7) {
-							json[j].status = "已下架";
-						} else if (json[j].status == 8) {
-							json[j].status = "强制下架";
-						} else if (json[j].status == 9) {
-							json[j].status = "人工处理中";
-						}
-						let hanndleStr = "";
-						for (let i = 0; i < json[j].customHanndle.length; i++) {
-							hanndleStr +=
-								"<span class='linkText ml10'>" +
-								json[j].customHanndle[i] +
-								"</span>";
-						}
-						json[j].customHanndle = hanndleStr;
-					}
-					this.tableData = json;
+					this.experienceTypeList = res.data.typeList;
+					this.experienceStatusList = res.data.statusList;
 				}
 			});
 		},
 		//分页控件获取数据
 		pageFn({ pageSize, pageNo }) {
-			console.dir(pageSize);
-			console.dir(pageNo);
+			this.queryPageSize = pageSize;
+			this.queryPageNo = pageNo;
+			this.fetchData();
 		},
 		//当某个单元格被点击时
 		cellUserClick({ row, column, cell, event }) {
-			if (column.label == "经验者" && event.target.innerText == "查看") {
-				this.seeAllSharePeople(row);
+			if (column.label == "参与者" && event.target.innerText == "查看") {
+				// this.seeAllSharePeople(row);
+				this.$router.push("/experience/participantList");
+			}
+			if (
+				column.label == "文章列表" &&
+				event.target.innerText == "查看"
+			) {
+				this.$router.push("/experience/articleList");
 			}
 			if (column.label == "操作") {
 				//操作列
@@ -932,7 +930,7 @@ export default {
 			}
 		},
 		hanndleOperate({ row, column, cell, event }) {
-			if (event.target.innerText == "详情") {
+			if (event.target.innerText == "查看详情") {
 				this.seeToppic(row);
 			}
 			if (event.target.innerText == "编辑") {
@@ -997,7 +995,8 @@ export default {
 		goodsDelete() {
 			this.$b.successMsg("删除成功");
 		},
-		seeToppic(e) {
+		seeToppic(data) {
+			this.baseExperienceInfo = data;
 			this.seeTopic = true;
 		},
 		editTopic(e) {
@@ -1055,13 +1054,11 @@ export default {
 			if (row.id) {
 				this.$baseConfirm(msg, { title: "提示" }, async () => {
 					this.$b.successMsg("未选中任何行");
-					this.fetchData();
 				});
 			} else {
 				if (this.selectRows.length > 0) {
 					this.$baseConfirm(msg, { title: "提示" }, async () => {
-						this.$b.successMsg("成功");
-						this.fetchData();
+						this.hanndleBtnFn(type, this.selectRows);
 					});
 				} else {
 					this.$b.warningMsg("未选中任何行");
@@ -1069,10 +1066,122 @@ export default {
 				}
 			}
 		},
+		hanndleBtnFn(type, selectRows) {
+			let ids = [];
+			for (let i = 0; i < selectRows.length; i++) {
+				ids.push(selectRows[i]["id"]);
+			}
+			if (type === 1) {
+				this.deleteExperience();
+			}
+			if (type === 2) {
+				this.deleteExperience();
+			}
+			if (type === 3) {
+				this.deleteExperience(ids);
+			}
+		},
+		deleteExperience(data) {
+			deleteDataReq(data).then((res) => {
+				if (res.success) {
+					this.$b.successMsg("删除成功");
+					this.fetchData();
+				}
+			});
+		},
 		handleQuery() {
 			this.fetchData();
 		},
-		async fetchData() {},
+		fetchData(fn) {
+			let userIdstr = JSON.parse(localStorage.getItem("userInfo"));
+			let startTime =
+					this.ruleForm.queryDate.length > 0
+						? new Date(this.ruleForm.queryDate[0]).Format(
+								"yyyy-MM-dd"
+						  )
+						: "",
+				endTime =
+					this.ruleForm.queryDate.length > 0
+						? new Date(this.ruleForm.queryDate[1]).Format(
+								"yyyy-MM-dd"
+						  )
+						: "";
+			let param = {
+				startTime: startTime,
+				endTime: endTime,
+				status: this.ruleForm.status,
+				type: this.ruleForm.type,
+				userId: userIdstr.userId,
+				pageSize: this.queryPageSize,
+				pageIndex: this.queryPageNo,
+			};
+			getInitDataReq(param).then((res) => {
+				if (res.success) {
+					let userName = res.data.userName;
+					let json = res.data.experienceList;
+					for (let i = 0; i < json.length; i++) {
+						json[i].userName = userName;
+						json[i].customLook = "";
+						json[i].customHanndle = [
+							"查看详情",
+							"编辑",
+							"上架",
+							"下架",
+							"删除",
+							"驳回",
+							"通过",
+						];
+					}
+
+					for (let j = 0; j < json.length; j++) {
+						if (json[j].shareMode == 1) {
+							json[j].shareMode = "共享模式";
+						} else if (json[j].shareMode == 2) {
+							json[j].shareMode = "永久共享";
+						} else if (json[j].shareMode == 3) {
+							json[j].shareMode = "付费模式";
+						} else if (json[j].shareMode == 4) {
+							json[j].shareMode = "免费模式";
+						}
+						json[j].customLook =
+							"<span class='linkText'>查看</span>";
+						json[j].customList =
+							"<span class='linkText'>查看</span>";
+						if (json[j].status == 1) {
+							json[j].status = "未审核";
+						} else if (json[j].status == 2) {
+							json[j].status = "审核中";
+						} else if (json[j].status == 3) {
+							json[j].status = "审核通过";
+						} else if (json[j].status == 4) {
+							json[j].status = "审核未通过";
+						} else if (json[j].status == 5) {
+							json[j].status = "未上架";
+						} else if (json[j].status == 6) {
+							json[j].status = "上架中";
+						} else if (json[j].status == 7) {
+							json[j].status = "已下架";
+						} else if (json[j].status == 8) {
+							json[j].status = "强制下架";
+						} else if (json[j].status == 9) {
+							json[j].status = "人工处理中";
+						}
+						let hanndleStr = "";
+						for (let i = 0; i < json[j].customHanndle.length; i++) {
+							hanndleStr +=
+								"<span class='linkText ml10'>" +
+								json[j].customHanndle[i] +
+								"</span>";
+						}
+						json[j].customHanndle = hanndleStr;
+						json[j].createTime = new Date(
+							json[j].createTime
+						).Format("yyyy-MM-dd hh:mm:ss");
+					}
+					this.tableData = json;
+				}
+			});
+		},
 	},
 };
 </script>

@@ -1,6 +1,6 @@
 /*!
  * zKeter JavaScript Library v0.2.0
- * https://www.icbf.com.cn/
+ * https://www.youmias.com/
  *
  * Copyright OpenJS Foundation and other contributors
  * Released under the MIT license
@@ -15,7 +15,7 @@ import dp from "./modules/designPattern";     // eslint-disable-line
 
 /**
  * @Description 原生js方法库 - zKeter库
- * @PermissionRange 华睿智（北京）科技有限公司（https://www.icbf.com.cn/）
+ * @PermissionRange 柚询科技有限公司（https://www.youmias.com/）
  * @Author  zpw
  * @Link    9000@icbf.com.cn  010-67011648  1297416879@qq.com
  * @CreateTime 2021-06-01 18:00

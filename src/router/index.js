@@ -68,6 +68,14 @@ export const constantRoutes = [
 				meta: { title: "经验列表", icon: "table" },
 			},
 			{
+				path: "participantList",
+				name: "ParticipantList",
+				hidden: true,
+				component: () =>
+					import("@/views/experience/list/participantList/index"),
+				meta: { title: "参与者列表", icon: "table" },
+			},
+			{
 				path: "release",
 				name: "Release",
 				component: () => import("@/views/experience/release/index"),
