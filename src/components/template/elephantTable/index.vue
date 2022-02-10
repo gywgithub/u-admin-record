@@ -22,6 +22,7 @@
 			:nestedCustom="isOpenNestedCustom"
 			:isOpenCustomFilter="commIsOpenCustomFilter"
 			:defaultShowFailed="openDefaultRender"
+			:isShowTootip="cellTextShowTootip"
 			@commonSelect="checkRow"
 			@commonAllSelect="checkAllRow"
 			@commonRowClick="clickRow"
@@ -34,7 +35,7 @@
 		</common-table>
 		<el-pagination
 			v-if="isShowPages"
-			class="fr mt30"
+			class="fr mt20"
 			@size-change="handleSizeChange"
 			@current-change="handleCurrentChange"
 			:page-sizes="pageSizes"
@@ -87,6 +88,10 @@ export default {
 			default: null,
 		},
 		isOpenRowCustom: /* 是否开启行自定义内容 */ {
+			type: Boolean,
+			default: false,
+		},
+		cellTextShowTootip: {
 			type: Boolean,
 			default: false,
 		},

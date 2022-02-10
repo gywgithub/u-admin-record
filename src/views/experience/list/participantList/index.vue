@@ -121,22 +121,25 @@
 				</template>
 			</el-table-column>
 		</el-table> -->
-		<elephant-table
-			:tableSourceData="tableData"
-			:tableSourceTitleData="tableTitleData"
-			:pageTotal="tableListTotal"
-			:pageNo="resetPageNo"
-			:pageSize="resetPageSize"
-			:isOpenMultipleSelect="isSelectTable"
-			:tableHeight="taskTableHeight"
-			:isOpenColumnCustom="isCusColumn"
-			:openDefaultRender="defaultShowFailed"
-			@getData="pageFn"
-			@cellClicked="cellUserClick"
-			@selectRowed="selectRowData"
-			@selectAllRowed="selectAllRowData"
-		>
-		</elephant-table>
+		<div class="mainBody">
+			<elephant-table
+				:tableSourceData="tableData"
+				:tableSourceTitleData="tableTitleData"
+				:pageTotal="tableListTotal"
+				:pageNo="resetPageNo"
+				:pageSize="resetPageSize"
+				:cellTextShowTootip="isTootip"
+				:isOpenMultipleSelect="isSelectTable"
+				:tableHeight="taskTableHeight"
+				:isOpenColumnCustom="isCusColumn"
+				:openDefaultRender="defaultShowFailed"
+				@getData="pageFn"
+				@cellClicked="cellUserClick"
+				@selectRowed="selectRowData"
+				@selectAllRowed="selectAllRowData"
+			>
+			</elephant-table>
+		</div>
 	</div>
 </template>
 
@@ -154,8 +157,9 @@ export default {
 			queryPageSize: 100,
 			resetPageNo: 1,
 			resetPageSize: 100,
+			isTootip: true,
 			isSelectTable: true,
-			taskTableHeight: "700px",
+			taskTableHeight: "730px",
 			isCusColumn: true, //
 			defaultShowFailed: false, //开启列自定义或行自定义，此属性必须为false
 			selectRows: [],
@@ -276,8 +280,13 @@ export default {
 			],
 		};
 	},
-	mounted() {
+	created() {
 		this.initData();
+	},
+	mounted() {
+		this.$nextTick(() => {
+			this.taskTableHeight = this.$b.dynamicHeight(this, 0);
+		});
 	},
 	methods: {
 		initData() {

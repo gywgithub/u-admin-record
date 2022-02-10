@@ -1,106 +1,112 @@
 <template>
 	<div class="list">
-		<el-row class="mb18">
-			<el-col>
-				<el-form
-					ref="ruleForm"
-					:inline="true"
-					:model="ruleForm"
-					:rules="formRules"
-					class="demo-ruleForm"
-				>
-					<el-form-item label="日期" prop="shareDate">
-						<el-date-picker
-							v-model="ruleForm.queryDate"
-							type="daterange"
-							align="right"
-							unlink-panels
-							range-separator="至"
-							start-placeholder="开始日期"
-							end-placeholder="结束日期"
-							:picker-options="pickerOptions"
-						></el-date-picker>
-					</el-form-item>
-					<el-form-item
-						label="经验类型"
-						prop="shareType"
-						label-width="90px"
+		<div class="headerTitle">
+			<el-row>
+				<el-col>
+					<el-form
+						ref="ruleForm"
+						:inline="true"
+						:model="ruleForm"
+						:rules="formRules"
+						class="demo-ruleForm"
 					>
-						<el-select v-model="ruleForm.type">
-							<el-option
-								v-for="(item, index) in experienceTypeList"
-								:key="index"
-								:label="item.text"
-								:value="item.value"
-							></el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item
-						label="经验状态"
-						prop="status"
-						label-width="90px"
-					>
-						<el-select v-model="ruleForm.status">
-							<el-option
-								v-for="(item, index) in experienceStatusList"
-								:key="index"
-								:label="item.text"
-								:value="item.value"
-							></el-option>
-						</el-select>
-					</el-form-item>
+						<el-form-item label="日期" prop="shareDate">
+							<el-date-picker
+								v-model="ruleForm.queryDate"
+								type="daterange"
+								align="right"
+								unlink-panels
+								range-separator="至"
+								start-placeholder="开始日期"
+								end-placeholder="结束日期"
+								:picker-options="pickerOptions"
+							></el-date-picker>
+						</el-form-item>
+						<el-form-item
+							label="经验类型"
+							prop="shareType"
+							label-width="90px"
+						>
+							<el-select v-model="ruleForm.type">
+								<el-option
+									v-for="(item, index) in experienceTypeList"
+									:key="index"
+									:label="item.text"
+									:value="item.value"
+								></el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item
+							label="经验状态"
+							prop="status"
+							label-width="90px"
+						>
+							<el-select v-model="ruleForm.status">
+								<el-option
+									v-for="(
+										item, index
+									) in experienceStatusList"
+									:key="index"
+									:label="item.text"
+									:value="item.value"
+								></el-option>
+							</el-select>
+						</el-form-item>
+						<el-button
+							icon="el-icon-search"
+							type="primary"
+							@click="handleQuery"
+						>
+							查 询
+						</el-button>
+					</el-form>
+				</el-col>
+			</el-row>
+		</div>
+		<div class="mainBody mt30" ref="mainRef">
+			<el-row class="mb30">
+				<el-col>
 					<el-button
-						icon="el-icon-search"
+						icon="el-icon-folder-add"
 						type="primary"
-						native-type="submit"
-						@click="handleQuery"
+						@click="handleBatch($event, 1)"
 					>
-						查询
+						批量上架
 					</el-button>
-				</el-form>
-			</el-col>
-		</el-row>
-		<el-row class="mb30">
-			<el-col>
-				<el-button
-					icon="el-icon-folder-add"
-					type="primary"
-					@click="handleBatch($event, 1)"
-				>
-					批量上架
-				</el-button>
-				<el-button
-					icon="el-icon-folder-remove"
-					type="warning"
-					@click="handleBatch($event, 2)"
-				>
-					批量下架
-				</el-button>
-				<el-button
-					icon="el-icon-delete"
-					type="danger"
-					@click="handleBatch($event, 3)"
-				>
-					批量删除
-				</el-button>
-			</el-col>
-		</el-row>
-		<elephant-table
-			:tableSourceData="tableData"
-			:tableSourceTitleData="tableTitleData"
-			:pageTotal="tableListTotal"
-			:pageNo="resetPageNo"
-			:pageSize="resetPageSize"
-			:isOpenMultipleSelect="isSelectTable"
-			:tableHeight="taskTableHeight"
-			:isOpenColumnCustom="isCusColumn"
-			:openDefaultRender="defaultShowFailed"
-			@getData="pageFn"
-			@cellClicked="cellUserClick"
-			@selectRowed="selectRowData"
-			@selectAllRowed="selectAllRowData"
-		>
-		</elephant-table>
+					<el-button
+						icon="el-icon-folder-remove"
+						type="warning"
+						@click="handleBatch($event, 2)"
+					>
+						批量下架
+					</el-button>
+					<el-button
+						icon="el-icon-delete"
+						type="danger"
+						@click="handleBatch($event, 3)"
+					>
+						批量删除
+					</el-button>
+				</el-col>
+			</el-row>
+			<elephant-table
+				:tableSourceData="tableData"
+				:tableSourceTitleData="tableTitleData"
+				:pageTotal="tableListTotal"
+				:pageNo="resetPageNo"
+				:pageSize="resetPageSize"
+				:isOpenMultipleSelect="isSelectTable"
+				:tableHeight="taskTableHeight"
+				:isOpenColumnCustom="isCusColumn"
+				:openDefaultRender="defaultShowFailed"
+				@getData="pageFn"
+				@cellClicked="cellUserClick"
+				@selectRowed="selectRowData"
+				@selectAllRowed="selectAllRowData"
+			>
+			</elephant-table>
+		</div>
+
 		<el-dialog
 			title="经验时间线"
 			:visible.sync="isShowExperienceDetail"
@@ -393,12 +399,28 @@
 				{{ baseExperienceInfo.status }}
 			</p>
 			<p>
+				<span class="boldFix">累计收益：</span>
+				2132象币
+				<el-popover placement="right" title="" trigger="hover">
+					10象币 = 1元
+					<el-button
+						slot="reference"
+						class="tipRule"
+						icon="el-icon-question"
+					></el-button>
+				</el-popover>
+			</p>
+			<p>
 				<span class="boldFix">所属分类：</span>
 				制造业/烟草制品
 			</p>
 			<p>
 				<span class="boldFix">价值模式：</span>
 				{{ baseExperienceInfo.shareMode }}
+			</p>
+			<p>
+				<span class="boldFix">参与者/总点赞数/中位点赞数：</span>
+				132位 / 8.7万 / 0.32万
 			</p>
 			<p>
 				<span class="boldFix">简单描述：</span>
@@ -738,6 +760,7 @@ export default {
 					label: "主标题",
 					prop: "title",
 					sort: false,
+					width: "120px",
 					align: "center",
 					filterData: [],
 				},
@@ -747,6 +770,7 @@ export default {
 					label: "价值模式",
 					prop: "shareMode",
 					sort: false,
+					width: "120px",
 					align: "center",
 					filterData: [],
 				},
@@ -764,6 +788,7 @@ export default {
 					name: "发布者",
 					label: "发布者",
 					prop: "userName",
+					width: "120px",
 					sort: false,
 					align: "center",
 					filterData: [],
@@ -774,6 +799,7 @@ export default {
 					label: "参与者",
 					prop: "customLook",
 					sort: false,
+					width: "120px",
 					align: "center",
 					filterData: [],
 				},
@@ -783,6 +809,7 @@ export default {
 					label: "文章列表",
 					prop: "customList",
 					sort: false,
+					width: "120px",
 					align: "center",
 					filterData: [],
 				},
@@ -792,6 +819,7 @@ export default {
 					label: "发布状态",
 					prop: "status",
 					sort: false,
+					width: "100px",
 					sortType: "string",
 					align: "center",
 					filterData: [],
@@ -802,6 +830,7 @@ export default {
 					label: "发布时间",
 					prop: "createTime",
 					sort: false,
+					width: "180px",
 					align: "center",
 					filterData: [],
 				},
@@ -812,6 +841,7 @@ export default {
 					prop: "customHanndle",
 					sort: false,
 					fixed: false,
+					width: "200px",
 					align: "center",
 					filterData: [],
 				},
@@ -886,7 +916,11 @@ export default {
 		this.initData();
 	},
 	beforeDestroy() {},
-	mounted() {},
+	mounted() {
+		this.$nextTick(() => {
+			this.taskTableHeight = this.$b.dynamicHeight(this, 300);
+		});
+	},
 	methods: {
 		initData() {
 			this.initFormData();
@@ -909,13 +943,19 @@ export default {
 		},
 		//当某个单元格被点击时
 		cellUserClick({ row, column, cell, event }) {
-			if (column.label == "参与者" && event.target.innerText == "查看") {
+			console.dir(event.target);
+			if (
+				column.label == "参与者" &&
+				event.target.innerText == "查看" &&
+				event.target.dataset.see
+			) {
 				// this.seeAllSharePeople(row);
 				this.$router.push("/experience/participantList");
 			}
 			if (
 				column.label == "文章列表" &&
-				event.target.innerText == "查看"
+				event.target.innerText == "查看" &&
+				event.target.dataset.see
 			) {
 				this.$router.push("/experience/articleList");
 			}
@@ -930,7 +970,7 @@ export default {
 			}
 		},
 		hanndleOperate({ row, column, cell, event }) {
-			if (event.target.innerText == "查看详情") {
+			if (event.target.innerText == "查看信息") {
 				this.seeToppic(row);
 			}
 			if (event.target.innerText == "编辑") {
@@ -1123,7 +1163,7 @@ export default {
 						json[i].userName = userName;
 						json[i].customLook = "";
 						json[i].customHanndle = [
-							"查看详情",
+							"查看信息",
 							"编辑",
 							"上架",
 							"下架",
@@ -1144,9 +1184,9 @@ export default {
 							json[j].shareMode = "免费模式";
 						}
 						json[j].customLook =
-							"<span class='linkText'>查看</span>";
+							"<span class='linkText' data-see='true'>查看</span>";
 						json[j].customList =
-							"<span class='linkText'>查看</span>";
+							"<span class='linkText' data-see='true'>查看</span>";
 						if (json[j].status == 1) {
 							json[j].status = "未审核";
 						} else if (json[j].status == 2) {
@@ -1195,6 +1235,14 @@ export default {
 ::v-deep .setTopCss .el-dialog__body {
 	padding-top: 10px;
 	padding-bottom: 10px;
+}
+::v-deep .el-form-item {
+	margin-bottom: 0px;
+}
+.tipRule {
+	font-size: 14px;
+	border: none;
+	padding: 0px;
 }
 .setTopCss {
 	p {

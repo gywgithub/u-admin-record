@@ -355,6 +355,10 @@ const createLog = (logger) => {
 	console.log(suffixLog);
 };
 
+const dynamicHeight = (content, cropValue) => {
+	return content.$refs["mainRef"].clientHeight - parseInt(cropValue);
+};
+
 export default {
 	filterRouter: filterAsyncRouter,
 	filterMenuRouter: filterMenuRouter,
@@ -373,4 +377,5 @@ export default {
 	promiseFactory: promiseFactory,
 	compare: compare,
 	createLog: createLog,
+	dynamicHeight: dynamicHeight,
 };

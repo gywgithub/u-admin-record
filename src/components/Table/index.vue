@@ -109,7 +109,6 @@
 	</div>
 </template>
 <script>
-import elephantTable from "@/components/template/elephantTable";
 import Sortable from "sortablejs";
 import Vue from "vue";
 export default {
@@ -137,6 +136,10 @@ export default {
 			type: Number,
 			required: false,
 			default: 2394023819,
+		},
+		isShowTootip: /* 单元格内容过长隐藏时显示tooltip */ {
+			type: Boolean,
+			default: false,
 		},
 		isOpenDynamicColumn: /* 是否开启动态列渲染 */ {
 			type: Boolean,
@@ -227,7 +230,6 @@ export default {
 			activeSortProp: "",
 			highligtTrue: true,
 			emitIndex: -1,
-			isShowTootip: false,
 			tableDyBaseRef: "",
 		};
 	},
@@ -542,7 +544,6 @@ export default {
 		},
 	},
 	components: {
-		elephantTable,
 		"render-html": {
 			props: {
 				html: String,
