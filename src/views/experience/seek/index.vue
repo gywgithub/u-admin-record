@@ -1,332 +1,343 @@
 <template>
 	<div class="seek">
-		<el-form
-			ref="baseform"
-			:model="form"
-			:rules="rules"
-			label-width="100px"
+		<div
+			class="mainBody"
+			ref="mainRef"
+			v-bind:style="{ minHeight: warpHeight + 'px' }"
 		>
-			<el-form-item label="主标题" prop="title">
-				<el-row>
-					<el-col :span="6">
-						<el-input
-							v-model="form.title"
-							maxlength="30"
-							placeholder="最多30字"
-						></el-input>
-					</el-col>
-				</el-row>
-			</el-form-item>
-			<el-form-item label="价值模式" prop="shareMode">
-				<div class="mt8">
-					<el-radio-group
-						v-model="form.shareMode"
-						@change="hanndleValid"
-					>
-						<el-radio :label="1">
-							共享模式
-							<el-popover
-								placement="right"
-								title="规则"
-								trigger="click"
-							>
-								<p>1: 该经验推送所有用户（权重：一般）</p>
-								<p>2: 打赏额度无最低要求</p>
-								<p>
-									3:
-									当您采纳后，平台将根据您采纳经验者的内容优质程度，退还您5%~30%的象币
-								</p>
-								<el-button
-									slot="reference"
-									class="tipRule"
-									icon="el-icon-question"
-								></el-button>
-							</el-popover>
-						</el-radio>
-						<el-radio :label="2">
-							打赏模式
-							<el-popover
-								placement="right"
-								title="规则"
-								trigger="click"
-							>
-								<p>
-									1:
-									该经验推送特定行业的用户（权重：高级），其它用户（权重：一般）
-								</p>
-								<p>2: 打赏额度最低100象币</p>
-								<p>
-									3:
-									当您采纳后，平台将根据您采纳经验者的内容优质程度，退还您5%~15%的象币
-								</p>
-								<el-button
-									slot="reference"
-									class="tipRule"
-									icon="el-icon-question"
-								></el-button>
-							</el-popover>
-						</el-radio>
-						<el-radio :label="3">
-							付费模式
-							<el-popover
-								placement="right"
-								title="规则"
-								trigger="click"
-							>
-								<p>
-									1:
-									平台将在1个工作日内，为你提供相关优质经验者的平台联系ID<el-tooltip
-										class="item"
-										effect="dark"
-										content="需征求经验者同意的前提下,至少2位，至多5位"
-										placement="top-start"
-									>
-										<el-link
-											icon="el-icon-question"
-											:underline="false"
-										></el-link>
-									</el-tooltip>
-								</p>
-								<p>
-									2:
-									平台将在1个工作日内，为你提供相关优质经验者的微信、QQ、邮箱任意一种联系方式<el-tooltip
-										class="item"
-										effect="dark"
-										content="需征求经验者同意的前提下,至少2位，至多5位"
-										placement="top-start"
-									>
-										<el-link
-											icon="el-icon-question"
-											:underline="false"
-										></el-link>
-									</el-tooltip>
-								</p>
-								<p>
-									3:
-									平台将在1个工作日内，为你提供相关优质经验者的手机号码<el-tooltip
-										class="item"
-										effect="dark"
-										content="需征求经验者同意的前提下,至少2位，至多5位"
-										placement="top-start"
-									>
-										<el-link
-											icon="el-icon-question"
-											:underline="false"
-										></el-link>
-									</el-tooltip>
-								</p>
-								<p>
-									4:
-									平台将在3个工作日内，为你提供相关优质经验者的所有信息(个人基础信息、工作信息、资质等)<el-tooltip
-										class="item"
-										effect="dark"
-										content="需征求经验者同意且涉及其它机构相关授权的前提下,至少2位，至多5位"
-										placement="top-start"
-									>
-										<el-link
-											icon="el-icon-question"
-											:underline="false"
-										></el-link>
-									</el-tooltip>
-								</p>
-								<div>
-									5:
-									<span class="fwb">平台联系: </span
-									>打赏额度最低100象币
-									<p class="ml15">
-										<span class="fwb"
-											>微信、邮箱、QQ:
-										</span>
-										打赏额度最低依次为600、400、300象币
-									</p>
-									<p class="ml15">
-										<span class="fwb">手机号码: </span
-										>打赏额度最低800象币+经验者自身溢价(和平台无关)
-									</p>
-									<p class="ml15">
-										<span class="fwb">完整信息: </span
-										>打赏额度最低2000象币+经验者自身溢价(和平台无关)
-									</p>
-									<p class="ml15">
-										<span class="fwb">其它: </span
-										>打赏额度最低500象币+经验者自身溢价(和平台无关)
-									</p>
-								</div>
-								<el-button
-									slot="reference"
-									class="tipRule"
-									icon="el-icon-question"
-								></el-button>
-							</el-popover>
-						</el-radio>
-					</el-radio-group>
-				</div>
-			</el-form-item>
-			<el-form-item
-				label="行业"
-				prop="isSelectProfession"
-				v-show="form.shareMode == '2'"
+			<el-form
+				ref="baseform"
+				:model="form"
+				:rules="rules"
+				class="mt30"
+				label-width="100px"
 			>
-				<el-row>
-					<el-col :span="6">
-						<el-cascader
-							ref="mycascader"
-							v-model="form.isSelectProfession"
-							style="width: 80%"
-							:props="customProp"
-							filterable
-							:options="categoryList"
-							:clearable="true"
-							placeholder="输入文字可搜素"
-							@change="getProfession"
-						></el-cascader>
-						<el-link
-							type="primary"
-							@click="openInTreeList"
-							class="ml20"
-							:underline="false"
-							>未找到?</el-link
+				<el-form-item label="主标题" prop="title">
+					<el-row>
+						<el-col :span="6">
+							<el-input
+								v-model="form.title"
+								maxlength="30"
+								placeholder="最多30字"
+							></el-input>
+						</el-col>
+					</el-row>
+				</el-form-item>
+				<el-form-item label="价值模式" prop="shareMode">
+					<div class="mt8">
+						<el-radio-group
+							v-model="form.shareMode"
+							@change="hanndleValid"
 						>
-					</el-col>
-				</el-row>
-			</el-form-item>
-			<el-form-item
-				label="付费类型"
-				prop="monenyMode"
-				v-show="form.shareMode == '3'"
-			>
-				<el-select v-model="form.monenyMode">
-					<el-option label="平台联系" value="ptlx"></el-option>
-					<el-option label="微信" value="wx"></el-option>
-					<el-option label="QQ" value="qq"></el-option>
-					<el-option label="邮箱" value="email"></el-option>
-					<el-option label="手机号码" value="sjhm"></el-option>
-					<el-option label="完整信息" value="wzxx"></el-option>
-					<el-option label="其它" value="other"></el-option>
-				</el-select>
-				<el-popover
-					placement="right"
-					title="规则"
-					trigger="click"
-					class="ml10"
-				>
-					<p>
-						1:
-						平台将在1个工作日内，为你提供相关优质经验者的平台联系ID<el-tooltip
-							class="item"
-							effect="dark"
-							content="需征求经验者同意的前提下,至少2位，至多5位"
-							placement="top-start"
-						>
-							<el-link
-								icon="el-icon-question"
-								:underline="false"
-							></el-link>
-						</el-tooltip>
-					</p>
-					<p>
-						2:
-						平台将在1个工作日内，为你提供相关优质经验者的微信、QQ、邮箱任意一种联系方式<el-tooltip
-							class="item"
-							effect="dark"
-							content="需征求经验者同意的前提下,至少2位，至多5位"
-							placement="top-start"
-						>
-							<el-link
-								icon="el-icon-question"
-								:underline="false"
-							></el-link>
-						</el-tooltip>
-					</p>
-					<p>
-						3:
-						平台将在1个工作日内，为你提供相关优质经验者的手机号码<el-tooltip
-							class="item"
-							effect="dark"
-							content="需征求经验者同意的前提下,至少2位，至多5位"
-							placement="top-start"
-						>
-							<el-link
-								icon="el-icon-question"
-								:underline="false"
-							></el-link>
-						</el-tooltip>
-					</p>
-					<p>
-						4:
-						平台将在3个工作日内，为你提供相关优质经验者的所有信息(个人基础信息、工作信息、资质等)<el-tooltip
-							class="item"
-							effect="dark"
-							content="需征求经验者同意且涉及其它机构相关授权的前提下,至少2位，至多5位"
-							placement="top-start"
-						>
-							<el-link
-								icon="el-icon-question"
-								:underline="false"
-							></el-link>
-						</el-tooltip>
-					</p>
-					<div>
-						5:
-						<span class="fwb">平台联系: </span>打赏额度最低100象币
-						<p class="ml15">
-							<span class="fwb">微信、邮箱、QQ: </span>
-							打赏额度最低依次为600、400、300象币
-						</p>
-						<p class="ml15">
-							<span class="fwb">手机号码: </span
-							>打赏额度最低800象币+经验者自身溢价(和平台无关)
-						</p>
-						<p class="ml15">
-							<span class="fwb">完整信息: </span
-							>打赏额度最低2000象币+经验者自身溢价(和平台无关)
-						</p>
-						<p class="ml15">
-							<span class="fwb">其它: </span
-							>打赏额度最低500象币+经验者自身溢价(和平台无关)
-						</p>
+							<el-radio :label="1">
+								共享模式
+								<el-popover
+									placement="right"
+									title="规则"
+									trigger="click"
+								>
+									<p>1: 该经验推送所有用户（权重：一般）</p>
+									<p>2: 打赏额度无最低要求</p>
+									<p>
+										3:
+										当您采纳后，平台将根据您采纳经验者的内容优质程度，退还您5%~30%的象币
+									</p>
+									<el-button
+										slot="reference"
+										class="tipRule"
+										icon="el-icon-question"
+									></el-button>
+								</el-popover>
+							</el-radio>
+							<el-radio :label="2">
+								打赏模式
+								<el-popover
+									placement="right"
+									title="规则"
+									trigger="click"
+								>
+									<p>
+										1:
+										该经验推送特定行业的用户（权重：高级），其它用户（权重：一般）
+									</p>
+									<p>2: 打赏额度最低100象币</p>
+									<p>
+										3:
+										当您采纳后，平台将根据您采纳经验者的内容优质程度，退还您5%~15%的象币
+									</p>
+									<el-button
+										slot="reference"
+										class="tipRule"
+										icon="el-icon-question"
+									></el-button>
+								</el-popover>
+							</el-radio>
+							<el-radio :label="3">
+								付费模式
+								<el-popover
+									placement="right"
+									title="规则"
+									trigger="click"
+								>
+									<p>
+										1:
+										平台将在1个工作日内，为你提供相关优质经验者的平台联系ID<el-tooltip
+											class="item"
+											effect="dark"
+											content="需征求经验者同意的前提下,至少2位，至多5位"
+											placement="top-start"
+										>
+											<el-link
+												icon="el-icon-question"
+												:underline="false"
+											></el-link>
+										</el-tooltip>
+									</p>
+									<p>
+										2:
+										平台将在1个工作日内，为你提供相关优质经验者的微信、QQ、邮箱任意一种联系方式<el-tooltip
+											class="item"
+											effect="dark"
+											content="需征求经验者同意的前提下,至少2位，至多5位"
+											placement="top-start"
+										>
+											<el-link
+												icon="el-icon-question"
+												:underline="false"
+											></el-link>
+										</el-tooltip>
+									</p>
+									<p>
+										3:
+										平台将在1个工作日内，为你提供相关优质经验者的手机号码<el-tooltip
+											class="item"
+											effect="dark"
+											content="需征求经验者同意的前提下,至少2位，至多5位"
+											placement="top-start"
+										>
+											<el-link
+												icon="el-icon-question"
+												:underline="false"
+											></el-link>
+										</el-tooltip>
+									</p>
+									<p>
+										4:
+										平台将在3个工作日内，为你提供相关优质经验者的所有信息(个人基础信息、工作信息、资质等)<el-tooltip
+											class="item"
+											effect="dark"
+											content="需征求经验者同意且涉及其它机构相关授权的前提下,至少2位，至多5位"
+											placement="top-start"
+										>
+											<el-link
+												icon="el-icon-question"
+												:underline="false"
+											></el-link>
+										</el-tooltip>
+									</p>
+									<div>
+										5:
+										<span class="fwb">平台联系: </span
+										>打赏额度最低100象币
+										<p class="ml15">
+											<span class="fwb"
+												>微信、邮箱、QQ:
+											</span>
+											打赏额度最低依次为600、400、300象币
+										</p>
+										<p class="ml15">
+											<span class="fwb">手机号码: </span
+											>打赏额度最低800象币+经验者自身溢价(和平台无关)
+										</p>
+										<p class="ml15">
+											<span class="fwb">完整信息: </span
+											>打赏额度最低2000象币+经验者自身溢价(和平台无关)
+										</p>
+										<p class="ml15">
+											<span class="fwb">其它: </span
+											>打赏额度最低500象币+经验者自身溢价(和平台无关)
+										</p>
+									</div>
+									<el-button
+										slot="reference"
+										class="tipRule"
+										icon="el-icon-question"
+									></el-button>
+								</el-popover>
+							</el-radio>
+						</el-radio-group>
 					</div>
-					<el-button
-						slot="reference"
-						class="tipRule"
-						icon="el-icon-question"
-					></el-button>
-				</el-popover>
-			</el-form-item>
-			<el-form-item label="打赏额度" prop="bounty">
-				<el-row>
-					<el-col :span="6">
-						<el-input
-							v-model="form.bounty"
-							placeholder="1人民币= 10象币"
-							suffix-icon="el-icon-money"
-							type="text"
-							max-length="6"
-						></el-input>
-					</el-col>
-				</el-row>
-			</el-form-item>
-			<el-form-item label="描述" prop="content">
-				<el-row>
-					<el-col :span="8">
-						<el-input
-							v-model="form.content"
-							type="textarea"
-							maxlength="300"
-							show-word-limit
-							:autosize="{ minRows: 8 }"
-							placeholder="限300字"
-						></el-input>
-					</el-col>
-				</el-row>
-			</el-form-item>
-			<el-form-item>
-				<el-button type="primary" @click="handleSave">提 交</el-button>
-				<el-button type="primary" @click="handleSee"
-					>预览效果</el-button
+				</el-form-item>
+				<el-form-item
+					label="行业"
+					prop="isSelectProfession"
+					v-show="form.shareMode == '2'"
 				>
-			</el-form-item>
-		</el-form>
+					<el-row>
+						<el-col :span="6">
+							<el-cascader
+								ref="mycascader"
+								v-model="form.isSelectProfession"
+								style="width: 80%"
+								:props="customProp"
+								filterable
+								:options="categoryList"
+								:clearable="true"
+								placeholder="输入文字可搜素"
+								@change="getProfession"
+							></el-cascader>
+							<el-link
+								type="primary"
+								@click="openInTreeList"
+								class="ml20"
+								:underline="false"
+								>未找到?</el-link
+							>
+						</el-col>
+					</el-row>
+				</el-form-item>
+				<el-form-item
+					label="付费类型"
+					prop="monenyMode"
+					v-show="form.shareMode == '3'"
+				>
+					<el-select v-model="form.monenyMode">
+						<el-option label="平台联系" value="ptlx"></el-option>
+						<el-option label="微信" value="wx"></el-option>
+						<el-option label="QQ" value="qq"></el-option>
+						<el-option label="邮箱" value="email"></el-option>
+						<el-option label="手机号码" value="sjhm"></el-option>
+						<el-option label="完整信息" value="wzxx"></el-option>
+						<el-option label="其它" value="other"></el-option>
+					</el-select>
+					<el-popover
+						placement="right"
+						title="规则"
+						trigger="click"
+						class="ml10"
+					>
+						<p>
+							1:
+							平台将在1个工作日内，为你提供相关优质经验者的平台联系ID<el-tooltip
+								class="item"
+								effect="dark"
+								content="需征求经验者同意的前提下,至少2位，至多5位"
+								placement="top-start"
+							>
+								<el-link
+									icon="el-icon-question"
+									:underline="false"
+								></el-link>
+							</el-tooltip>
+						</p>
+						<p>
+							2:
+							平台将在1个工作日内，为你提供相关优质经验者的微信、QQ、邮箱任意一种联系方式<el-tooltip
+								class="item"
+								effect="dark"
+								content="需征求经验者同意的前提下,至少2位，至多5位"
+								placement="top-start"
+							>
+								<el-link
+									icon="el-icon-question"
+									:underline="false"
+								></el-link>
+							</el-tooltip>
+						</p>
+						<p>
+							3:
+							平台将在1个工作日内，为你提供相关优质经验者的手机号码<el-tooltip
+								class="item"
+								effect="dark"
+								content="需征求经验者同意的前提下,至少2位，至多5位"
+								placement="top-start"
+							>
+								<el-link
+									icon="el-icon-question"
+									:underline="false"
+								></el-link>
+							</el-tooltip>
+						</p>
+						<p>
+							4:
+							平台将在3个工作日内，为你提供相关优质经验者的所有信息(个人基础信息、工作信息、资质等)<el-tooltip
+								class="item"
+								effect="dark"
+								content="需征求经验者同意且涉及其它机构相关授权的前提下,至少2位，至多5位"
+								placement="top-start"
+							>
+								<el-link
+									icon="el-icon-question"
+									:underline="false"
+								></el-link>
+							</el-tooltip>
+						</p>
+						<div>
+							5:
+							<span class="fwb">平台联系: </span
+							>打赏额度最低100象币
+							<p class="ml15">
+								<span class="fwb">微信、邮箱、QQ: </span>
+								打赏额度最低依次为600、400、300象币
+							</p>
+							<p class="ml15">
+								<span class="fwb">手机号码: </span
+								>打赏额度最低800象币+经验者自身溢价(和平台无关)
+							</p>
+							<p class="ml15">
+								<span class="fwb">完整信息: </span
+								>打赏额度最低2000象币+经验者自身溢价(和平台无关)
+							</p>
+							<p class="ml15">
+								<span class="fwb">其它: </span
+								>打赏额度最低500象币+经验者自身溢价(和平台无关)
+							</p>
+						</div>
+						<el-button
+							slot="reference"
+							class="tipRule"
+							icon="el-icon-question"
+						></el-button>
+					</el-popover>
+				</el-form-item>
+				<el-form-item label="打赏额度" prop="bounty">
+					<el-row>
+						<el-col :span="6">
+							<el-input
+								v-model="form.bounty"
+								placeholder="1人民币= 10象币"
+								suffix-icon="el-icon-money"
+								type="text"
+								max-length="6"
+							></el-input>
+						</el-col>
+					</el-row>
+				</el-form-item>
+				<el-form-item label="描述" prop="content">
+					<el-row>
+						<el-col :span="8">
+							<el-input
+								v-model="form.content"
+								type="textarea"
+								maxlength="300"
+								show-word-limit
+								:autosize="{ minRows: 8 }"
+								placeholder="限300字"
+							></el-input>
+						</el-col>
+					</el-row>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="handleSave"
+						>提 交</el-button
+					>
+					<el-button type="primary" @click="handleSee"
+						>预览效果</el-button
+					>
+				</el-form-item>
+			</el-form>
+		</div>
+
 		<el-dialog title="预览" :visible.sync="dialogTableVisible">
 			<div style="min-height: 60vh">
 				<h3 class="news-title mb40">{{ form.title }}</h3>
@@ -489,6 +500,7 @@ export default {
 		return {
 			addNodeData: {},
 			pathLabelsArray: [],
+			warpHeight: "700px",
 			treeNewNameForm: {
 				treeNodeAddName: "",
 			},
@@ -804,6 +816,9 @@ export default {
 	},
 	mounted() {
 		this.init();
+		this.$nextTick(() => {
+			this.warpHeight = this.$b.dynamicHeight(this, 0) + 300;
+		});
 	},
 	methods: {
 		init() {

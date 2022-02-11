@@ -918,7 +918,7 @@ export default {
 	beforeDestroy() {},
 	mounted() {
 		this.$nextTick(() => {
-			this.taskTableHeight = this.$b.dynamicHeight(this, 300);
+			this.taskTableHeight = this.$b.dynamicHeight(this, 320);
 		});
 	},
 	methods: {

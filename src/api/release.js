@@ -1,5 +1,13 @@
 import request from "@/utils/request";
 
+//获取分类
+export function getCategoryReq(data) {
+	return request({
+		url: "/categoryList",
+		method: "get",
+	});
+}
+
 //获取行业分类
 export function getIndustryCategoryReq(data) {
 	return request({

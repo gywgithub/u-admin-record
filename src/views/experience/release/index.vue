@@ -1,289 +1,332 @@
 <template>
 	<div class="release">
-		<el-form ref="form" :model="form" :rules="rules" label-width="100px">
-			<el-form-item label="主标题" prop="title">
-				<el-row>
-					<el-col :span="6">
-						<el-input
-							v-model="form.title"
-							maxlength="30"
-							placeholder="最多30字"
-						></el-input>
-					</el-col>
-				</el-row>
-			</el-form-item>
-			<el-form-item label="行业" prop="isSelectProfession">
-				<el-row>
-					<el-col :span="6">
-						<el-cascader
-							ref="mycascader"
-							v-model="form.isSelectProfession"
-							style="width: 76%"
-							:props="customProp"
-							filterable
-							:options="categoryList"
-							:clearable="true"
-							placeholder="输入文字可搜索"
-							@change="getProfession"
-						></el-cascader>
-						<el-popover
-							placement="right"
-							title="规则"
-							width="300"
-							class="ml10"
-							trigger="click"
-						>
-							<p>1: 该经验将推送在同行业中或直接搜索该经验</p>
-							<p>2: 奖励固定提升0.05（0.1元/次 => 0.15元/次）</p>
-							<p>3: 该奖励与所属地址奖励可累加获得</p>
-							<el-button
-								slot="reference"
-								class="tipRule"
-								icon="el-icon-question"
-							></el-button>
-						</el-popover>
-						<el-link
-							type="primary"
-							@click="openInTreeList"
-							class="ml10"
-							:underline="false"
-							>未找到?</el-link
-						>
-					</el-col>
-				</el-row>
-			</el-form-item>
-			<el-form-item label="地址" prop="address">
-				<el-row>
-					<el-col :span="6">
-						<el-cascader
-							ref="mycascader2"
-							v-model="form.address"
-							style="width: 76%"
-							:props="customProp"
-							filterable
-							:options="categoryList"
-							:clearable="true"
-							placeholder="输入文字可搜索"
-						></el-cascader>
-						<el-popover
-							placement="right"
-							title="规则"
-							width="300"
-							class="ml10"
-							trigger="click"
-						>
-							<p>
-								1: 该经验将根据用户地理位置，提升推送权重
-								地理位置越接近，推送权重越大或直接搜索该经验
-							</p>
-							<p>2: 奖励固定提升0.05（0.1元/次 => 0.15元/次）</p>
-							<p>3: 该奖励与所属行业奖励可累加获得</p>
-							<el-button
-								slot="reference"
-								class="tipRule"
-								icon="el-icon-question"
-							></el-button>
-						</el-popover>
-						<el-link
-							type="primary"
-							@click="openAddAreaDig"
-							class="ml10"
-							:underline="false"
-							>未找到?</el-link
-						>
-					</el-col>
-				</el-row>
-			</el-form-item>
-			<el-form-item label="价值共享" prop="shareMode">
-				<div class="mt8">
-					<el-radio-group v-model="form.shareMode">
-						<el-radio :label="1">
-							共享模式
-							<el-popover
-								placement="right"
-								title="规则"
-								trigger="click"
+		<div
+			class="mainBody"
+			ref="mainRef"
+			v-bind:style="{ minHeight: warpHeight + 'px' }"
+		>
+			<el-form
+				ref="form"
+				:model="form"
+				class="mt30"
+				:rules="rules"
+				label-width="100px"
+			>
+				<el-form-item label="主标题" prop="title">
+					<el-row>
+						<el-col :span="6">
+							<el-input
+								v-model="form.title"
+								maxlength="30"
+								style="width: 505px"
+								placeholder="最多30字"
+							></el-input>
+						</el-col>
+					</el-row>
+				</el-form-item>
+				<el-form-item label="类别" prop="type">
+					<el-cascader
+						ref="mycascader"
+						v-model="form.type"
+						:props="customProp"
+						filterable
+						style="width: 505px"
+						:options="professionList"
+						:clearable="true"
+						placeholder="输入文字可搜索"
+						@change="getProfession"
+					></el-cascader>
+					<el-link
+						type="primary"
+						@click="openInCategory"
+						class="ml10"
+						:underline="false"
+						>未找到?</el-link
+					>
+				</el-form-item>
+				<el-form-item label="价值共享" prop="shareMode">
+					<div class="mt8">
+						<el-radio-group v-model="form.shareMode">
+							<el-radio :label="1">
+								共享模式
+								<el-popover
+									placement="right"
+									title="规则"
+									trigger="click"
+								>
+									<p>
+										1:
+										该经验将推送给平台所有用户(与行业、地址规则第一条不共享)
+									</p>
+									<p>
+										2:
+										平台将根据您经验的优质程度，奖励您一定的收益（每2个周期月结算一次）
+										<el-tooltip
+											class="item"
+											effect="dark"
+											content="算法： 每位经验者所得到的平台奖励构成 =  经验者获得的点赞数 + 发起者获得的收藏数 + 评论数(热度)"
+											placement="top-start"
+										>
+											<el-link
+												icon="el-icon-question"
+												:underline="false"
+											></el-link>
+										</el-tooltip>
+									</p>
+									<p>
+										3:
+										只要有人点赞、收藏、评论您名下经验者的经验时，您都将固定获得您名下经验者总收益的2%;
+										&nbsp;&nbsp;&nbsp;
+										<b style="color: red">且是永久的</b>
+									</p>
+									<p>
+										4:
+										点赞超1000后，且连续保持上架63天的经验，自动转为付费模式（0.1元/次）
+									</p>
+									<p>
+										5:
+										平台已认证的经验，11天后自动转为付费模式（0.1元/次）
+									</p>
+									<el-button
+										slot="reference"
+										class="tipRule"
+										icon="el-icon-question"
+									></el-button>
+								</el-popover>
+							</el-radio>
+							<el-radio :label="2">
+								永久共享
+								<el-popover
+									placement="right"
+									title="规则"
+									trigger="click"
+								>
+									<p>
+										1.此经验将设为永久共享模式，感谢您的经验与付出
+									</p>
+									<p>
+										2.平台将根据您经验的优质程度，固定奖励您一定的收益（每2个周期月结算一次）
+									</p>
+									<p>3:您可以随时调整为其它模式</p>
+									<el-button
+										slot="reference"
+										class="tipRule"
+										icon="el-icon-question"
+									></el-button>
+								</el-popover>
+							</el-radio>
+							<el-radio :label="3">
+								付费模式
+								<el-popover
+									placement="right"
+									title="规则"
+									trigger="click"
+								>
+									<p>
+										1: 该经验需要提前认证<el-tooltip
+											class="item"
+											effect="dark"
+											content="认证时间： 3~15工作日"
+											placement="top-start"
+										>
+											<el-link
+												icon="el-icon-question"
+												:underline="false"
+											></el-link>
+										</el-tooltip>
+									</p>
+									<p>
+										2: 0.2元/次
+										(与行业、地址规则第二条不共享)
+									</p>
+									<p>
+										3: 您将得到该经验的全部收益<el-tooltip
+											class="item"
+											effect="dark"
+											content="不包括您名下经验者的点赞、收藏"
+											placement="top-start"
+										>
+											<el-link
+												icon="el-icon-question"
+												:underline="false"
+											></el-link>
+										</el-tooltip>
+									</p>
+									<p>
+										4:
+										"踩一下"的数量达到点赞数量的1/3时，该经验将强制下架
+									</p>
+									<el-button
+										slot="reference"
+										class="tipRule"
+										icon="el-icon-question"
+									></el-button>
+								</el-popover>
+							</el-radio>
+							<el-radio :label="4">
+								免费模式
+								<el-popover
+									placement="right"
+									title="规则"
+									trigger="click"
+								>
+									<p>
+										1.此经验将设为免费模式，感谢您的经验与付出
+									</p>
+									<p>2.您可以随时调整为其它模式</p>
+									<el-button
+										slot="reference"
+										class="tipRule"
+										icon="el-icon-question"
+									></el-button>
+								</el-popover>
+							</el-radio>
+						</el-radio-group>
+					</div>
+				</el-form-item>
+				<el-form-item label="简单描述" prop="content">
+					<el-row>
+						<el-col :span="8">
+							<el-input
+								v-model="form.content"
+								type="textarea"
+								maxlength="300"
+								show-word-limit
+								:autosize="{ minRows: 8 }"
+								placeholder="限300字"
+							></el-input>
+						</el-col>
+					</el-row>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="handleSave"
+						>下一步</el-button
+					>
+				</el-form-item>
+			</el-form>
+			<el-row class="mt20">
+				<el-col :xs="24" :lg="12">
+					<el-collapse v-model="activeNames" @change="handleChange">
+						<el-collapse-item name="1">
+							<template slot="title">
+								<i class="header-icon el-icon-arrow-down"></i>
+								<pre>&nbsp;</pre>
+								填写更多
+							</template>
+							<el-form
+								ref="moform"
+								:model="moreForm"
+								label-width="100px"
 							>
-								<p>
-									1:
-									该经验将推送给平台所有用户(与行业、地址规则第一条不共享)
-								</p>
-								<p>
-									2:
-									平台将根据您经验的优质程度，奖励您一定的收益（每2个周期月结算一次）
-									<el-tooltip
-										class="item"
-										effect="dark"
-										content="算法： 每位经验者所得到的平台奖励构成 =  经验者获得的点赞数 + 发起者获得的收藏数 + 评论数(热度)"
-										placement="top-start"
+								<el-form-item
+									label="行业"
+									prop="isSelectProfession"
+								>
+									<el-cascader
+										ref="mycascader"
+										v-model="moreForm.isSelectProfession"
+										style="width: 505px"
+										:props="customProp"
+										filterable
+										:options="categoryList"
+										:clearable="true"
+										placeholder="输入文字可搜索"
+										@change="getProfession"
+									></el-cascader>
+									<el-popover
+										placement="right"
+										title="规则"
+										width="300"
+										class="ml10"
+										trigger="click"
 									>
-										<el-link
+										<p>
+											1:
+											该经验将推送在同行业中或直接搜索该经验
+										</p>
+										<p>
+											2: 奖励固定提升0.05（0.1元/次 =>
+											0.15元/次）
+										</p>
+										<p>3: 该奖励与所属地址奖励可累加获得</p>
+										<el-button
+											slot="reference"
+											class="tipRule"
 											icon="el-icon-question"
-											:underline="false"
-										></el-link>
-									</el-tooltip>
-								</p>
-								<p>
-									3:
-									只要有人点赞、收藏、评论您名下经验者的经验时，您都将固定获得您名下经验者总收益的2%;
-									&nbsp;&nbsp;&nbsp;
-									<b style="color: red">且是永久的</b>
-								</p>
-								<p>
-									4:
-									点赞超1000后，且连续保持上架63天的经验，自动转为付费模式（0.1元/次）
-								</p>
-								<p>
-									5:
-									平台已认证的经验，11天后自动转为付费模式（0.1元/次）
-								</p>
-								<el-button
-									slot="reference"
-									class="tipRule"
-									icon="el-icon-question"
-								></el-button>
-							</el-popover>
-						</el-radio>
-						<el-radio :label="2">
-							永久共享
-							<el-popover
-								placement="right"
-								title="规则"
-								trigger="click"
-							>
-								<p>
-									1.此经验将设为永久共享模式，感谢您的经验与付出
-								</p>
-								<p>
-									2.平台将根据您经验的优质程度，固定奖励您一定的收益（每2个周期月结算一次）
-								</p>
-								<p>3:您可以随时调整为其它模式</p>
-								<el-button
-									slot="reference"
-									class="tipRule"
-									icon="el-icon-question"
-								></el-button>
-							</el-popover>
-						</el-radio>
-						<el-radio :label="3">
-							付费模式
-							<el-popover
-								placement="right"
-								title="规则"
-								trigger="click"
-							>
-								<p>
-									1: 该经验需要提前认证<el-tooltip
-										class="item"
-										effect="dark"
-										content="认证时间： 3~15工作日"
-										placement="top-start"
+										></el-button>
+									</el-popover>
+									<el-link
+										type="primary"
+										@click="openInTreeList"
+										class="ml10"
+										:underline="false"
+										>未找到?</el-link
 									>
-										<el-link
-											icon="el-icon-question"
-											:underline="false"
-										></el-link>
-									</el-tooltip>
-								</p>
-								<p>
-									2: 0.2元/次 (与行业、地址规则第二条不共享)
-								</p>
-								<p>
-									3: 您将得到该经验的全部收益<el-tooltip
-										class="item"
-										effect="dark"
-										content="不包括您名下经验者的点赞、收藏"
-										placement="top-start"
+								</el-form-item>
+								<el-form-item label="地址" prop="address">
+									<el-cascader
+										ref="mycascader2"
+										v-model="moreForm.address"
+										style="width: 505px"
+										:props="customProp"
+										filterable
+										:options="categoryList"
+										:clearable="true"
+										placeholder="输入文字可搜索"
+									></el-cascader>
+									<el-popover
+										placement="right"
+										title="规则"
+										width="300"
+										class="ml10"
+										trigger="click"
 									>
-										<el-link
+										<p>
+											1:
+											该经验将根据用户地理位置，提升推送权重
+											地理位置越接近，推送权重越大或直接搜索该经验
+										</p>
+										<p>
+											2: 奖励固定提升0.05（0.1元/次 =>
+											0.15元/次）
+										</p>
+										<p>3: 该奖励与所属行业奖励可累加获得</p>
+										<el-button
+											slot="reference"
+											class="tipRule"
 											icon="el-icon-question"
-											:underline="false"
-										></el-link>
-									</el-tooltip>
-								</p>
-								<p>
-									4:
-									"踩一下"的数量达到点赞数量的1/3时，该经验将强制下架
-								</p>
-								<el-button
-									slot="reference"
-									class="tipRule"
-									icon="el-icon-question"
-								></el-button>
-							</el-popover>
-						</el-radio>
-						<el-radio :label="4">
-							免费模式
-							<el-popover
-								placement="right"
-								title="规则"
-								trigger="click"
-							>
-								<p>
-									1.此经验将设为免费模式，感谢您的经验与付出
-								</p>
-								<p>2.您可以随时调整为其它模式</p>
-								<el-button
-									slot="reference"
-									class="tipRule"
-									icon="el-icon-question"
-								></el-button>
-							</el-popover>
-						</el-radio>
-					</el-radio-group>
-				</div>
-			</el-form-item>
-			<el-form-item label="简单描述" prop="content">
-				<el-row>
-					<el-col :span="8">
-						<el-input
-							v-model="form.content"
-							type="textarea"
-							maxlength="300"
-							show-word-limit
-							:autosize="{ minRows: 8 }"
-							placeholder="限300字"
-						></el-input>
-					</el-col>
-				</el-row>
-			</el-form-item>
-			<el-form-item>
-				<el-button type="primary" @click="handleSave">下一步</el-button>
-			</el-form-item>
-		</el-form>
-		<el-collapse v-model="activeNames" @change="handleChange">
-			<el-collapse-item name="1">
-				<template slot="title">
-					<i class="header-icon el-icon-arrow-down"></i>
-					<pre>&nbsp;</pre>
-					填写更多
-				</template>
-				<el-form ref="moform" :model="moreForm" label-width="100px">
-					<el-form-item label="起因" prop="cause">
-						<el-row>
-							<el-col :span="6">
-								<el-input
-									v-model="moreForm.cause"
-									maxlength="100"
-									placeholder="最多100字"
-								></el-input>
-							</el-col>
-						</el-row>
-					</el-form-item>
-					<el-form-item label="结果" prop="reules">
-						<el-row>
-							<el-col :span="6">
-								<el-input
-									v-model="moreForm.reules"
-									maxlength="100"
-									placeholder="最多100字"
-								></el-input>
-							</el-col>
-						</el-row>
-					</el-form-item>
-				</el-form>
-			</el-collapse-item>
-		</el-collapse>
+										></el-button>
+									</el-popover>
+									<el-link
+										type="primary"
+										@click="openAddAreaDig"
+										class="ml10"
+										:underline="false"
+										>未找到?</el-link
+									>
+								</el-form-item>
+								<el-form-item label="起因" prop="cause">
+									<el-input
+										v-model="moreForm.cause"
+										maxlength="100"
+										style="width: 505px"
+										placeholder="最多100字"
+									></el-input>
+								</el-form-item>
+								<el-form-item label="结果" prop="reules">
+									<el-input
+										v-model="moreForm.reules"
+										maxlength="100"
+										style="width: 505px"
+										placeholder="最多100字"
+									></el-input>
+								</el-form-item>
+							</el-form>
+						</el-collapse-item>
+					</el-collapse>
+				</el-col>
+			</el-row>
+		</div>
 		<el-dialog
 			v-dialogDrag
 			:title="remarkDialogTitle"
@@ -340,7 +383,7 @@
 				class="disf"
 				label-width="100px"
 			>
-				<el-form-item label="主分类" prop="newindustryName">
+				<el-form-item label="默认行业" prop="newindustryName">
 					<el-row>
 						<el-col :span="24">
 							<el-cascader
@@ -357,7 +400,7 @@
 						</el-col>
 					</el-row>
 				</el-form-item>
-				<el-form-item label="子行业名称" prop="treeNodeAddName">
+				<el-form-item label="新增名称" prop="treeNodeAddName">
 					<el-row>
 						<el-col :span="24">
 							<el-input
@@ -370,12 +413,67 @@
 				<div class="newindustryTips mb20" v-show="newindustryTipShow">
 					<p>1、每位用户15天内，只能提交一次</p>
 					<p>2、提交审核通过后，该经验将自动划分到您新增的行业中</p>
-					<p>3、审核未通过，该经验将自动划分到主分类行业中</p>
+					<p>3、审核未通过，该经验将自动划分到默认行业中</p>
 				</div>
 				<el-button
 					type="primary"
 					style="margin-left: 200px"
 					@click="addNodeName('treeNewform')"
+					>确 定</el-button
+				>
+			</el-form>
+		</el-dialog>
+		<el-dialog
+			:title="dialogCategoryTitle"
+			:visible.sync="dialogCategoryVisible"
+			:close-on-click-modal="categoryUnModal"
+			width="520px"
+			:before-close="handleCategoryClose"
+		>
+			<el-form
+				ref="categoryNewform"
+				:model="categoryNewNameForm"
+				:rules="categoryNewNameRules"
+				:label-position="categoryLabelNodePos"
+				class="disf"
+				label-width="100px"
+			>
+				<el-form-item label="默认类别" prop="categoryName">
+					<el-row>
+						<el-col :span="24">
+							<el-cascader
+								style="width: 300px"
+								ref="newindustryCascader"
+								v-model="categoryNewNameForm.categoryName"
+								:props="newCategoryCustomProp"
+								filterable
+								:options="professionList"
+								:clearable="true"
+								placeholder="输入文字可搜索"
+								@change="categoryAddChange"
+							></el-cascader>
+						</el-col>
+					</el-row>
+				</el-form-item>
+				<el-form-item label="新增名称" prop="categoryChilName">
+					<el-row>
+						<el-col :span="24">
+							<el-input
+								v-model="categoryNewNameForm.categoryChilName"
+								style="width: 300px"
+								placeholder=""
+							></el-input></el-col
+					></el-row>
+				</el-form-item>
+				<div class="newindustryTips mb20" v-show="newCategoryTipShow">
+					<p>1、每位用户15天内，只能提交一次</p>
+					<p>2、提交审核通过后，该经验将自动划分到您新增的类别中</p>
+					<p>3、审核未通过，该经验将自动划分到默认类别中</p>
+				</div>
+				<el-button
+					type="primary"
+					style="margin-left: 200px"
+					@click="addCategoryNodeName('categoryNewform')"
 					>确 定</el-button
 				>
 			</el-form>
@@ -395,7 +493,7 @@
 				class="disf"
 				label-width="100px"
 			>
-				<el-form-item label="主地址" prop="newAreaName">
+				<el-form-item label="默认地址" prop="newAreaName">
 					<el-row>
 						<el-col :span="24">
 							<el-cascader
@@ -404,14 +502,14 @@
 								v-model="treeNewAreaNameForm.newAreaName"
 								:props="newAreaCustomProp"
 								filterable
-								:options="categoryList"
+								:options="professionList"
 								:clearable="true"
 								placeholder="输入文字可搜索"
 							></el-cascader>
 						</el-col>
 					</el-row>
 				</el-form-item>
-				<el-form-item label="子地址名称" prop="treeNodeAddAreaName">
+				<el-form-item label="新增名称" prop="treeNodeAddAreaName">
 					<el-row>
 						<el-col :span="24">
 							<el-input
@@ -426,7 +524,7 @@
 				<div class="newindustryTips mb20" v-show="newAreaTipShow">
 					<p>1、每位用户15天内，只能提交一次</p>
 					<p>2、提交审核通过后，该经验将自动划分到您新增的地址中</p>
-					<p>3、提交审核未通过，该经验将自动划分到主地址中</p>
+					<p>3、提交审核未通过，该经验将自动划分到默认地址中</p>
 				</div>
 				<el-button
 					type="primary"
@@ -440,7 +538,7 @@
 </template>
 
 <script>
-import { getIndustryCategoryReq } from "@/api/release";
+import { getIndustryCategoryReq, getCategoryReq } from "@/api/release";
 
 export default {
 	name: "Release",
@@ -453,12 +551,43 @@ export default {
 	data() {
 		return {
 			categoryList: [],
+			professionList: [],
+			dialogCategoryVisible: false,
 			newindustryTipShow: false,
 			newAreaTipShow: false,
+			dialogCategoryTitle: "新增类别",
+			categoryUnModal: false,
+			categoryNewNameForm: {
+				categoryName: "",
+				categoryChilName: "",
+			},
+			categoryLabelNodePos: "100px",
+			categoryNewNameRules: {
+				categoryName: [
+					{
+						required: true,
+						message: "请选择",
+						trigger: "change",
+					},
+				],
+				categoryChilName: [
+					{
+						required: true,
+						message: "请输入",
+						trigger: "change",
+					},
+				],
+			},
+			newCategoryTipShow: false,
 			filterText: "",
-			customProp: { value: "code", label: "name" },
+			customProp: { value: "id", label: "name" },
 			newindustryCustomProp: {
-				value: "code",
+				value: "id",
+				label: "name",
+				checkStrictly: true,
+			},
+			newCategoryCustomProp: {
+				value: "id",
 				label: "name",
 				checkStrictly: true,
 			},
@@ -467,7 +596,7 @@ export default {
 				label: "name",
 				checkStrictly: true,
 			},
-			activeNames: 1,
+			activeNames: "1",
 			addNodeData: {},
 			treeNewAreaNameForm: {
 				treeNodeAddAreaName: "",
@@ -652,23 +781,32 @@ export default {
 			borderColor: "#dcdfe6",
 			dialogTableVisible: false,
 			isOpenMoenyShare: false,
+			warpHeight: "730px",
 			noUnder: false,
 			form: {
 				title: "", //标题
 				content: "", //描述
 				shareMode: 1, //共享模式
-				isSelectProfession: "", //行业
-				address: "", //省市区
+				type: "",
 			},
 			moreForm: {
 				cause: "",
 				reules: "",
+				isSelectProfession: "", //行业
+				address: "", //省市区
 			},
 			rules: {
 				title: [
 					{
 						required: true,
 						message: "请输入",
+						trigger: "change",
+					},
+				],
+				type: [
+					{
+						required: true,
+						message: "请选择",
 						trigger: "change",
 					},
 				],
@@ -697,6 +835,9 @@ export default {
 	},
 	mounted() {
 		this.init();
+		this.$nextTick(() => {
+			this.warpHeight = this.$b.dynamicHeight(this, 0) + 200;
+		});
 	},
 	methods: {
 		init() {
@@ -704,6 +845,7 @@ export default {
 		},
 		initData() {
 			this.getIndustryList();
+			this.getProfessionList();
 		},
 		saveContent() {
 			this.dialogVisible = true;
@@ -853,6 +995,17 @@ export default {
 		allowDrag(draggingNode) {
 			return draggingNode.data.label.indexOf("三级 3-2-2") === -1;
 		},
+		getProfessionList() {
+			getCategoryReq().then((res) => {
+				if (res.success) {
+					console.dir(res.data);
+					this.professionList = this.listToTree(res.data);
+					console.dir(this.professionList);
+				} else {
+					this.$baseMessage(res.message, "error");
+				}
+			});
+		},
 		getIndustryList() {
 			getIndustryCategoryReq().then((res) => {
 				if (res.success) {
@@ -933,12 +1086,32 @@ export default {
 		},
 		deleEditedContent() {},
 		openInTreeList() {
-			//this.dialogVisible = true; //打开树结构
 			this.dialognodeNameVisible = true; //打开弹窗
+		},
+		openInCategory() {
+			this.dialogCategoryVisible = true; //打开弹窗
 		},
 		openAddAreaDig() {
 			this.dialogAreaNameVisible = true; //打开弹窗
 		},
+		handleCategoryClose() {
+			this.dialogCategoryVisible = false;
+		},
+		addCategoryNodeName(formName) {
+			this.$refs[formName].validate((valid) => {
+				if (valid) {
+					if (this.newCategoryTipShow) {
+						this.newCategoryTipShow = false;
+						this.dialogCategoryVisible = false;
+					} else {
+						this.newCategoryTipShow = true;
+					}
+				} else {
+					return false;
+				}
+			});
+		},
+		categoryAddChange() {},
 		getProfession(val) {
 			if (!this.$refs.mycascader.getCheckedNodes()[0].pathLabels) {
 				this.isSelectCity = "";
@@ -975,6 +1148,12 @@ export default {
 }
 ::v-deep .el-collapse-item__header .el-icon-arrow-right {
 	display: none;
+}
+::v-deep .el-collapse-item__wrap {
+	border-bottom: 0px solid #606266;
+}
+::v-deep .el-collapse-item__header {
+	border-bottom: 0px solid #606266;
 }
 .release {
 	.newindustryTips {
