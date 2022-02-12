@@ -16,6 +16,14 @@ export function getIndustryCategoryReq(data) {
 	});
 }
 
+//获取省市区县
+export function getAddressReq() {
+	return request({
+		url: "/addressList",
+		method: "get",
+	});
+}
+
 //发布经验
 export function releaseExperienceReq(data) {
 	return request({

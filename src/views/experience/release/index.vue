@@ -270,7 +270,7 @@
 										style="width: 505px"
 										:props="customProp"
 										filterable
-										:options="categoryList"
+										:options="addressList"
 										:clearable="true"
 										placeholder="输入文字可搜索"
 									></el-cascader>
@@ -538,7 +538,11 @@
 </template>
 
 <script>
-import { getIndustryCategoryReq, getCategoryReq } from "@/api/release";
+import {
+	getIndustryCategoryReq,
+	getCategoryReq,
+	getAddressReq,
+} from "@/api/release";
 
 export default {
 	name: "Release",
@@ -552,6 +556,7 @@ export default {
 		return {
 			categoryList: [],
 			professionList: [],
+			addressList: [],
 			dialogCategoryVisible: false,
 			newindustryTipShow: false,
 			newAreaTipShow: false,
@@ -846,6 +851,7 @@ export default {
 		initData() {
 			this.getIndustryList();
 			this.getProfessionList();
+			this.getAddressList();
 		},
 		saveContent() {
 			this.dialogVisible = true;
@@ -995,6 +1001,16 @@ export default {
 		allowDrag(draggingNode) {
 			return draggingNode.data.label.indexOf("三级 3-2-2") === -1;
 		},
+		getAddressList() {
+			getAddressReq().then((res) => {
+				if (res.success) {
+					this.addressList = this.listToTreeAddress(res.data);
+					console.dir(this.addressList);
+				} else {
+					this.$baseMessage(res.message, "error");
+				}
+			});
+		},
 		getProfessionList() {
 			getCategoryReq().then((res) => {
 				if (res.success) {
@@ -1068,6 +1084,30 @@ export default {
 
 			return list.filter((item) => {
 				if (item.parentId === 0) {
+					return item;
+				}
+			});
+		},
+		listToTreeAddress(list) {
+			let map = {};
+			list.forEach((item) => {
+				if (!map[item.selfId]) {
+					map[item.selfId] = item;
+				}
+			});
+
+			list.forEach((item) => {
+				if (item.parentId !== "0") {
+					if (map[item.parentId].children) {
+						map[item.parentId].children.push(item);
+					} else {
+						map[item.parentId].children = [item];
+					}
+				}
+			});
+
+			return list.filter((item) => {
+				if (item.parentId === "0") {
 					return item;
 				}
 			});
