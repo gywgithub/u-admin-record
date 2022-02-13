@@ -134,6 +134,7 @@ export default {
 				selector: `#${this.tinymceId}`,
 				language: this.languageTypeList["zh"],
 				height: this.height,
+				statusbar: false,
 				body_class: "panel-body ",
 				branding: false,
 				resize: true,
@@ -150,6 +151,11 @@ export default {
 				imagetools_cors_hosts: ["www.tinymce.com", "codepen.io"],
 				default_link_target: "_blank",
 				link_title: false,
+				save_enablewhendirty: false,
+				save_onsavecallback: function () {
+					localStorage.setItem("memorySave", _this.value);
+					_this.$b.successMsg("保存成功");
+				},
 				nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
 				init_instance_callback: (editor) => {
 					if (_this.value) {

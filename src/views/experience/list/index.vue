@@ -402,7 +402,7 @@
 				<span class="boldFix">累计收益：</span>
 				2132象币
 				<el-popover placement="right" title="" trigger="hover">
-					10象币 = 1元
+					1元 = 10象币
 					<el-button
 						slot="reference"
 						class="tipRule"
@@ -440,6 +440,7 @@ import {
 	getInitDataReq,
 	getFormInitDataReq,
 	deleteDataReq,
+	chageStatusReq,
 } from "@/api/experience";
 import elephantTable from "@/components/template/elephantTable";
 import request from "@/utils/request";
@@ -743,7 +744,7 @@ export default {
 				},
 			],
 			list: [],
-			tableListTotal: 300,
+			tableListTotal: 0,
 			queryPageNo: 1,
 			queryPageSize: 100,
 			resetPageNo: 1,
@@ -753,14 +754,55 @@ export default {
 			isCusColumn: true, //是否开启列自定义
 			defaultShowFailed: false, //开启列自定义或行自定义，此属性必须为false
 			tableData: [],
+			experienceListBakSourceData: [],
 			tableTitleData: [
+				{
+					id: 3,
+					name: "发布者",
+					label: "发布者",
+					prop: "userName",
+					width: "120px",
+					sort: false,
+					align: "center",
+					filterData: [],
+				},
+				{
+					id: 12,
+					name: "所属分类",
+					label: "所属分类",
+					prop: "sswl",
+					width: "180px",
+					sort: false,
+					align: "center",
+					filterData: [],
+				},
+				{
+					id: 5,
+					name: "发布状态",
+					label: "发布状态",
+					prop: "status",
+					sort: false,
+					width: "100px",
+					sortType: "string",
+					align: "center",
+					filterData: [],
+				},
 				{
 					id: 1,
 					name: "主标题",
 					label: "主标题",
 					prop: "title",
 					sort: false,
-					width: "120px",
+					width: "300px",
+					align: "center",
+					filterData: [],
+				},
+				{
+					id: 2,
+					name: "简单描述",
+					label: "简单描述",
+					prop: "content",
+					sort: false,
 					align: "center",
 					filterData: [],
 				},
@@ -775,38 +817,9 @@ export default {
 					filterData: [],
 				},
 				{
-					id: 2,
-					name: "简单描述",
-					label: "简单描述",
-					prop: "content",
-					sort: false,
-					align: "center",
-					filterData: [],
-				},
-				{
-					id: 3,
-					name: "发布者",
-					label: "发布者",
-					prop: "userName",
-					width: "120px",
-					sort: false,
-					align: "center",
-					filterData: [],
-				},
-				{
-					id: 4,
-					name: "参与者",
-					label: "参与者",
-					prop: "customLook",
-					sort: false,
-					width: "120px",
-					align: "center",
-					filterData: [],
-				},
-				{
 					id: 9,
-					name: "文章列表",
-					label: "文章列表",
+					name: "全部文章",
+					label: "全部文章",
 					prop: "customList",
 					sort: false,
 					width: "120px",
@@ -814,13 +827,22 @@ export default {
 					filterData: [],
 				},
 				{
-					id: 5,
-					name: "发布状态",
-					label: "发布状态",
-					prop: "status",
+					id: 10,
+					name: "累计收益",
+					label: "累计收益",
+					prop: "sy",
 					sort: false,
-					width: "100px",
-					sortType: "string",
+					width: "120px",
+					align: "center",
+					filterData: [],
+				},
+				{
+					id: 11,
+					name: "总点赞数/点赞数",
+					label: "总点赞数/点赞数",
+					prop: "userxingwei",
+					sort: false,
+					width: "200px",
 					align: "center",
 					filterData: [],
 				},
@@ -918,7 +940,7 @@ export default {
 	beforeDestroy() {},
 	mounted() {
 		this.$nextTick(() => {
-			this.taskTableHeight = this.$b.dynamicHeight(this, 320);
+			this.taskTableHeight = this.$b.dynamicWinHeight(350);
 		});
 	},
 	methods: {
@@ -953,12 +975,13 @@ export default {
 				this.$router.push("/experience/participantList");
 			}
 			if (
-				column.label == "文章列表" &&
+				column.label == "全部文章" &&
 				event.target.innerText == "查看" &&
-				event.target.dataset.see
+				event.target.dataset.artict
 			) {
-				this.$router.push("/experience/articleList");
+				this.$router.push({ name: "ArticleList", params: {} });
 			}
+
 			if (column.label == "操作") {
 				//操作列
 				this.hanndleOperate({
@@ -970,20 +993,26 @@ export default {
 			}
 		},
 		hanndleOperate({ row, column, cell, event }) {
-			if (event.target.innerText == "查看信息") {
-				this.seeToppic(row);
-			}
+			// if (event.target.innerText == "基础信息") {
+			// 	this.seeToppic(row);
+			// }
 			if (event.target.innerText == "编辑") {
-				console.log("编辑");
+				this.hanndlePackageFromData(row);
 			}
-			if (event.target.innerText == "上架") {
-				this.goodsPutOn(row);
-			}
-			if (event.target.innerText == "下架") {
-				this.goodsOffShelf(row);
-			}
-			if (event.target.innerText == "删除") {
-				this.goodsDelete(row);
+			// if (event.target.innerText == "上架") {
+			// 	this.goodsPutOn(row);
+			// }
+			// if (event.target.innerText == "下架") {
+			// 	this.goodsOffShelf(row);
+			// }
+			// if (event.target.innerText == "删除") {
+			// 	this.goodsDelete(row);
+			// }
+			if (event.target.innerText == "参与") {
+				this.$router.push({
+					name: "TinymceEditor",
+					params: { isOnlyTitle: true, titleContent: row },
+				});
 			}
 			if (event.target.innerText == "驳回") {
 				console.log("驳回");
@@ -991,6 +1020,31 @@ export default {
 			if (event.target.innerText == "通过") {
 				console.log("通过");
 			}
+		},
+		hanndlePackageFromData(data) {
+			let currData = {};
+			for (let i = 0; i < this.experienceListBakSourceData.length; i++) {
+				if (this.experienceListBakSourceData[i].id == data.id) {
+					currData = this.experienceListBakSourceData[i];
+				}
+			}
+			// this.moreForm.cause = editContent.cause;
+			// this.moreForm.reules = editContent.reules;
+			this.$router.push({
+				name: "Release",
+				params: {
+					isEditBaseInfo: true,
+					editBaseInfo: {
+						id: currData.id,
+						title: currData.title,
+						category: currData.category,
+						shareMode: currData.shareMode,
+						content: currData.content,
+						industry: currData.industry,
+						address: currData.address,
+					},
+				},
+			});
 		},
 		selectRowData({ selection, row }) {
 			this.selectRows = selection;
@@ -1112,14 +1166,23 @@ export default {
 				ids.push(selectRows[i]["id"]);
 			}
 			if (type === 1) {
-				this.deleteExperience();
+				this.shelfDownExperience({ ids: ids, statusType: 6 });
 			}
 			if (type === 2) {
-				this.deleteExperience();
+				this.shelfDownExperience({ ids: ids, statusType: 7 });
 			}
 			if (type === 3) {
 				this.deleteExperience(ids);
 			}
+		},
+		shelfDownExperience(data) {
+			chageStatusReq(data).then((res) => {
+				if (res.success) {
+					let msg = data.statusType == 6 ? "上架成功" : "下架成功";
+					this.$b.successMsg(msg);
+					this.fetchData();
+				}
+			});
 		},
 		deleteExperience(data) {
 			deleteDataReq(data).then((res) => {
@@ -1157,19 +1220,22 @@ export default {
 			};
 			getInitDataReq(param).then((res) => {
 				if (res.success) {
+					this.$_.deepClone(
+						res.data.experienceList,
+						this.experienceListBakSourceData
+					);
 					let userName = res.data.userName;
 					let json = res.data.experienceList;
 					for (let i = 0; i < json.length; i++) {
 						json[i].userName = userName;
-						json[i].customLook = "";
+						json[i].userxingwei = "8.7万 / 0.32万";
+						json[i].sswl = "制造业/烟草制品";
+						json[i].sy = "1.2万象币";
 						json[i].customHanndle = [
-							"查看信息",
+							"参与",
 							"编辑",
-							"上架",
-							"下架",
-							"删除",
-							"驳回",
 							"通过",
+							"驳回",
 						];
 					}
 
@@ -1183,10 +1249,8 @@ export default {
 						} else if (json[j].shareMode == 4) {
 							json[j].shareMode = "免费模式";
 						}
-						json[j].customLook =
-							"<span class='linkText' data-see='true'>查看</span>";
 						json[j].customList =
-							"<span class='linkText' data-see='true'>查看</span>";
+							"<span class='linkText' data-artict='true'>查看</span>";
 						if (json[j].status == 1) {
 							json[j].status = "未审核";
 						} else if (json[j].status == 2) {
@@ -1219,6 +1283,7 @@ export default {
 						).Format("yyyy-MM-dd hh:mm:ss");
 					}
 					this.tableData = json;
+					this.tableListTotal = res.data.total;
 				}
 			});
 		},

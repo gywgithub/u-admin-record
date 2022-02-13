@@ -76,6 +76,14 @@ export const constantRoutes = [
 				meta: { title: "参与者列表", icon: "table" },
 			},
 			{
+				path: "articleList",
+				name: "ArticleList",
+				hidden: true,
+				component: () =>
+					import("@/views/experience/list/articleList/index"),
+				meta: { title: "文章列表", icon: "table" },
+			},
+			{
 				path: "release",
 				name: "Release",
 				component: () => import("@/views/experience/release/index"),
@@ -110,6 +118,32 @@ export const constantRoutes = [
 					title: "发布成功",
 					icon: "form",
 				},
+			},
+		],
+	},
+	{
+		path: "/deploy",
+		component: Layout,
+		redirect: "/deploy/userManage",
+		name: "Experience",
+		meta: { title: "配置", icon: "el-icon-s-tools" },
+		children: [
+			{
+				path: "personalCenter",
+				name: "PersonalCenter",
+				meta: { title: "个人中心", icon: "user" },
+			},
+			{
+				path: "userManage",
+				name: "UserManage",
+				component: () =>
+					import("@/views/experience/list/participantList/index"),
+				meta: { title: "用户管理", icon: "peoples" },
+			},
+			{
+				path: "roleManage",
+				name: "RoleManage",
+				meta: { title: "角色管理", icon: "password" },
 			},
 		],
 	},

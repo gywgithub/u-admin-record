@@ -32,3 +32,12 @@ export function releaseExperienceReq(data) {
 		data: data,
 	});
 }
+
+//修改经验
+export function updateExperienceDataReq(data) {
+	return request({
+		url: `/experience/editExperience`,
+		method: "post",
+		data: data,
+	});
+}

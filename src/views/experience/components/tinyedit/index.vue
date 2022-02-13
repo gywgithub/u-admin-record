@@ -1,140 +1,160 @@
 <template>
-	<div class="tiny-editor" ref="mainTinyHeight">
-		<el-row :gutter="20">
-			<el-col :span="12">
-				<h2 style="text-align: center">
-					<strong>{{ currShareData.title }}</strong>
-				</h2>
-				<tinymce-editor
-					v-model="content"
-					:height="dyHeight"
-				></tinymce-editor>
-			</el-col>
-			<el-col :span="12">
-				<h2 style="text-align: center">
-					<strong>实时展示</strong>
-				</h2>
-				<div class="editor-content" v-html="content" />
-			</el-col>
-		</el-row>
-		<el-row>
-			<el-col :span="12">
-				<div
-					class="mt30"
-					style="display: flex; justify-content: center"
-				>
-					<el-button
-						style="display: fixed"
-						type="primary"
-						class="saveStyle"
-						@click="prvePage"
-						>上一步</el-button
-					>
-					<el-button
-						style="display: fixed"
-						type="primary"
-						class="saveStyle ml20-imp"
-						@click="saveContent"
-						>保 存</el-button
-					>
-				</div>
-			</el-col>
-		</el-row>
-		<el-dialog
-			v-dialogDrag
-			:visible.sync="dialogVisible"
-			:close-on-click-modal="unModalFaceBack"
-			width="520px"
-			:before-close="handleClose"
+	<div class="tiny-editor">
+		<div
+			class="mainBody"
+			ref="mainRef"
+			v-bind:style="{ minHeight: warpHeight + 'px' }"
 		>
-			<div slot="title" class="listDialog">
-				{{ currShareData.title }}
-				<el-popover
-					placement="right"
-					title="规则"
-					width="300"
-					trigger="hover"
-				>
-					<p>1:当前目录仅作用于当前的经验</p>
-					<p>
-						2:您可以以目录的方式划分经验
-						<el-tooltip
-							class="item"
-							effect="dark"
-							content="划分提示: 从不同维度、不同角度等划分"
-							placement="top-start"
+			<el-row :gutter="20">
+				<el-col :span="12">
+					<h2 style="text-align: left">
+						<strong>{{ currShareData.title }}</strong>
+					</h2>
+					<tinymce-editor
+						v-model="content"
+						:height="tinymceHeight"
+					></tinymce-editor>
+					<div
+						class="mt30"
+						style="display: flex; justify-content: center"
+					>
+						<el-button
+							v-if="!onlyEditArticle"
+							style="display: fixed"
+							type="primary"
+							@click="prvePage"
+							>上一步</el-button
 						>
-							<el-link
-								icon="el-icon-question"
-								:underline="false"
-							></el-link>
-						</el-tooltip>
-					</p>
-					<p>3:目录所有层级总数量最大为45</p>
-					<el-button
-						slot="reference"
-						class="tipRule"
-						icon="el-icon-question"
-					></el-button>
-				</el-popover>
-			</div>
-			<el-tree
-				ref="cateTree"
-				:data="treeData"
-				node-key="id"
-				class="mb20"
-				show-checkbox
-				:check-strictly="true"
-				:default-expanded-keys="[1]"
-				:default-checked-keys="[99]"
-				@check-change="handleCheckChange"
-				@node-drag-start="handleDragStart"
-				@node-drag-enter="handleDragEnter"
-				@node-drag-leave="handleDragLeave"
-				@node-drag-over="handleDragOver"
-				@node-drag-end="handleDragEnd"
-				@node-drop="handleDrop"
-				:render-content="renderContent"
-				:filter-node-method="filterNode"
-				:draggable="false"
-				:allow-drop="allowDrop"
-				:allow-drag="allowDrag"
-			>
-			</el-tree>
-			<el-button type="primary" @click="reviewreeValue">提 交</el-button>
-		</el-dialog>
-		<el-dialog
-			:title="nodeNameDialogTitle"
-			:visible.sync="dialognodeNameVisible"
-			:close-on-click-modal="unModalFaceBack"
-			width="520px"
-			:before-close="handleCloseAddName"
-		>
-			<el-form
-				ref="treeNewform"
-				:model="treeNewNameForm"
-				:rules="treeNewNameRules"
-				:label-position="labelNodePos"
-				class="disf"
-			>
-				<el-form-item label="目录名称" prop="treeNodeAddName">
-					<el-row>
-						<el-col :span="12">
-							<el-input
-								v-model="treeNewNameForm.treeNodeAddName"
-								placeholder=""
-							></el-input></el-col
-					></el-row>
-				</el-form-item>
-				<el-form-item
-					><el-button
-						type="primary"
-						@click="addNodeName('treeNewform')"
-						>确 定</el-button
-					></el-form-item
+						<el-button
+							v-if="!onlyEditArticle"
+							style="display: fixed"
+							type="primary"
+							class="ml20-imp"
+							@click="saveAndContent"
+							>保存并提交</el-button
+						>
+						<el-button
+							v-if="onlyEditArticle"
+							style="display: fixed"
+							type="primary"
+							class="ml20-imp"
+							@click="addArticle"
+							>立即发布</el-button
+						>
+					</div>
+				</el-col>
+				<el-col
+					:span="12"
+					v-bind:style="{
+						height: warpHeight + 'px',
+						backgroundColor: '#fcfaf2',
+						overflowY: 'scroll',
+					}"
 				>
-			</el-form>
-		</el-dialog>
+					<h2 style="text-align: left">
+						<strong>{{ currShareData.title }}</strong>
+					</h2>
+					<div class="editor-content" v-html="content" />
+				</el-col>
+			</el-row>
+			<el-dialog
+				v-dialogDrag
+				:visible.sync="dialogVisible"
+				:close-on-click-modal="unModalFaceBack"
+				width="520px"
+				:before-close="handleClose"
+			>
+				<div slot="title" class="listDialog">
+					{{ currShareData.title }}
+					<el-popover
+						placement="right"
+						title="规则"
+						width="300"
+						trigger="hover"
+					>
+						<p>1:当前目录仅作用于当前的经验</p>
+						<p>
+							2:您可以以目录的方式划分经验
+							<el-tooltip
+								class="item"
+								effect="dark"
+								content="划分提示: 从不同维度、不同角度等划分"
+								placement="top-start"
+							>
+								<el-link
+									icon="el-icon-question"
+									:underline="false"
+								></el-link>
+							</el-tooltip>
+						</p>
+						<p>3:目录所有层级总数量最大为45</p>
+						<el-button
+							slot="reference"
+							class="tipRule"
+							icon="el-icon-question"
+						></el-button>
+					</el-popover>
+				</div>
+				<el-tree
+					ref="cateTree"
+					:data="treeData"
+					node-key="id"
+					class="mb20"
+					show-checkbox
+					:check-strictly="true"
+					:default-expanded-keys="[1]"
+					:default-checked-keys="[99]"
+					@check-change="handleCheckChange"
+					@node-drag-start="handleDragStart"
+					@node-drag-enter="handleDragEnter"
+					@node-drag-leave="handleDragLeave"
+					@node-drag-over="handleDragOver"
+					@node-drag-end="handleDragEnd"
+					@node-drop="handleDrop"
+					:render-content="renderContent"
+					:filter-node-method="filterNode"
+					:draggable="false"
+					:allow-drop="allowDrop"
+					:allow-drag="allowDrag"
+				>
+				</el-tree>
+				<el-button type="primary" @click="reviewreeValue"
+					>提 交</el-button
+				>
+			</el-dialog>
+			<el-dialog
+				:title="nodeNameDialogTitle"
+				:visible.sync="dialognodeNameVisible"
+				:close-on-click-modal="unModalFaceBack"
+				width="520px"
+				:before-close="handleCloseAddName"
+			>
+				<el-form
+					ref="treeNewform"
+					:model="treeNewNameForm"
+					:rules="treeNewNameRules"
+					:label-position="labelNodePos"
+					class="disf"
+				>
+					<el-form-item label="目录名称" prop="treeNodeAddName">
+						<el-row>
+							<el-col :span="12">
+								<el-input
+									v-model="treeNewNameForm.treeNodeAddName"
+									placeholder=""
+								></el-input></el-col
+						></el-row>
+					</el-form-item>
+					<el-form-item
+						><el-button
+							type="primary"
+							@click="addNodeName('treeNewform')"
+							>确 定</el-button
+						></el-form-item
+					>
+				</el-form>
+			</el-dialog>
+		</div>
 	</div>
 </template>
 
@@ -147,11 +167,15 @@ export default {
 	data() {
 		return {
 			content: "",
-			currShareData: {},
+			onlyEditArticle: false,
+			currShareData: { title: "" },
+			memorySaveData: "",
 			addNodeData: {},
 			treeNewNameForm: {
 				treeNodeAddName: "",
 			},
+			warpHeight: "800px",
+			tinymceHeight: "800px",
 			dynamicList: [{ id: 99, name: "默认目录", parentId: 0 }],
 			treeNewNameRules: {},
 			dyHeight: 450,
@@ -297,17 +321,100 @@ export default {
 			// this.dyHeight = 1000;
 		},
 	},
+	beforeDestroy() {
+		document.removeEventListener("keydown", this.saveContent); //截获 Ctrl+S
+		clearInterval(this.timer);
+	},
 	mounted() {
+		document.addEventListener("keydown", this.saveContent); //截获 Ctrl+S
+
+		this.timer = setInterval(() => {
+			this.save("自动保存");
+		}, 180 * 1000); //截获 Ctrl+S
+
 		this.init();
+		this.$nextTick(() => {
+			this.warpHeight = this.$b.dynamicWinHeight(120);
+			this.tinymceHeight = this.$b.dynamicWinHeight(420);
+		});
 	},
 	methods: {
 		init() {
 			this.currShareData = JSON.parse(
-				localStorage.getItem("tempShareObject")
+				localStorage.getItem("experienceBaseInfo") || "{}"
 			);
+			this.memorySaveData = localStorage.getItem("memorySave") || "";
+			let isReviewContent = this.$route.params.isReviewContent;
+			if (this.memorySaveData && isReviewContent) {
+				this.content = this.memorySaveData;
+			}
+			let isOnlyTitle = this.$route.params.isOnlyTitle;
+			if (isOnlyTitle) {
+				this.onlyEditArticle = true;
+				this.currShareData.title =
+					this.$route.params.titleContent.title;
+			}
 		},
-		saveContent() {
-			this.dialogVisible = true;
+		save(msg) {
+			localStorage.setItem("memorySave", this.content);
+			this.$b.successMsg(msg);
+		},
+		saveContent(e) {
+			var key = window.event.keyCode
+				? window.event.keyCode
+				: window.event.which;
+			if (key === 83 && e.ctrlKey) {
+				this.save("保存成功");
+				e.preventDefault();
+			}
+		},
+		//已经存在文章，累计新增文章
+		addArticle() {
+			this.$b.successMsg("努力开发中，敬请期待......");
+		},
+		saveAndContent() {
+			this.$confirm("确认提交本次内容?", "提示", {
+				confirmButtonText: "确定",
+				cancelButtonText: "取消",
+				type: "warning",
+			})
+				.then(() => {
+					//articleType 1：新增第一篇文章  2：编辑文章
+					if (this.$route.params.articleType == 2) {
+						this.dialogVisible = true;
+					} else {
+						this.submitArticle();
+					}
+				})
+				.catch(() => {});
+		},
+		submitArticle() {
+			let paramStorage = this.currShareData;
+			if (paramStorage) {
+				// insertList: this.dynamicList, //用户新增的目录
+				let userId = JSON.parse(
+					localStorage.getItem("userInfo")
+				).userId;
+				let params = {
+					userId: userId,
+					content: paramStorage.content, //描述
+					title: paramStorage.title, //标题
+					shareMode: paramStorage.shareMode, //共享模式
+					industry: paramStorage.industry, //行业
+					address: paramStorage.address,
+					cause: paramStorage.cause,
+					reules: paramStorage.reules,
+					category: paramStorage.category,
+					selectCatalog: {
+						id: 99,
+						nativeNode: true,
+						disabled: false,
+						label: "默认目录",
+					}, //新增文章 自动增加 默认目录
+					richTextCode: this.content, //富文本内容
+				};
+				this.submitExperience(params);
+			}
 		},
 		handleClose() {
 			this.dialogVisible = false;
@@ -418,26 +525,22 @@ export default {
 		},
 		reviewreeValue() {
 			let selected = this.$refs.cateTree.getCheckedNodes();
-			if (selected.length == 1) {
-				let storageObj = JSON.parse(
-					localStorage.getItem("tempShareObject")
-				);
-				console.log(storageObj.content);
+			let paramStorage = this.currShareData;
+			if (selected.length == 1 && paramStorage) {
 				// insertList: this.dynamicList, //用户新增的目录
 				let userId = JSON.parse(
 					localStorage.getItem("userInfo")
 				).userId;
 				let params = {
 					userId: userId,
-					content: storageObj.content, //描述
-					title: storageObj.title, //标题
-					shareMode: storageObj.shareMode, //共享模式
-					industryId: storageObj.isSelectProfession[1], //行业
-					provinceId: storageObj.address[0],
-					cityId: storageObj.address[1],
-					countyId: "",
-					townId: "",
-					villageId: "",
+					content: paramStorage.content, //描述
+					title: paramStorage.title, //标题
+					shareMode: paramStorage.shareMode, //共享模式
+					industry: paramStorage.industry, //行业
+					address: paramStorage.address,
+					cause: paramStorage.cause,
+					reules: paramStorage.reules,
+					category: paramStorage.type,
 					selectCatalog: selected[0], //用户勾选的目录
 					richTextCode: this.content, //富文本内容
 				};
@@ -453,6 +556,8 @@ export default {
 			releaseExperienceReq(data).then((res) => {
 				if (res.success) {
 					this.dialogVisible = false;
+					localStorage.removeItem("experienceBaseInfo");
+					localStorage.removeItem("memorySave");
 					this.$router.push("/experience/releaseSuccess");
 				}
 			});
@@ -501,7 +606,13 @@ export default {
 				type: "warning",
 			})
 				.then(() => {
-					this.$router.push("/experience/release");
+					localStorage.setItem("memorySave", this.content);
+					this.$router.push({
+						name: "Release",
+						params: {
+							isReviewFrom: true,
+						},
+					});
 				})
 				.catch(() => {});
 		},
@@ -512,7 +623,6 @@ export default {
 	},
 };
 </script>
-
 <style lang="scss" scoped>
 ::v-deep .custom-tree-node .el-button {
 	margin-left: 10px;
@@ -522,13 +632,14 @@ export default {
 	background: none;
 	padding-left: 0px;
 }
+::v-deep .mainBody {
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
 .tinymceEditorStyle {
 	width: 50%;
 }
 .editor-content {
 	margin-top: 20px;
-}
-.saveStyle {
-	width: 100px;
 }
 </style>

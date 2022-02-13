@@ -17,6 +17,15 @@ export function getInitDataReq(data) {
 	});
 }
 
+//批量上架/下架
+export function chageStatusReq(data) {
+	return request({
+		url: `/experience/editExperienceStatus`,
+		method: "post",
+		data: data,
+	});
+}
+
 //删除经验
 export function deleteDataReq(data) {
 	return request({

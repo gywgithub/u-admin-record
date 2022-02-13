@@ -24,10 +24,10 @@
 						</el-col>
 					</el-row>
 				</el-form-item>
-				<el-form-item label="类别" prop="type">
+				<el-form-item label="类别" prop="category">
 					<el-cascader
 						ref="mycascader"
-						v-model="form.type"
+						v-model="form.category"
 						:props="customProp"
 						filterable
 						style="width: 505px"
@@ -36,13 +36,13 @@
 						placeholder="输入文字可搜索"
 						@change="getProfession"
 					></el-cascader>
-					<el-link
+					<!-- <el-link
 						type="primary"
 						@click="openInCategory"
 						class="ml10"
 						:underline="false"
 						>未找到?</el-link
-					>
+					> -->
 				</el-form-item>
 				<el-form-item label="价值共享" prop="shareMode">
 					<div class="mt8">
@@ -199,8 +199,23 @@
 					</el-row>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="handleSave"
+					<el-button
+						type="primary"
+						v-if="!isEditBaseExperienceFrom"
+						@click="handleSave"
 						>下一步</el-button
+					>
+					<el-button
+						type="primary"
+						v-if="isEditBaseExperienceFrom"
+						@click="updateBaseInfo"
+						>保 存</el-button
+					>
+					<el-button
+						type="primary"
+						v-if="isEditBaseExperienceFrom"
+						@click="backExperienceList"
+						>返回列表</el-button
 					>
 				</el-form-item>
 			</el-form>
@@ -218,13 +233,10 @@
 								:model="moreForm"
 								label-width="100px"
 							>
-								<el-form-item
-									label="行业"
-									prop="isSelectProfession"
-								>
+								<el-form-item label="行业" prop="industry">
 									<el-cascader
 										ref="mycascader"
-										v-model="moreForm.isSelectProfession"
+										v-model="moreForm.industry"
 										style="width: 505px"
 										:props="customProp"
 										filterable
@@ -236,7 +248,6 @@
 									<el-popover
 										placement="right"
 										title="规则"
-										width="300"
 										class="ml10"
 										trigger="click"
 									>
@@ -255,13 +266,13 @@
 											icon="el-icon-question"
 										></el-button>
 									</el-popover>
-									<el-link
+									<!-- <el-link
 										type="primary"
 										@click="openInTreeList"
 										class="ml10"
 										:underline="false"
 										>未找到?</el-link
-									>
+									> -->
 								</el-form-item>
 								<el-form-item label="地址" prop="address">
 									<el-cascader
@@ -277,7 +288,6 @@
 									<el-popover
 										placement="right"
 										title="规则"
-										width="300"
 										class="ml10"
 										trigger="click"
 									>
@@ -297,13 +307,13 @@
 											icon="el-icon-question"
 										></el-button>
 									</el-popover>
-									<el-link
+									<!-- <el-link
 										type="primary"
 										@click="openAddAreaDig"
 										class="ml10"
 										:underline="false"
 										>未找到?</el-link
-									>
+									> -->
 								</el-form-item>
 								<el-form-item label="起因" prop="cause">
 									<el-input
@@ -413,7 +423,7 @@
 				<div class="newindustryTips mb20" v-show="newindustryTipShow">
 					<p>1、每位用户15天内，只能提交一次</p>
 					<p>2、提交审核通过后，该经验将自动划分到您新增的行业中</p>
-					<p>3、审核未通过，该经验将自动划分到默认行业中</p>
+					<p>3、审核若未通过，该经验将自动划分到默认行业中</p>
 				</div>
 				<el-button
 					type="primary"
@@ -468,7 +478,7 @@
 				<div class="newindustryTips mb20" v-show="newCategoryTipShow">
 					<p>1、每位用户15天内，只能提交一次</p>
 					<p>2、提交审核通过后，该经验将自动划分到您新增的类别中</p>
-					<p>3、审核未通过，该经验将自动划分到默认类别中</p>
+					<p>3、审核若未通过，该经验将自动划分到默认类别中</p>
 				</div>
 				<el-button
 					type="primary"
@@ -524,7 +534,7 @@
 				<div class="newindustryTips mb20" v-show="newAreaTipShow">
 					<p>1、每位用户15天内，只能提交一次</p>
 					<p>2、提交审核通过后，该经验将自动划分到您新增的地址中</p>
-					<p>3、提交审核未通过，该经验将自动划分到默认地址中</p>
+					<p>3、提交审核若未通过，该经验将自动划分到默认地址中</p>
 				</div>
 				<el-button
 					type="primary"
@@ -542,6 +552,7 @@ import {
 	getIndustryCategoryReq,
 	getCategoryReq,
 	getAddressReq,
+	updateExperienceDataReq,
 } from "@/api/release";
 
 export default {
@@ -785,6 +796,7 @@ export default {
 			},
 			borderColor: "#dcdfe6",
 			dialogTableVisible: false,
+			isEditBaseExperienceFrom: false,
 			isOpenMoenyShare: false,
 			warpHeight: "730px",
 			noUnder: false,
@@ -792,13 +804,13 @@ export default {
 				title: "", //标题
 				content: "", //描述
 				shareMode: 1, //共享模式
-				type: "",
+				category: [],
 			},
 			moreForm: {
 				cause: "",
 				reules: "",
-				isSelectProfession: "", //行业
-				address: "", //省市区
+				industry: [], //行业
+				address: [], //省市区
 			},
 			rules: {
 				title: [
@@ -808,7 +820,7 @@ export default {
 						trigger: "change",
 					},
 				],
-				type: [
+				category: [
 					{
 						required: true,
 						message: "请选择",
@@ -841,17 +853,59 @@ export default {
 	mounted() {
 		this.init();
 		this.$nextTick(() => {
-			this.warpHeight = this.$b.dynamicHeight(this, 0) + 200;
+			this.warpHeight = this.$b.dynamicWinHeight(90);
 		});
 	},
 	methods: {
 		init() {
 			this.initData();
+			let isEditFrom = this.$route.params.isEditBaseInfo;
+			if (isEditFrom) {
+				this.isEditBaseExperienceFrom = true;
+			} else {
+				this.isEditBaseExperienceFrom = false;
+			}
 		},
 		initData() {
 			this.getIndustryList();
 			this.getProfessionList();
 			this.getAddressList();
+			let reviewFormData = JSON.parse(
+				localStorage.getItem("experienceBaseInfo")
+			);
+			let isReviewFrom = this.$route.params.isReviewFrom;
+			if (reviewFormData && isReviewFrom) {
+				this.form.title = reviewFormData.title;
+				this.form.type = reviewFormData.type.split(",").map(Number);
+				this.form.shareMode = reviewFormData.shareMode;
+				this.form.content = reviewFormData.content;
+				this.moreForm.industry = reviewFormData.industry
+					.split(",")
+					.map(Number);
+				this.moreForm.address = reviewFormData.address
+					.split(",")
+					.map(Number);
+				this.moreForm.cause = reviewFormData.cause;
+				this.moreForm.reules = reviewFormData.reules;
+			}
+			//是否是编辑发布过的内容
+			let isEditFrom = this.$route.params.isEditBaseInfo;
+			let editContent = this.$route.params.editBaseInfo;
+
+			if (isEditFrom) {
+				this.form.title = editContent.title;
+				this.form.category = editContent.category
+					.split(",")
+					.map(Number);
+				this.form.shareMode = editContent.shareMode;
+				this.form.content = editContent.content;
+				this.moreForm.industry = editContent.industry
+					.split(",")
+					.map(Number);
+				this.moreForm.address = editContent.address
+					.split(",")
+					.map(Number);
+			}
 		},
 		saveContent() {
 			this.dialogVisible = true;
@@ -1157,14 +1211,51 @@ export default {
 				this.isSelectCity = "";
 			}
 		},
+		hanndleStrogeSaveForm(data) {
+			let expInfo = {
+				title: data.title,
+				category: data.category.join(","),
+				shareMode: data.shareMode,
+				content: data.content,
+				industry: data.industry.join(","),
+				address: data.address.join(","),
+				cause: data.cause,
+				reules: data.reules,
+			};
+			return expInfo;
+		},
+		backExperienceList() {
+			this.$router.push({ name: "List", params: {} });
+		},
+		updateBaseInfo() {
+			let params = this.hanndleStrogeSaveForm(
+				Object.assign(this.form, this.moreForm)
+			);
+			params["id"] = this.$route.params.editBaseInfo.id;
+			updateExperienceDataReq(params).then((res) => {
+				if (res.success) {
+					this.$b.successMsg("修改成功");
+					this.$router.push({ name: "List", params: {} });
+				}
+			});
+		},
 		handleSave() {
 			this.$refs["form"].validate((valid) => {
 				if (valid) {
-					localStorage.setItem(
-						"tempShareObject",
-						JSON.stringify(this.form)
+					let baseParams = this.hanndleStrogeSaveForm(
+						Object.assign(this.form, this.moreForm)
 					);
-					this.$router.push("/experience/tinymceEditor");
+					localStorage.setItem(
+						"experienceBaseInfo",
+						JSON.stringify(baseParams)
+					);
+					this.$router.push({
+						name: "TinymceEditor",
+						params: {
+							articleType: 1, //1：新增文章  2：编辑文章
+							isReviewContent: true,
+						},
+					});
 				} else {
 					return false;
 				}

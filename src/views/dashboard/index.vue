@@ -1,7 +1,7 @@
 <template>
 	<div class="dashboard">
 		<el-row :gutter="40">
-			<el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+			<el-col :xs="24" :lg="6" class="card-panel-col">
 				<div
 					class="card-panel"
 					@click="handleSetLineChartData('newVisitis')"
@@ -23,7 +23,7 @@
 					</div>
 				</div>
 			</el-col>
-			<el-col :xs="12" :lg="6" class="card-panel-col">
+			<el-col :xs="24" :lg="6" class="card-panel-col">
 				<div
 					class="card-panel"
 					@click="handleSetLineChartData('messages')"
@@ -45,7 +45,7 @@
 					</div>
 				</div>
 			</el-col>
-			<el-col :xs="12" :lg="6" class="card-panel-col">
+			<el-col :xs="24" :lg="6" class="card-panel-col">
 				<div
 					class="card-panel"
 					@click="handleSetLineChartData('purchases')"
@@ -67,7 +67,7 @@
 					</div>
 				</div>
 			</el-col>
-			<el-col :xs="12" :lg="6" class="card-panel-col">
+			<el-col :xs="24" :lg="6" class="card-panel-col">
 				<div
 					class="card-panel"
 					@click="handleSetLineChartData('shoppings')"
@@ -129,7 +129,7 @@
 					</el-timeline>
 				</el-card>
 			</el-col>
-			<el-col :xs="24" :lg="6">
+			<el-col :xs="24" :lg="6" style="height: 480px">
 				<el-card class="box-card">
 					<div slot="header" class="clearfix">
 						<span>经验排行榜</span>
@@ -144,7 +144,7 @@
 					</div>
 				</el-card>
 			</el-col>
-			<el-col :xs="24" :lg="6">
+			<el-col :xs="24" :lg="6" style="height: 480px">
 				<el-card class="box-card">
 					<div slot="header" class="clearfix">
 						<span>收益排行榜</span>
@@ -247,6 +247,12 @@ export default {
 <style lang="scss" scoped>
 .dashboard {
 	margin-top: 18px;
+
+	.card {
+		height: 480px;
+		-webkit-box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+		box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+	}
 
 	.chart-wrapper {
 		background: #fff;

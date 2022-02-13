@@ -38,7 +38,8 @@ module.exports = {
 		},
 		proxy: {
 			"/api": {
-				target: "http://10.255.52.94:8080",
+				// target: "http://10.255.52.94:8080", //gs
+				target: "http://192.168.124.11:8080", //jia
 				ws: true,
 				changeOrigin: true,
 				pathRewrite: { "^/api": "" },

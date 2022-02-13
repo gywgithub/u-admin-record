@@ -359,6 +359,10 @@ const dynamicHeight = (content, cropValue) => {
 	return content.$refs["mainRef"].clientHeight - parseInt(cropValue);
 };
 
+const dynamicWinHeight = (cropValue) => {
+	return window.innerHeight - parseInt(cropValue);
+};
+
 export default {
 	filterRouter: filterAsyncRouter,
 	filterMenuRouter: filterMenuRouter,
@@ -378,4 +382,5 @@ export default {
 	compare: compare,
 	createLog: createLog,
 	dynamicHeight: dynamicHeight,
+	dynamicWinHeight: dynamicWinHeight,
 };

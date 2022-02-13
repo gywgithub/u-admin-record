@@ -18,6 +18,7 @@
 							<el-input
 								v-model="form.title"
 								maxlength="30"
+								style="width: 505px"
 								placeholder="最多30字"
 							></el-input>
 						</el-col>
@@ -308,7 +309,8 @@
 								placeholder="1人民币= 10象币"
 								suffix-icon="el-icon-money"
 								type="text"
-								max-length="6"
+								style="width: 505px"
+								maxlength="6"
 							></el-input>
 						</el-col>
 					</el-row>
@@ -321,6 +323,7 @@
 								type="textarea"
 								maxlength="300"
 								show-word-limit
+								style="width: 600px"
 								:autosize="{ minRows: 8 }"
 								placeholder="限300字"
 							></el-input>
@@ -817,7 +820,7 @@ export default {
 	mounted() {
 		this.init();
 		this.$nextTick(() => {
-			this.warpHeight = this.$b.dynamicHeight(this, 0) + 300;
+			this.warpHeight = this.$b.dynamicWinHeight(90);
 		});
 	},
 	methods: {

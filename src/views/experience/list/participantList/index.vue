@@ -1,127 +1,47 @@
 <template>
 	<div class="participant-list">
-		<!-- <el-table :data="shareList" style="width: 100%">
-			<el-table-column type="expand">
-				<template slot-scope="scope">
-					 {{ scope.row }}
-					<el-table :data="selfShareList" border style="width: 100%">
-						<el-table-column
-							prop="name"
-							label="Ta的案例"
-							align="center"
-						></el-table-column>
-						<el-table-column
-							prop="updateTime"
-							label="最后更新时间"
-							align="center"
-						></el-table-column>
-						<el-table-column label="经验者" align="center">
-							<template #default="{ row }">
-								{{ row.author }}
-								张三
-							</template>
-						</el-table-column>
-						<el-table-column
-							prop="singlecoll"
-							label="点赞数"
-							align="center"
-						></el-table-column>
-						<el-table-column
-							prop="pro"
-							label="省"
-							align="center"
-						></el-table-column>
-						<el-table-column
-							prop="city"
-							label="市"
-							align="center"
-						></el-table-column>
-						<el-table-column
-							prop="createTime"
-							label="发布时间"
-							align="center"
-						></el-table-column>
-						<el-table-column label="" width="180" align="center">
-							<template slot="header" slot-scope="scope">
-								操作
-								 {{ scope.row }}
-								<el-tooltip
-									class="item"
-									effect="dark"
-									content="每位用户每月最多申诉3次"
-									placement="top-start"
-								>
-									<el-link
-										icon="el-icon-question"
-										:underline="false"
-									></el-link>
-								</el-tooltip>
-							</template>
-							<template slot-scope="scope">
-								<el-button
-									type="text"
-									size="small"
-									@click="seeDetail(scope.row)"
-								>
-									查看
-								</el-button>
-								<el-button type="text" size="small"
-									>上架</el-button
-								>
-								<el-button type="text" size="small"
-									>下架</el-button
-								>
-								<el-button
-									type="text"
-									size="small"
-									@click="report(scope.row)"
-								>
-									申诉
-								</el-button>
-							</template>
-						</el-table-column>
-					</el-table>
-				</template>
-			</el-table-column>
-			<el-table-column
-				label="参与者"
-				prop="author"
-				align="center"
-			></el-table-column>
-			<el-table-column
-				label="参与者级别"
-				prop="levUser"
-				align="center"
-			></el-table-column>
-			<el-table-column label="总点赞数" prop="coll" align="center">
-				<template slot="header" slot-scope="scope">
-					总点赞数{{ scope.row }}
-					<el-tooltip
-						class="item"
-						effect="dark"
-						content="经验者所有经验案例点赞数累加之和"
-						placement="top-start"
-					>
-						<el-link
-							icon="el-icon-question"
-							:underline="false"
-						></el-link>
-					</el-tooltip>
-				</template>
-			</el-table-column>
-			<el-table-column align="center" label="操作">
-				<template>
-					<el-link type="primary" :underline="false">关注</el-link>
-					<el-link type="primary" :underline="false" class="ml20"
-						>拉黑</el-link
-					>
-					<el-link type="primary" :underline="false" class="ml20"
-						>举报</el-link
-					>
-				</template>
-			</el-table-column>
-		</el-table> -->
-		<div class="mainBody">
+		<div class="headerTitle">
+			<el-form
+				ref="ruleForm"
+				:inline="true"
+				:model="ruleForm"
+				:rules="formRules"
+				class="demo-ruleForm"
+			>
+				<el-form-item
+					label="参与者级别"
+					prop="shareType"
+					label-width="90px"
+				>
+					<el-select v-model="ruleForm.type">
+						<el-option
+							v-for="(item, index) in participarnList"
+							:key="index"
+							:label="item.text"
+							:value="item.value"
+						></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="粉丝数" prop="status" label-width="70px">
+					<el-select v-model="ruleForm.status">
+						<el-option
+							v-for="(item, index) in fanNumberList"
+							:key="index"
+							:label="item.text"
+							:value="item.value"
+						></el-option>
+					</el-select>
+				</el-form-item>
+				<el-button
+					icon="el-icon-search"
+					type="primary"
+					@click="handleQuery"
+				>
+					查 询
+				</el-button>
+			</el-form>
+		</div>
+		<div class="mainBody mt30">
 			<elephant-table
 				:tableSourceData="tableData"
 				:tableSourceTitleData="tableTitleData"
@@ -140,6 +60,57 @@
 			>
 			</elephant-table>
 		</div>
+		<el-dialog
+			:visible.sync="seeTopic"
+			width="30%"
+			class="setTopCss"
+			:before-close="handleClose"
+		>
+			<span slot="title" class="dialog-title">
+				<span class="topiceTitle">{{ baseExperienceInfo.title }}</span>
+			</span>
+			<p>
+				<span class="boldFix">发布人：</span>
+				{{ baseExperienceInfo.userName }}
+			</p>
+			<p>
+				<span class="boldFix">发布状态：</span>
+				{{ baseExperienceInfo.status }}
+			</p>
+			<p>
+				<span class="boldFix">累计收益：</span>
+				2132象币
+				<el-popover placement="right" title="" trigger="hover">
+					1元 = 10象币
+					<el-button
+						slot="reference"
+						class="tipRule"
+						icon="el-icon-question"
+					></el-button>
+				</el-popover>
+			</p>
+			<p>
+				<span class="boldFix">所属分类：</span>
+				制造业/烟草制品
+			</p>
+			<p>
+				<span class="boldFix">价值模式：</span>
+				{{ baseExperienceInfo.shareMode }}
+			</p>
+			<p>
+				<span class="boldFix">参与者/总点赞数/中位点赞数：</span>
+				132位 / 8.7万 / 0.32万
+			</p>
+			<p>
+				<span class="boldFix">简单描述：</span>
+				{{ baseExperienceInfo.content }}
+			</p>
+			<p>
+				<span class="boldFix">发布时间：</span>
+				{{ baseExperienceInfo.createTime }}
+			</p>
+			<span slot="footer" class="dialog-footer"></span>
+		</el-dialog>
 	</div>
 </template>
 
@@ -158,14 +129,47 @@ export default {
 			resetPageNo: 1,
 			resetPageSize: 100,
 			isTootip: true,
-			isSelectTable: true,
+			seeTopic: false,
+			baseExperienceInfo: {
+				title: "地球有外星人吗？",
+				userName: "张盼伟",
+				status: "上架中",
+				shareMode: "共享模式",
+				content: "地球100%有外星人，且存在五种外星人",
+				createTime: "2022-02-13 16:30:37",
+			},
+			pickerOptions: {},
+			fanNumberList: [
+				{ id: 1, text: "10k以下", value: 1 },
+				{ id: 2, text: "10k~50k", value: 2 },
+				{ id: 3, text: "50k~100k", value: 3 },
+				{ id: 4, text: "100k~500k", value: 4 },
+				{ id: 5, text: "500k~1000k", value: 5 },
+				{ id: 6, text: "1000k以上", value: 6 },
+			],
+			participarnList: [
+				{ id: 1, text: "普通用户", value: 1 },
+				{ id: 2, text: "中级用户", value: 2 },
+				{ id: 3, text: "高级用户", value: 3 },
+				{ id: 4, text: "资深用户", value: 4 },
+				{ id: 5, text: "授权用户", value: 5 },
+			],
+			ruleForm: {
+				queryDate: [],
+				type: "",
+				status: "",
+			},
+			formRules: {
+				status: [{ required: false, message: "", trigger: "blur" }],
+			},
+			isSelectTable: false,
 			taskTableHeight: "730px",
 			isCusColumn: true, //
 			defaultShowFailed: false, //开启列自定义或行自定义，此属性必须为false
 			selectRows: [],
 			tableTitleData: [
 				{
-					id: 2,
+					id: 1,
 					name: "参与者",
 					label: "参与者",
 					prop: "author",
@@ -174,16 +178,7 @@ export default {
 					filterData: [],
 				},
 				{
-					id: 3,
-					name: "全部案例",
-					label: "全部案例",
-					prop: "singlecoll",
-					sort: false,
-					align: "center",
-					filterData: [],
-				},
-				{
-					id: 4,
+					id: 2,
 					name: "级别",
 					label: "级别",
 					prop: "levUser",
@@ -191,17 +186,63 @@ export default {
 					align: "center",
 					filterData: [],
 				},
+
 				{
-					id: 5,
-					name: "点赞数",
-					label: "点赞数",
+					id: 3,
+					name: "最近活动",
+					label: "最近活动",
 					prop: "coll",
 					sort: false,
 					align: "center",
 					filterData: [],
 				},
 				{
+					id: 4,
+					name: "关联的经验",
+					label: "关联的经验",
+					prop: "linkExperience",
+					sort: false,
+					align: "center",
+					filterData: [],
+				},
+				{
+					id: 5,
+					name: "点赞/收藏",
+					label: "点赞/收藏",
+					prop: "singlecoll",
+					sort: false,
+					align: "center",
+					filterData: [],
+				},
+				{
 					id: 6,
+					name: "获得象币",
+					label: "获得象币",
+					prop: "xb",
+					sort: false,
+					align: "center",
+					filterData: [],
+				},
+				{
+					id: 7,
+					name: "被拉黑数",
+					label: "被拉黑数",
+					prop: "sc",
+					sort: false,
+					align: "center",
+					filterData: [],
+				},
+				{
+					id: 8,
+					name: "粉丝",
+					label: "粉丝",
+					prop: "fs",
+					sort: false,
+					align: "center",
+					filterData: [],
+				},
+				{
+					id: 9,
 					name: "操作",
 					label: "操作",
 					prop: "hanndle",
@@ -211,73 +252,6 @@ export default {
 				},
 			],
 			tableData: [],
-			selfShareList: [
-				{
-					id: 1,
-					name: "案例一",
-					coll: 1334,
-					levUser: "白银",
-					singlecoll: 12,
-					isVisible: true,
-					shareContent: [{}, {}],
-					author: "张三",
-					isEdit: true,
-					status: "上架中",
-					createTime: "2020-04-12",
-					updateTime: "2020-04-12",
-					city: "保定",
-					pro: "河北",
-					ear: "唐县",
-				},
-				{
-					id: 2,
-					name: "案例二",
-					author: "李四",
-					coll: 1334,
-					levUser: "黄金",
-					singlecoll: 5,
-					isVisible: false,
-					status: "已下架",
-					isEdit: false,
-					createTime: "2020-04-12",
-					updateTime: "2020-04-12",
-					city: "保定",
-					pro: "河北",
-					ear: "唐县",
-				},
-				{
-					id: 3,
-					name: "案例三",
-					author: "王五",
-					coll: 1334,
-					levUser: "白金",
-					singlecoll: 11,
-					isVisible: false,
-					status: "审核中",
-					isEdit: false,
-					createTime: "2020-04-12",
-					updateTime: "2020-04-12",
-					city: "保定",
-					pro: "河北",
-					ear: "唐县",
-				},
-				{
-					id: 4,
-					name: "案例四",
-					author: "赵柳",
-					coll: 1334,
-					levUser: "钻石",
-					singlecoll: 6,
-					isVisible: true,
-					status: "上架中",
-					isEdit: false,
-					createTime: "2020-04-12",
-					updateTime: "2020-04-12",
-					city: "保定",
-					pro: "河北",
-					ear: "唐县",
-				},
-			],
 		};
 	},
 	created() {
@@ -285,7 +259,7 @@ export default {
 	},
 	mounted() {
 		this.$nextTick(() => {
-			this.taskTableHeight = this.$b.dynamicHeight(this, 0);
+			this.taskTableHeight = this.$b.dynamicWinHeight(300);
 		});
 	},
 	methods: {
@@ -294,12 +268,17 @@ export default {
 			for (let i = 0; i < 8; i++) {
 				let temp = {};
 				temp.author = "张三";
+				temp.linkExperience =
+					"<span class='linkText' data-see='true'>查看</span>";
 				temp.createTime = "张三";
-				temp.levUser = "白银";
-				temp.coll = "231";
-				temp.singlecoll = "<span class='linkText'>查看</span>";
+				temp.levUser = "高级用户";
+				temp.coll = "5天前来过";
+				temp.sc = "389";
+				temp.fs = "1022";
+				temp.xb = "1283";
+				temp.singlecoll = "283 / 512";
 				temp.hanndle =
-					"<span class='linkText ml20'>屏蔽</span> <span class='linkText ml20'>关注</span>";
+					"<span class='linkText ml20'>查看Ta的文章</span> <span class='linkText ml20' data-shield='true'>拉黑</span> <span class='linkText ml20' data-fllow='true'>关注</span>";
 				json.push(temp);
 			}
 			this.tableData = json;
@@ -312,9 +291,39 @@ export default {
 		},
 		//当某个单元格被点击时
 		cellUserClick({ row, column, cell, event }) {
-			if (column.label == "参与者" && event.target.innerText == "查看") {
-				this.$router.push("/experience/participantList");
+			if (
+				column.label == "关联的经验" &&
+				event.target.innerText == "查看" &&
+				event.target.dataset.see
+			) {
+				this.seeTopic = true;
 			}
+			if (
+				column.label == "操作" &&
+				event.target.innerText == "拉黑" &&
+				event.target.dataset.shield
+			) {
+				this.$baseConfirm(
+					"您确认拉黑此用户吗？您将屏蔽Ta所有的文章",
+					{ title: "提示" },
+					async () => {
+						this.$b.successMsg("拉黑成功");
+					}
+				);
+			}
+			if (
+				column.label == "操作" &&
+				event.target.innerText == "关注" &&
+				event.target.dataset.fllow
+			) {
+				this.$b.successMsg("关注成功");
+			}
+		},
+		handleClose() {
+			this.seeTopic = false;
+		},
+		handleQuery() {
+			this.fetchData();
 		},
 		selectRowData({ selection, row }) {
 			this.selectRows = selection;
@@ -326,4 +335,26 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+::v-deep .el-form-item {
+	margin-bottom: 0px;
+}
+.tipRule {
+	font-size: 14px;
+	border: none;
+	padding: 0px;
+}
+.setTopCss {
+	p {
+		padding: 0px;
+		margin: 0px;
+	}
+	.topiceTitle {
+		font-weight: bold;
+	}
+	.boldFix {
+		font-weight: bold;
+		line-height: 30px;
+	}
+}
+</style>

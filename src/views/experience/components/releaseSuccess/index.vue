@@ -1,6 +1,10 @@
 <template>
 	<div class="release-success">
-		<div class="succcess-main">
+		<div
+			class="mainBody succcess-main"
+			ref="mainRef"
+			v-bind:style="{ minHeight: warpHeight + 'px' }"
+		>
 			<div class="mb20">
 				<p class="sucmsg">提交成功，请耐心等待审核...</p>
 			</div>
@@ -30,17 +34,20 @@ export default {
 	watch: {},
 	data() {
 		return {
-			pn: "经验成功",
+			warpHeight: "800px",
 			currShareData: {},
 		};
 	},
 	mounted() {
 		this.init();
+		this.$nextTick(() => {
+			this.warpHeight = this.$b.dynamicWinHeight(90);
+		});
 	},
 	methods: {
 		init() {
 			this.currShareData = JSON.parse(
-				localStorage.getItem("tempShareObject")
+				localStorage.getItem("experienceBaseInfo")
 			);
 		},
 		hrefPath(type) {
@@ -56,7 +63,7 @@ export default {
 		},
 	},
 	destroyed() {
-		localStorage.removeItem("tempShareObject");
+		localStorage.removeItem("experienceBaseInfo");
 	},
 };
 </script>
