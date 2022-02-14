@@ -235,6 +235,10 @@ body,
 	margin-left: 150px;
 }
 
+.ml-cus3 {
+	margin-left: -3px;
+}
+
 .mr5 {
 	margin-right: 5px;
 }
@@ -247,7 +251,23 @@ body,
 	margin-right: 10px;
 }
 
+.mr12 {
+	margin-right: 12px;
+}
+
+.mr13 {
+	margin-right: 13px;
+}
+
+.mr14 {
+	margin-right: 14px;
+}
+
 .mr15 {
+	margin-right: 15px;
+}
+
+.mr16 {
 	margin-right: 15px;
 }
 

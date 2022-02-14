@@ -7,21 +7,38 @@ export default {
 			type: String,
 			default: "",
 		},
+		sysicon: {
+			type: String,
+			default: "",
+		},
 		title: {
 			type: String,
 			default: "",
 		},
 	},
 	render(h, context) {
-		const { icon, title } = context.props;
+		const { icon, title, sysicon } = context.props;
 		const vnodes = [];
-
-		if (icon) {
+		if (icon && !sysicon) {
 			if (icon.includes("el-icon")) {
 				vnodes.push(<i class={[icon, "sub-el-icon"]} />);
 			} else {
 				vnodes.push(<svg-icon icon-class={icon} />);
 			}
+		}
+		if (!icon && sysicon) {
+			vnodes.push(
+				<i
+					class={[
+						"sub-el-icon",
+						"elephant",
+						"mr14",
+						"font20-imp",
+						"ml-cus3",
+					]}
+					domProps={{ innerHTML: sysicon }}
+				/>
+			);
 		}
 
 		if (title) {

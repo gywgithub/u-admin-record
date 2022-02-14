@@ -55,17 +55,68 @@ export const constantRoutes = [
 		],
 	},
 	{
-		path: "/experience",
+		path: "/diary",
 		component: Layout,
-		redirect: "/experience/list",
-		name: "Experience",
-		meta: { title: "经验管理", icon: "el-icon-s-management" },
+		redirect: "/diary",
 		children: [
 			{
-				path: "list",
-				name: "List",
+				path: "diary",
+				name: "Diary",
+				component: () => import("@/views/experience/release/index"),
+				meta: { title: "写日记", icon: "el-icon-edit" },
+			},
+		],
+	},
+	{
+		path: "/release",
+		component: Layout,
+		redirect: "/release",
+		children: [
+			{
+				path: "release",
+				name: "Release",
+				component: () => import("@/views/experience/release/index"),
+				meta: { title: "发布经验", icon: "edit" },
+			},
+		],
+	},
+	{
+		path: "/seek",
+		component: Layout,
+		redirect: "/seek",
+		children: [
+			{
+				path: "seek",
+				name: "Seek",
+				component: () => import("@/views/experience/seek/index"),
+				meta: { title: "征求经验", icon: "form" },
+			},
+		],
+	},
+	{
+		path: "/experienceManage",
+		component: Layout,
+		redirect: "/experienceManage/list",
+		name: "Experience",
+		meta: { title: "经验管理", icon: "component" },
+		children: [
+			{
+				path: "diaryList",
+				name: "DiaryList",
 				component: () => import("@/views/experience/list/index"),
-				meta: { title: "经验列表", icon: "table" },
+				meta: { title: "日记管理", sysicon: "&#xe610;" },
+			},
+			{
+				path: "releaseList",
+				name: "ReleaseList",
+				component: () => import("@/views/experience/list/index"),
+				meta: { title: "发布管理", sysicon: "&#xe631;" },
+			},
+			{
+				path: "seekList",
+				name: "SeekList",
+				component: () => import("@/views/experience/list/index"),
+				meta: { title: "征求管理", sysicon: "&#xe632;" },
 			},
 			{
 				path: "participantList",
@@ -84,18 +135,6 @@ export const constantRoutes = [
 				meta: { title: "文章列表", icon: "table" },
 			},
 			{
-				path: "release",
-				name: "Release",
-				component: () => import("@/views/experience/release/index"),
-				meta: { title: "发布经验", icon: "form" },
-			},
-			{
-				path: "seek",
-				name: "Seek",
-				component: () => import("@/views/experience/seek/index"),
-				meta: { title: "寻求经验", icon: "el-icon-s-help" },
-			},
-			{
 				path: "tinymceEditor",
 				name: "TinymceEditor",
 				hidden: true,
@@ -107,17 +146,10 @@ export const constantRoutes = [
 				},
 			},
 			{
-				path: "releaseSuccess",
-				name: "ReleaseSuccess",
-				hidden: true,
-				component: () =>
-					import(
-						"@/views/experience/components/releaseSuccess/index"
-					),
-				meta: {
-					title: "发布成功",
-					icon: "form",
-				},
+				path: "trunk",
+				name: "Trunk",
+				component: () => import("@/views/topology/index"),
+				meta: { title: "拓扑图", icon: "tree" },
 			},
 		],
 	},
@@ -147,19 +179,19 @@ export const constantRoutes = [
 			},
 		],
 	},
-	{
-		path: "/topology",
-		component: Layout,
-		redirect: "/topology/trunk",
-		children: [
-			{
-				path: "trunk",
-				name: "Trunk",
-				component: () => import("@/views/topology/index"),
-				meta: { title: "拓扑图", icon: "tree" },
-			},
-		],
-	},
+	// {
+	// 	path: "/topology",
+	// 	component: Layout,
+	// 	redirect: "/topology/trunk",
+	// 	children: [
+	// 		{
+	// 			path: "trunk",
+	// 			name: "Trunk",
+	// 			component: () => import("@/views/topology/index"),
+	// 			meta: { title: "拓扑图", icon: "tree" },
+	// 		},
+	// 	],
+	// },
 	// 404 page must be placed at the end !!!
 	{ path: "*", redirect: "/404", hidden: true },
 ];

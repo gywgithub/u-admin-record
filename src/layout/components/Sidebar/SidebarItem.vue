@@ -15,11 +15,14 @@
 					:index="resolvePath(onlyOneChild.path)"
 					:class="{ 'submenu-title-noDropdown': !isNest }"
 				>
+					<!-- <i class="elephant" v-html="item.meta.sysicon"></i>
+					<span slot="title">{{ item.meta.title }}</span> -->
 					<item
 						:icon="
 							onlyOneChild.meta.icon ||
 							(item.meta && item.meta.icon)
 						"
+						:sysicon="item.meta && item.meta.sysicon"
 						:title="onlyOneChild.meta.title"
 					/>
 				</el-menu-item>
@@ -35,6 +38,7 @@
 			<template slot="title">
 				<item
 					v-if="item.meta"
+					:sysicon="item.meta && item.meta.sysicon"
 					:icon="item.meta && item.meta.icon"
 					:title="item.meta.title"
 				/>
