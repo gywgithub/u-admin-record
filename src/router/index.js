@@ -62,7 +62,7 @@ export const constantRoutes = [
 			{
 				path: "diary",
 				name: "Diary",
-				component: () => import("@/views/experience/release/index"),
+				component: () => import("@/views/diary/index"),
 				meta: { title: "写日记", icon: "el-icon-edit" },
 			},
 		],

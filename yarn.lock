@@ -893,10 +893,25 @@
     "@babel/types" "^7.4.4"
     esutils "^2.0.2"
 
+"@babel/runtime-corejs3@^7.11.2":
+  version "7.17.2"
+  resolved "https://registry.npmmirror.com/@babel/runtime-corejs3/-/runtime-corejs3-7.17.2.tgz#fdca2cd05fba63388babe85d349b6801b008fd13"
+  integrity sha512-NcKtr2epxfIrNM4VOmPKO46TvDMCBhgi2CrSHaEarrz+Plk2K5r9QemmOFTGpZaoKnWoGH5MO+CzeRsih/Fcgg==
+  dependencies:
+    core-js-pure "^3.20.2"
+    regenerator-runtime "^0.13.4"
+
 "@babel/runtime@^7.11.0", "@babel/runtime@^7.8.4":
   version "7.17.0"
   resolved "https://registry.npmmirror.com/@babel/runtime/-/runtime-7.17.0.tgz"
   integrity sha512-etcO/ohMNaNA2UBdaXBBSX/3aEzFMRrVfaPv8Ptc0k+cWpWW0QFiGZ2XnVqQZI1Cf734LbPGmqBKWESfW4x/dQ==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
+"@babel/runtime@^7.11.2":
+  version "7.17.2"
+  resolved "https://registry.npmmirror.com/@babel/runtime/-/runtime-7.17.2.tgz#66f68591605e59da47523c631416b18508779941"
+  integrity sha512-hzeyJyMA1YGdJTuWU0e/j4wKXrU4OMFvY2MSlaI9B7VQb0r5cxTE3EAIS2Q7Tn2RIcDkRvTA/v2JsAEhxe99uw==
   dependencies:
     regenerator-runtime "^0.13.4"
 
@@ -3387,6 +3402,11 @@ core-js-compat@^3.20.2, core-js-compat@^3.21.0, core-js-compat@^3.6.5:
   dependencies:
     browserslist "^4.19.1"
     semver "7.0.0"
+
+core-js-pure@^3.20.2:
+  version "3.21.0"
+  resolved "https://registry.npmmirror.com/core-js-pure/-/core-js-pure-3.21.0.tgz#819adc8dfb808205ce25b51d50591becd615db7e"
+  integrity sha512-VaJUunCZLnxuDbo1rNOzwbet9E1K9joiXS5+DQMPtgxd24wfsZbJZMMfQLGYMlCUvSxLfsRUUhoOR2x28mFfeg==
 
 core-js@3.6.5:
   version "3.6.5"
@@ -10996,6 +11016,11 @@ tslib@^1.9.0:
   resolved "https://registry.npmmirror.com/tslib/-/tslib-1.14.1.tgz"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
+tslib@^2.1.0:
+  version "2.3.1"
+  resolved "https://registry.npmmirror.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
+  integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
+
 tty-browserify@0.0.0:
   version "0.0.0"
   resolved "https://registry.npmmirror.com/tty-browserify/-/tty-browserify-0.0.0.tgz"
@@ -11360,6 +11385,13 @@ vue-hot-reload-api@^2.3.0:
   resolved "https://registry.npmmirror.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz"
   integrity sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==
 
+vue-input-tag@^2.0.7:
+  version "2.0.7"
+  resolved "https://registry.npmmirror.com/vue-input-tag/-/vue-input-tag-2.0.7.tgz#daea4db750df34a8c87605f88455dc5f64e1052b"
+  integrity sha512-MiTVXg/OQ0SEPmQRPBw77akCrANAn/MUvo8U5fXLEwwtzGAASpGSru2uBvCMakDB5zF0ZV3ynkX/V8tOfSU6qA==
+  dependencies:
+    vue "^2.5.17"
+
 vue-jest@^3.0.5:
   version "3.0.7"
   resolved "https://registry.npmmirror.com/vue-jest/-/vue-jest-3.0.7.tgz"
@@ -11424,6 +11456,11 @@ vue@2.6.10:
   resolved "https://registry.npmmirror.com/vue/-/vue-2.6.10.tgz"
   integrity sha512-ImThpeNU9HbdZL3utgMCq0oiMzAkt1mcgy3/E6zWC/G6AaQoeuFdsl9nDhTDU3X1R6FK7nsIUuRACVcjI+A2GQ==
 
+vue@^2.5.17:
+  version "2.6.14"
+  resolved "https://registry.npmmirror.com/vue/-/vue-2.6.14.tgz#e51aa5250250d569a3fbad3a8a5a687d6036e235"
+  integrity sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==
+
 vuedraggable@2.20.0:
   version "2.20.0"
   resolved "https://registry.npmmirror.com/vuedraggable/-/vuedraggable-2.20.0.tgz#82eac1f9a32c116ef4cf5215fe18dfb152afa9dd"
@@ -11458,6 +11495,15 @@ walker@^1.0.7, walker@~1.0.5:
   integrity sha512-ts/8E8l5b7kY0vlWLewOkDXMmPdLcVV4GmOQLyxuSswIJsweeFZtAsMF7k1Nszz+TYBQrlYRmzOnr398y1JemQ==
   dependencies:
     makeerror "1.0.12"
+
+wangeditor@^4.7.11:
+  version "4.7.11"
+  resolved "https://registry.npmmirror.com/wangeditor/-/wangeditor-4.7.11.tgz#1a3c5f3b5e406eaabd1bdbcf456d9455ae3830e7"
+  integrity sha512-z6xEHTSj4YgqvQkHWh9/V/Md7hjEKchXquwvtxvWhwlMS/wBFprCg7qgE4omzuSBeivkZZGTJP08pmdHzOwCUQ==
+  dependencies:
+    "@babel/runtime" "^7.11.2"
+    "@babel/runtime-corejs3" "^7.11.2"
+    tslib "^2.1.0"
 
 watchpack-chokidar2@^2.0.1:
   version "2.0.1"
