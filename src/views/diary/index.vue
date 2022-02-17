@@ -10,10 +10,10 @@
 					<el-input
 						v-model="diaryTitle"
 						maxlength="50"
+						class="mb30"
 						placeholder="日记标题"
 					></el-input>
 					<editor
-						class="mt30"
 						ref="editorOne"
 						v-model="content"
 						@change="contentChange"
@@ -61,12 +61,17 @@
 								></i>
 							</el-form-item>
 							<el-form-item>
-								<el-button
-									class="mt20"
-									type="primary"
-									@click="handleSave"
-									>保 存</el-button
-								>
+								<confirm-popover
+									class="mt20 mr10"
+									textMessage="确认保存当前日记吗？"
+									adsorptionBtnType="primary"
+									adsorptionBtnIcon=""
+									:iconStyle="iconStyleObj"
+									:iconClass="iconClassString"
+									:isPlain="plainFalse"
+									@emitCallback="handleSave"
+									adsorptionTxt="保 存"
+								></confirm-popover>
 								<el-button
 									class="mt20 cusList"
 									type="primary"
@@ -92,7 +97,7 @@
 				:rules="catalogModelRules"
 				:label-position="catalogPos"
 				class="disf"
-				label-width="80px"
+				label-width="50px"
 			>
 				<el-form-item label="名称" prop="name">
 					<el-input
@@ -106,11 +111,14 @@
 						type="textarea"
 						maxlength="200"
 						show-word-limit
-						:autosize="{ minRows: 3 }"
+						:autosize="{ minRows: 6 }"
 						placeholder="限200字"
 					></el-input>
 				</el-form-item>
-				<el-button type="primary" @click="addCatelogName('catalogForm')"
+				<el-button
+					type="primary"
+					class="ml50-imp"
+					@click="addCatelogName('catalogForm')"
 					>提 交</el-button
 				>
 			</el-form>
@@ -120,18 +128,22 @@
 
 <script>
 import Editor from "@/components/wangEditor";
+import confirmPopover from "@/components/ConfirmPopover";
 import InputTag from "vue-input-tag";
 import { getCatelogDataReq, addCatelogReq, saveDiaryReq } from "@/api/diary";
 
 export default {
 	name: "Diary",
-	components: { Editor, InputTag },
+	components: { Editor, InputTag, confirmPopover },
 	watch: {},
 	data() {
 		return {
 			warpHeight: "800px",
 			diaryTitle: "",
 			content: "",
+			plainFalse: false,
+			iconClassString: "el-icon-circle-check",
+			iconStyleObj: { color: "#409EFF" },
 			dialogTitle: "新增目录",
 			dialogVisible: false,
 			unModalBack: false,
@@ -186,8 +198,9 @@ export default {
 			});
 		},
 		hanndleAddCatelog() {
+			let userIdObj = JSON.parse(localStorage.getItem("userInfo"));
 			let params = {
-				userId: 1,
+				userId: userIdObj.userId,
 				name: this.catalogModelForm.name,
 				describe: this.catalogModelForm.describe,
 			};
@@ -235,7 +248,7 @@ export default {
 				title: this.diaryTitle,
 				content: this.content,
 				label: this.form.keyword && this.form.keyword.join(","),
-				catalogId: this.form.category,
+				diaryCatalogId: this.form.category,
 				userId: userIdObj.userId,
 			};
 			saveDiaryReq(params).then((res) => {

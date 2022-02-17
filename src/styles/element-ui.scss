@@ -47,10 +47,9 @@
 	box-sizing: content-box;
 }
 
-.w-e-text-container {
-	z-index: 1000 !important;
-}
-
 .w-e-toolbar {
-	z-index: 1000 !important;
+	z-index: 2 !important;
+}
+.w-e-text-container {
+	z-index: 1 !important;
 }
