@@ -4,7 +4,6 @@ module.exports = {
   // 使用tab缩进，默认false
   useTabs: true,
   // 使用分号, 默认true
-
   semi: true,
   // 使用单引号, 默认false(在jsx中配置无效, 默认都是双引号)
   singleQuote: false,

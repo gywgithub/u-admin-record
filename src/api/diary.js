@@ -26,3 +26,21 @@ export function saveDiaryReq(data) {
 		data: data,
 	});
 }
+
+//获取日记
+export function getDiaryListReq(data) {
+	return request({
+		url: `/diary/selectDiary`,
+		method: "post",
+		data: data,
+	});
+}
+
+//删除日记
+export function deleteDiaryReq(data) {
+	return request({
+		url: `/diary/deleteDiary`,
+		method: "post",
+		data: data,
+	});
+}

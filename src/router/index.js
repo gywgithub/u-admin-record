@@ -94,16 +94,16 @@ export const constantRoutes = [
 		],
 	},
 	{
-		path: "/experienceManage",
+		path: "/manage",
 		component: Layout,
-		redirect: "/experienceManage/list",
+		redirect: "/manage/diaryList",
 		name: "Experience",
-		meta: { title: "经验管理", icon: "component" },
+		meta: { title: "综合管理", icon: "component" },
 		children: [
 			{
 				path: "diaryList",
 				name: "DiaryList",
-				component: () => import("@/views/experience/list/index"),
+				component: () => import("@/views/diary/list/index"),
 				meta: { title: "日记管理", sysicon: "&#xe610;" },
 			},
 			{

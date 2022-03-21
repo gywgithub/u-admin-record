@@ -43,6 +43,7 @@ module.exports = {
 				args: "none", //不检测参数
 			},
 		],
+		"no-mixed-spaces-and-tabs": "off"
 
 		//更多规则......
 	},

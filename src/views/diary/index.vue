@@ -42,7 +42,7 @@
 									placeholder="最多3个"
 								></input-tag>
 							</el-form-item>
-							<el-form-item label="目录" prop="category">
+							<el-form-item label="分类" prop="category">
 								<el-select
 									v-model="form.category"
 									placeholder="请选择"
@@ -61,7 +61,7 @@
 								></i>
 							</el-form-item>
 							<el-form-item>
-								<confirm-popover
+								<!-- <confirm-popover
 									class="mt20 mr10"
 									textMessage="确认保存当前日记吗？"
 									adsorptionBtnType="primary"
@@ -71,12 +71,18 @@
 									:isPlain="plainFalse"
 									@emitCallback="handleSave"
 									adsorptionTxt="保 存"
-								></confirm-popover>
+								></confirm-popover> -->
+								<el-button
+									class="mt20"
+									type="primary"
+									@click="handleSave"
+									>保 存</el-button
+								>
 								<el-button
 									class="mt20 cusList"
 									type="primary"
 									@click="seeDiaryList"
-									>查看日记列表</el-button
+									>查看日记本</el-button
 								>
 							</el-form-item>
 						</el-form>
@@ -128,13 +134,12 @@
 
 <script>
 import Editor from "@/components/wangEditor";
-import confirmPopover from "@/components/ConfirmPopover";
 import InputTag from "vue-input-tag";
 import { getCatelogDataReq, addCatelogReq, saveDiaryReq } from "@/api/diary";
 
 export default {
 	name: "Diary",
-	components: { Editor, InputTag, confirmPopover },
+	components: { Editor, InputTag },
 	watch: {},
 	data() {
 		return {
