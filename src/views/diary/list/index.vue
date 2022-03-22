@@ -79,11 +79,7 @@
 
 <script>
 import elephantTable from "@/components/template/elephantTable";
-import {
-	getCatelogDataReq,
-	getDiaryListReq,
-	deleteDiaryReq,
-} from "@/api/diary";
+import { getCatelogDataReq, queryDiaryReq, deleteDiaryReq } from "@/api/diary";
 export default {
 	name: "DiaryList",
 	components: { elephantTable },
@@ -203,7 +199,7 @@ export default {
 				if (res.success) {
 					this.$_.deepClone(res.data, this.diaryCatelogBak);
 					this.diaryTypeList = res.data;
-                    this.fetchData();
+					this.fetchData();
 				}
 			});
 		},
@@ -221,14 +217,24 @@ export default {
 
 			if (column.label == "操作") {
 				if (event.target.innerText == "编辑") {
-					this.hanndlePackageFromData(row);
+					this.$router.push({
+						name: "Diary",
+						params: {
+							diaryId: event.target.dataset.id,
+						},
+					});
 				}
 				if (event.target.innerText == "删除") {
-					console.log("删除");
+					this.$baseConfirm(
+						"您确定要删除吗?",
+						{ title: "提示" },
+						async () => {
+							this.deleteFn([event.target.dataset.id]);
+						}
+					);
 				}
 			}
 		},
-		hanndlePackageFromData(data) {},
 		selectRowData({ selection, row }) {
 			this.selectRows = selection;
 		},
@@ -257,6 +263,9 @@ export default {
 			for (let i = 0; i < selectRows.length; i++) {
 				ids.push(selectRows[i]["id"]);
 			}
+			this.deleteFn(ids);
+		},
+		deleteFn(ids) {
 			deleteDiaryReq(ids).then((res) => {
 				if (res.success) {
 					this.$b.successMsg("删除成功");
@@ -284,15 +293,18 @@ export default {
 			let param = {
 				startTime: startTime,
 				endTime: endTime,
-				type: this.ruleForm.type,
+				diaryCatalogId: this.ruleForm.type,
 				userId: userIdstr.userId,
 				pageSize: this.queryPageSize,
 				pageIndex: this.queryPageNo,
 			};
-			getDiaryListReq(param).then((res) => {
+			queryDiaryReq(param).then((res) => {
 				if (res.success) {
-					this.$_.deepClone(res.data, this.diaryListBakData);
-					let json = res.data;
+					this.$_.deepClone(
+						res.data.diaryList,
+						this.diaryListBakData
+					);
+					let json = res.data.diaryList;
 					for (let i = 0; i < json.length; i++) {
 						json[i].customHanndle = ["编辑", "删除"];
 					}
@@ -321,7 +333,9 @@ export default {
 						let hanndleStr = "";
 						for (let i = 0; i < json[j].customHanndle.length; i++) {
 							hanndleStr +=
-								"<span class='linkText ml10'>" +
+								"<span class='linkText ml10' data-id='" +
+								json[j].id +
+								"'>" +
 								json[j].customHanndle[i] +
 								"</span>";
 						}

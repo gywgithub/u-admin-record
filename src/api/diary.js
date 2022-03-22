@@ -27,10 +27,19 @@ export function saveDiaryReq(data) {
 	});
 }
 
-//获取日记
-export function getDiaryListReq(data) {
+//根据条件获取日记
+export function queryDiaryReq(data) {
 	return request({
-		url: `/diary/selectDiary`,
+		url: `/diary/queryDiary`,
+		method: "post",
+		data: data,
+	});
+}
+
+//获取单条日记
+export function queryByIdDiaryReq(data) {
+	return request({
+		url: `/diary/queryByIdDiary`,
 		method: "post",
 		data: data,
 	});
@@ -40,6 +49,33 @@ export function getDiaryListReq(data) {
 export function deleteDiaryReq(data) {
 	return request({
 		url: `/diary/deleteDiary`,
+		method: "post",
+		data: data,
+	});
+}
+
+//更新日记
+export function updateDiaryReq(data) {
+	return request({
+		url: `/diary/updateDiary`,
+		method: "post",
+		data: data,
+	});
+}
+
+//更新目录
+export function updateDiaryCatalogReq(data) {
+	return request({
+		url: `/diary/updateDiaryCatalog`,
+		method: "post",
+		data: data,
+	});
+}
+
+//删除目录
+export function deleteDiaryCatalogReq(data) {
+	return request({
+		url: `/diary/deleteDiaryCatalog`,
 		method: "post",
 		data: data,
 	});
