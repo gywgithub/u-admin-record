@@ -558,7 +558,7 @@ export default {
 					this.dialogVisible = false;
 					localStorage.removeItem("experienceBaseInfo");
 					localStorage.removeItem("memorySave");
-					this.$router.push("/experience/releaseSuccess");
+					this.$router.push("/release/releaseSuccess");
 				}
 			});
 		},

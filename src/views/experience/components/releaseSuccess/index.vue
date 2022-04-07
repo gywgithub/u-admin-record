@@ -52,13 +52,13 @@ export default {
 		},
 		hrefPath(type) {
 			if (type == 1) {
-				this.$router.push("/experience/list");
+				this.$router.push("/manage/releaseList");
 			} else if (type == 2) {
-				this.$router.push("/experience/release");
+				this.$router.push("/release/release");
 			} else if (type == 3) {
-				this.$router.push("/experience/seek");
+				this.$router.push("/seek/seek");
 			} else if (type == 4) {
-				this.$router.push("/topology");
+				this.$router.push("/manage/trunk");
 			}
 		},
 	},

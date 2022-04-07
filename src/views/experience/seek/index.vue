@@ -1050,11 +1050,15 @@ export default {
 		handleSave() {
 			this.$refs["baseform"].validate((valid) => {
 				if (valid) {
-					this.$router.push("/experience/releaseSuccess");
+					this.saveFindExperience();
 				} else {
 					return false;
 				}
 			});
+		},
+		saveFindExperience() {
+			console.dir("------------");
+			//this.$router.push("/experience/releaseSuccess");
 		},
 	},
 };

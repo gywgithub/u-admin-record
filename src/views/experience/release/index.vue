@@ -26,7 +26,7 @@
 				</el-form-item>
 				<el-form-item label="类别" prop="category">
 					<el-cascader
-						ref="mycascader"
+						ref="mycascaderCategory"
 						v-model="form.category"
 						:props="customProp"
 						filterable
@@ -1206,10 +1206,13 @@ export default {
 			});
 		},
 		categoryAddChange() {},
+		// getProfession(val) {
+		// 	if (!this.$refs.mycascaderCategory.getCheckedNodes()[0].pathLabels) {
+		// 		this.isSelectCity = "";
+		// 	}
+		// },
 		getProfession(val) {
-			if (!this.$refs.mycascader.getCheckedNodes()[0].pathLabels) {
-				this.isSelectCity = "";
-			}
+			console.dir(val);
 		},
 		hanndleStrogeSaveForm(data) {
 			let expInfo = {

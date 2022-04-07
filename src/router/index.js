@@ -78,6 +78,16 @@ export const constantRoutes = [
 				component: () => import("@/views/experience/release/index"),
 				meta: { title: "发布经验", icon: "edit" },
 			},
+			{
+				path: "releaseSuccess",
+				name: "ReleaseSuccess",
+				hidden: true,
+				component: () =>
+					import(
+						"@/views/experience/components/releaseSuccess/index"
+					),
+				meta: { title: "发布成功", icon: "success" },
+			},
 		],
 	},
 	{
