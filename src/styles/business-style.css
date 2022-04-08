@@ -95,6 +95,22 @@ body,
 	margin-top: 100px;
 }
 
+.mt120 {
+	margin-top: 120px;
+}
+
+.mt140 {
+	margin-top: 140px;
+}
+
+.mt160 {
+	margin-top: 160px;
+}
+
+.mt180 {
+	margin-top: 180px;
+}
+
 .mb5 {
 	margin-bottom: 5px;
 }
@@ -233,6 +249,14 @@ body,
 
 .ml150 {
 	margin-left: 150px;
+}
+
+.ml160 {
+	margin-left: 160px;
+}
+
+.ml180 {
+	margin-left: 180px;
 }
 
 .ml-cus3 {

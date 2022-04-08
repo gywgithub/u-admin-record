@@ -1,6 +1,8 @@
 <template>
-	<div class="topology">
-		<svg id="topologyTree"></svg>
+	<div class="topology posRel">
+		<div class="mainBody" v-bind:style="{ minHeight: warpHeight + 'px' }">
+			<svg id="topologyTree" class="treeStyle"></svg>
+		</div>
 	</div>
 </template>
 
@@ -13,10 +15,11 @@ export default {
 	watch: {},
 	data() {
 		return {
+			warpHeight: "730px",
 			treeHeight: 600,
 			treewidth: 1566,
 			treeData: {
-				name: "女士衣服",
+				name: "衣服",
 				children: [
 					{
 						name: "上衣",
@@ -60,6 +63,9 @@ export default {
 	},
 	mounted() {
 		this.genTree();
+		this.$nextTick(() => {
+			this.warpHeight = this.$b.dynamicWinHeight(90);
+		});
 	},
 	methods: {
 		genTree() {
@@ -149,5 +155,15 @@ path {
 	fill: none;
 	stroke: #76bf8a;
 	stroke-width: 3px;
+}
+.topology {
+	background: #ffffff;
+	.treeStyle {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		margin-left: -783px;
+		margin-top: -300px;
+	}
 }
 </style>

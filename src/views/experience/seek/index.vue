@@ -14,20 +14,19 @@
 			>
 				<el-form-item label="主标题" prop="title">
 					<el-row>
-						<el-col :span="6">
+						<el-col :span="8">
 							<el-input
 								v-model="form.title"
 								maxlength="30"
-								style="width: 505px"
 								placeholder="最多30字"
 							></el-input>
 						</el-col>
 					</el-row>
 				</el-form-item>
-				<el-form-item label="价值模式" prop="shareMode">
+				<el-form-item label="价值模式" prop="mode">
 					<div class="mt8">
 						<el-radio-group
-							v-model="form.shareMode"
+							v-model="form.mode"
 							@change="hanndleValid"
 						>
 							<el-radio :label="1">
@@ -171,15 +170,15 @@
 				</el-form-item>
 				<el-form-item
 					label="行业"
-					prop="isSelectProfession"
-					v-show="form.shareMode == '2'"
+					prop="industry"
+					v-show="form.mode == '2'"
 				>
 					<el-row>
-						<el-col :span="6">
+						<el-col :span="8">
 							<el-cascader
 								ref="mycascader"
-								v-model="form.isSelectProfession"
-								style="width: 80%"
+								v-model="form.industry"
+								style="width: 100%"
 								:props="customProp"
 								filterable
 								:options="categoryList"
@@ -187,20 +186,20 @@
 								placeholder="输入文字可搜素"
 								@change="getProfession"
 							></el-cascader>
-							<el-link
+							<!-- <el-link
 								type="primary"
 								@click="openInTreeList"
 								class="ml20"
 								:underline="false"
 								>未找到?</el-link
-							>
+							> -->
 						</el-col>
 					</el-row>
 				</el-form-item>
 				<el-form-item
 					label="付费类型"
 					prop="monenyMode"
-					v-show="form.shareMode == '3'"
+					v-show="form.mode == '3'"
 				>
 					<el-select v-model="form.monenyMode">
 						<el-option label="平台联系" value="ptlx"></el-option>
@@ -303,15 +302,17 @@
 				</el-form-item>
 				<el-form-item label="打赏额度" prop="bounty">
 					<el-row>
-						<el-col :span="6">
+						<el-col :span="8">
 							<el-input
 								v-model="form.bounty"
+								oninput="value=value.replace(/\D/g,'')"
 								placeholder="1人民币= 10象币"
-								suffix-icon="el-icon-money"
+								suffix-icon="icon-consumption"
 								type="text"
-								style="width: 505px"
-								maxlength="6"
-							></el-input>
+								maxlength="8"
+							>
+								<i slot="suffix" class="elephant">&#xe778;</i>
+							</el-input>
 						</el-col>
 					</el-row>
 				</el-form-item>
@@ -323,7 +324,6 @@
 								type="textarea"
 								maxlength="300"
 								show-word-limit
-								style="width: 600px"
 								:autosize="{ minRows: 8 }"
 								placeholder="限300字"
 							></el-input>
@@ -334,8 +334,14 @@
 					<el-button type="primary" @click="handleSave"
 						>提 交</el-button
 					>
-					<el-button type="primary" @click="handleSee"
+					<!-- <el-button type="primary" @click="handleSee"
 						>预览效果</el-button
+					> -->
+					<el-button
+						class="mt20 cusList"
+						type="primary"
+						@click="seeSeekList"
+						>我的征求</el-button
 					>
 				</el-form-item>
 			</el-form>
@@ -352,7 +358,7 @@
 						</template>
 						张盼伟
 					</el-descriptions-item>
-					<el-descriptions-item v-if="form.shareMode == 2">
+					<el-descriptions-item v-if="form.mode == 2">
 						<template slot="label">
 							<i class="el-icon-menu"></i>
 							行业
@@ -366,14 +372,14 @@
 							价值模式
 						</template>
 						{{
-							form.shareMode == 1
+							form.mode == 1
 								? "共享模式"
-								: form.shareMode == 2
+								: form.mode == 2
 								? "打赏模式"
 								: "付费模式"
 						}}
 					</el-descriptions-item>
-					<el-descriptions-item v-if="form.shareMode == 3">
+					<el-descriptions-item v-if="form.mode == 3">
 						<template slot="label">
 							<i class="el-icon-menu"></i>
 							付费类型
@@ -470,6 +476,8 @@
 
 <script>
 var id = 0;
+import { getIndustryCategoryReq } from "@/api/release";
+import { saveSeekReq } from "@/api/seek";
 export default {
 	name: "Seek",
 	components: {},
@@ -627,31 +635,6 @@ export default {
 				label: "label",
 			},
 			childNodeCount: 99,
-			options: {
-				theme: "snow",
-				bounds: document.body,
-				debug: "warn",
-				modules: {
-					toolbar: [
-						["bold", "underline", "strike"],
-						[{ header: [1, 2, 3, 4, 5, 6, false] }],
-						[{ size: ["small", false, "large", "huge"] }],
-						// [{ color: [] }, { background: [] }],
-						[{ color: [] }],
-						["blockquote", "code-block"],
-						[{ list: "ordered" }, { list: "bullet" }],
-						[{ script: "sub" }, { script: "super" }],
-						// [{ indent: '-1' }, { indent: '+1' }],
-						[{ align: [] }],
-						// [{ direction: 'rtl' }],
-						[{ font: [] }],
-						// ['clean'],
-						["link"],
-					],
-				},
-				placeholder: "最多500字.",
-				readOnly: false,
-			},
 			borderColor: "#dcdfe6",
 			dialogTableVisible: false,
 			isOpenMoenyShare: false,
@@ -675,9 +658,9 @@ export default {
 			form: {
 				title: "",
 				content: "",
-				shareMode: 1,
+				mode: 1,
 				bounty: "",
-				isSelectProfession: "-999",
+				industry: "",
 				monenyMode: "ptlx",
 			},
 			categoryList: [],
@@ -692,23 +675,23 @@ export default {
 						trigger: "change",
 					},
 				],
-				isSelectProfession: [
+				mode: [
 					{
 						required: true,
+						trigger: "change",
+					},
+				],
+				industry: [
+					{
+						required: false,
 						message: "请选择",
 						trigger: "change",
 					},
 				],
 				monenyMode: [
 					{
-						required: true,
+						required: false,
 						message: "请选择",
-						trigger: "change",
-					},
-				],
-				shareMode: [
-					{
-						required: true,
 						trigger: "change",
 					},
 				],
@@ -716,12 +699,12 @@ export default {
 					{
 						required: true,
 						validator: (rules, value, cb) => {
-							if (this.form.shareMode == "1") {
+							if (this.form.mode == "1") {
 								if (!value) {
 									return cb(new Error("请输入"));
 								}
 							}
-							if (this.form.shareMode == "2") {
+							if (this.form.mode == "2") {
 								if (parseInt(value) < 100) {
 									return cb(
 										new Error(
@@ -730,7 +713,7 @@ export default {
 									);
 								}
 							}
-							if (this.form.shareMode == "3") {
+							if (this.form.mode == "3") {
 								if (
 									this.form.monenyMode == "ptlx" &&
 									parseInt(value) < 100
@@ -834,7 +817,17 @@ export default {
 			this.dialogVisible = false;
 		},
 		hanndleValid() {
-			this.form.bounty = "";
+			if (this.form.mode == 1) {
+				this.rules.industry[0].required = false;
+				this.rules.monenyMode[0].required = false;
+			}
+			if (this.form.mode == 2) {
+				this.rules.industry[0].required = true;
+			}
+			if (this.form.mode == 3) {
+				this.rules.monenyMode[0].required = true;
+			}
+			// this.form.bounty = "";
 			this.$refs["baseform"].clearValidate();
 		},
 		handleCloseAddName() {
@@ -898,7 +891,6 @@ export default {
 			this.treeNewNameForm.treeNodeAddName = "";
 			this.addNodeData = data;
 		},
-
 		remove(node, data) {
 			const parent = node.parent;
 			const children = parent.data.children || parent.data;
@@ -961,16 +953,13 @@ export default {
 			return draggingNode.data.label.indexOf("三级 3-2-2") === -1;
 		},
 		getIndustryList() {
-			// getIndustryCategoryReq().then((res) => {
-			// 	if (res.success) {
-			// 		this.categoryListBak = res.data;
-			// 		let editTreeList = this.transFiled(res.data);
-			// 		this.treeData = this.listToTree(editTreeList);
-			// 		this.categoryList = this.listToTree(res.data);
-			// 	} else {
-			// 		this.$baseMessage(res.message, "error");
-			// 	}
-			// });
+			getIndustryCategoryReq().then((res) => {
+				if (res.success) {
+					this.categoryList = this.listToTree(res.data);
+				} else {
+					this.$baseMessage(res.message, "error");
+				}
+			});
 		},
 		transFiled(data) {
 			let arr = [];
@@ -1039,6 +1028,9 @@ export default {
 				}
 			});
 		},
+		seeSeekList() {
+			this.$router.push("/manage/seekList");
+		},
 		deleEditedContent() {},
 		getProfession(val) {
 			if (!this.$refs.mycascader.getCheckedNodes()[0].pathLabels) {
@@ -1057,14 +1049,36 @@ export default {
 			});
 		},
 		saveFindExperience() {
-			console.dir("------------");
-			//this.$router.push("/experience/releaseSuccess");
+			let params = {
+				mode: this.form.mode,
+				title: this.form.title,
+				content: this.form.content,
+				gold: this.form.bounty,
+				moneyCny: parseInt(this.form.bounty) / 10,
+				userId: 1,
+			};
+			if (this.form.mode == 2) {
+				params.industry = this.form.industry.join();
+			}
+			if (this.form.mode == 3) {
+				params.costType = this.form.monenyMode;
+			}
+			saveSeekReq(params).then((res) => {
+				if (res.success) {
+					this.$baseMessage("提交成功", "success");
+					this.$refs["baseform"].resetFields();
+				}
+			});
 		},
 	},
 };
 </script>
 <style lang="scss" scoped>
 .seek {
+	.cusList {
+		background-color: #3ccba3;
+		border-color: #3ccba3;
+	}
 	.tipRule {
 		font-size: 14px;
 		border: none;

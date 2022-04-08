@@ -36,7 +36,7 @@
 								></el-option>
 							</el-select>
 						</el-form-item>
-						<el-form-item
+						<!-- <el-form-item
 							label="经验状态"
 							prop="status"
 							label-width="90px"
@@ -51,7 +51,7 @@
 									:value="item.value"
 								></el-option>
 							</el-select>
-						</el-form-item>
+						</el-form-item> -->
 						<el-button
 							icon="el-icon-search"
 							type="primary"
@@ -761,7 +761,6 @@ export default {
 					name: "发布者",
 					label: "发布者",
 					prop: "userName",
-					width: "120px",
 					sort: false,
 					align: "center",
 					filterData: [],
@@ -771,7 +770,6 @@ export default {
 					name: "所属分类",
 					label: "所属分类",
 					prop: "sswl",
-					width: "180px",
 					sort: false,
 					align: "center",
 					filterData: [],
@@ -782,7 +780,6 @@ export default {
 					label: "发布状态",
 					prop: "status",
 					sort: false,
-					width: "100px",
 					sortType: "string",
 					align: "center",
 					filterData: [],
@@ -793,7 +790,6 @@ export default {
 					label: "主标题",
 					prop: "title",
 					sort: false,
-					width: "300px",
 					align: "center",
 					filterData: [],
 				},
@@ -812,7 +808,6 @@ export default {
 					label: "价值模式",
 					prop: "shareMode",
 					sort: false,
-					width: "120px",
 					align: "center",
 					filterData: [],
 				},
@@ -822,7 +817,6 @@ export default {
 					label: "全部文章",
 					prop: "customList",
 					sort: false,
-					width: "120px",
 					align: "center",
 					filterData: [],
 				},
@@ -832,7 +826,6 @@ export default {
 					label: "累计收益",
 					prop: "sy",
 					sort: false,
-					width: "120px",
 					align: "center",
 					filterData: [],
 				},
@@ -842,7 +835,6 @@ export default {
 					label: "总点赞数/点赞数",
 					prop: "userxingwei",
 					sort: false,
-					width: "200px",
 					align: "center",
 					filterData: [],
 				},
@@ -852,7 +844,6 @@ export default {
 					label: "发布时间",
 					prop: "createTime",
 					sort: false,
-					width: "180px",
 					align: "center",
 					filterData: [],
 				},
@@ -863,7 +854,6 @@ export default {
 					prop: "customHanndle",
 					sort: false,
 					fixed: false,
-					width: "200px",
 					align: "center",
 					filterData: [],
 				},

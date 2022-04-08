@@ -125,7 +125,7 @@ export const constantRoutes = [
 			{
 				path: "seekList",
 				name: "SeekList",
-				component: () => import("@/views/experience/list/index"),
+				component: () => import("@/views/experience/find/index"),
 				meta: { title: "征求管理", sysicon: "&#xe632;" },
 			},
 			{
