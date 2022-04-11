@@ -173,18 +173,22 @@ export const constantRoutes = [
 			{
 				path: "personalCenter",
 				name: "PersonalCenter",
+				component: () =>
+					import("@/views/deploy/personalCenter/index"),
 				meta: { title: "个人中心", icon: "user" },
 			},
 			{
 				path: "userManage",
 				name: "UserManage",
 				component: () =>
-					import("@/views/experience/list/participantList/index"),
-				meta: { title: "用户管理", icon: "peoples" },
+					import("@/views/deploy/userDeploy/index"),
+				meta: { title: "账号管理", icon: "peoples" },
 			},
 			{
 				path: "roleManage",
 				name: "RoleManage",
+				component: () =>
+					import("@/views/deploy/roleDeploy/index"),
 				meta: { title: "角色管理", icon: "password" },
 			},
 		],
