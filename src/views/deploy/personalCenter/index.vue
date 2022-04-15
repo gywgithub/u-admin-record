@@ -1,7 +1,5 @@
 <template>
-	<div class="personal-center">
-		个人中心
-	</div>
+	<div class="personal-center"><elephant-table></elephant-table></div>
 </template>
 
 <script>
@@ -12,14 +10,12 @@ export default {
 	computed: {},
 	watch: {},
 	data() {
-		return {}
+		return {};
 	},
 	created() {},
 	mounted() {},
-	methods: {}
+	methods: {},
 };
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

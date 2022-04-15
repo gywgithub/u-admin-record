@@ -173,22 +173,29 @@ export const constantRoutes = [
 			{
 				path: "personalCenter",
 				name: "PersonalCenter",
-				component: () =>
-					import("@/views/deploy/personalCenter/index"),
+				component: () => import("@/views/deploy/personalCenter/index"),
 				meta: { title: "个人中心", icon: "user" },
 			},
 			{
 				path: "userManage",
 				name: "UserManage",
-				component: () =>
-					import("@/views/deploy/userDeploy/index"),
+				component: () => import("@/views/deploy/userDeploy/index"),
 				meta: { title: "账号管理", icon: "peoples" },
+			},
+			{
+				path: "permissionSetting",
+				name: "PermissionSetting",
+				hidden: true,
+				component: () =>
+					import(
+						"@/views/deploy/roleDeploy/components/permissionSetting/index"
+					),
+				meta: { title: "角色权限设置", icon: "password" },
 			},
 			{
 				path: "roleManage",
 				name: "RoleManage",
-				component: () =>
-					import("@/views/deploy/roleDeploy/index"),
+				component: () => import("@/views/deploy/roleDeploy/index"),
 				meta: { title: "角色管理", icon: "password" },
 			},
 		],

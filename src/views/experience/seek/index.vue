@@ -341,7 +341,7 @@
 						class="mt20 cusList"
 						type="primary"
 						@click="seeSeekList"
-						>我的征求</el-button
+						>列表征求</el-button
 					>
 				</el-form-item>
 			</el-form>
