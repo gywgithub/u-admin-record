@@ -1,7 +1,6 @@
-import { login, getInfo } from "@/api/user";
-//logout
+import { login, getInfo, logout } from "@/api/user";
 import { getToken, setToken, removeToken, tokenKey } from "@/utils/auth";
-// import { resetRouter } from "@/router";
+import { resetRouter } from "@/router";
 
 const getDefaultState = () => {
 	return {
@@ -72,18 +71,16 @@ const actions = {
 	// user logout
 	logout({ commit, state }) {
 		return new Promise((resolve, reject) => {
-			localStorage.removeItem(tokenKey());
-			resolve();
-			// 	logout(state.token)
-			// 		.then(() => {
-			// 			removeToken(); // must remove  token  first
-			// 			resetRouter();
-			// 			commit("RESET_STATE");
-			// 			resolve();
-			// 		})
-			// 		.catch((error) => {
-			// 			reject(error);
-			// 		});
+			logout(state.token)
+				.then(() => {
+					removeToken(); // must remove  token  first
+					resetRouter();
+					commit("RESET_STATE");
+					resolve();
+				})
+				.catch((error) => {
+					reject(error);
+				});
 		});
 	},
 
