@@ -10,6 +10,7 @@ export function setToken(token) {
 
 export function removeToken() {
 	localStorage.removeItem(TokenKey);
+	localStorage.removeItem("userInfo");
 }
 
 export function tokenKey() {

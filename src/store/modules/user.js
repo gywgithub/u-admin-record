@@ -33,8 +33,10 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			login(loginInfo)
 				.then((response) => {
-					commit("SET_TOKEN", response.data.token);
-					setToken(response.data.token);
+					if (response.success) {
+						commit("SET_TOKEN", response.data.token);
+						setToken(response.data.token);
+					}
 					resolve(response);
 				})
 				.catch((error) => {

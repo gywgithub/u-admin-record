@@ -1083,18 +1083,13 @@ export default {
 			this.baseExperienceInfo = data;
 			this.seeTopic = true;
 		},
-		editTopic(e) {
-			this.$router.push("/share/editShare");
-		},
 		goodsPutOn() {
 			this.$b.successMsg("上架成功");
 		},
 		goodsOffShelf() {
 			this.$b.successMsg("下架成功");
 		},
-		addCurrShare() {
-			this.$router.push("/share/addShare");
-		},
+		addCurrShare() {},
 		handleClick(tab, event) {
 			console.log(tab, event);
 		},
