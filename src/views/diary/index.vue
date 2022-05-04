@@ -277,19 +277,15 @@ export default {
 			this.getCatelogFn();
 		},
 		isReviewDiary(id) {
-			let userIdObj = JSON.parse(localStorage.getItem("userInfo"));
-			queryByIdDiaryReq({ userId: userIdObj.userId, id: id }).then(
-				(res) => {
-					this.diaryTitle = res.data.title;
-					this.content = res.data.content;
-					this.form.category = res.data.diaryCatalogId;
-					this.form.keyword = res.data.label.split(",");
-				}
-			);
+			queryByIdDiaryReq({ id: id }).then((res) => {
+				this.diaryTitle = res.data.title;
+				this.content = res.data.content;
+				this.form.category = res.data.diaryCatalogId;
+				this.form.keyword = res.data.label.split(",");
+			});
 		},
 		getCatelogFn() {
-			let userIdObj = JSON.parse(localStorage.getItem("userInfo"));
-			getCatelogDataReq({ userId: userIdObj.userId }).then((res) => {
+			getCatelogDataReq().then((res) => {
 				this.categoryList = res.data;
 				this.$_.deepClone(res.data, this.categoryListBak);
 			});
@@ -312,9 +308,7 @@ export default {
 			});
 		},
 		hanndleAddCatelog() {
-			let userIdObj = JSON.parse(localStorage.getItem("userInfo"));
 			let params = {
-				userId: userIdObj.userId,
 				name: this.catalogModelForm.name,
 				describe: this.catalogModelForm.descride,
 			};
@@ -350,8 +344,7 @@ export default {
 			this.editCategoryFn();
 		},
 		editCategoryFn() {
-			let userIdObj = JSON.parse(localStorage.getItem("userInfo"));
-			getCatelogDataReq({ userId: userIdObj.userId }).then((res) => {
+			getCatelogDataReq().then((res) => {
 				let json = res.data;
 				for (let i = 0; i < json.length; i++) {
 					json[i].customHanndle = ["编辑", "删除"];
@@ -460,13 +453,11 @@ export default {
 			});
 		},
 		hanndleDiarySave() {
-			let userIdObj = JSON.parse(localStorage.getItem("userInfo"));
 			let params = {
 				title: this.diaryTitle,
 				content: this.content,
 				label: this.form.keyword && this.form.keyword.join(","),
 				diaryCatalogId: this.form.category,
-				userId: userIdObj.userId,
 			};
 			saveDiaryReq(params).then((res) => {
 				if (res.success) {

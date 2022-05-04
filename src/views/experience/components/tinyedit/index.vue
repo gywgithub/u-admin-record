@@ -392,11 +392,7 @@ export default {
 			let paramStorage = this.currShareData;
 			if (paramStorage) {
 				// insertList: this.dynamicList, //用户新增的目录
-				let userId = JSON.parse(
-					localStorage.getItem("userInfo")
-				).userId;
 				let params = {
-					userId: userId,
 					content: paramStorage.content, //描述
 					title: paramStorage.title, //标题
 					shareMode: paramStorage.shareMode, //共享模式
@@ -528,11 +524,7 @@ export default {
 			let paramStorage = this.currShareData;
 			if (selected.length == 1 && paramStorage) {
 				// insertList: this.dynamicList, //用户新增的目录
-				let userId = JSON.parse(
-					localStorage.getItem("userInfo")
-				).userId;
 				let params = {
-					userId: userId,
 					content: paramStorage.content, //描述
 					title: paramStorage.title, //标题
 					shareMode: paramStorage.shareMode, //共享模式

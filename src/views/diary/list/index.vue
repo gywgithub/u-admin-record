@@ -194,8 +194,7 @@ export default {
 		},
 		//初始化表单数据
 		initFormData() {
-			let userIdObj = JSON.parse(localStorage.getItem("userInfo"));
-			getCatelogDataReq({ userId: userIdObj.userId }).then((res) => {
+			getCatelogDataReq().then((res) => {
 				if (res.success) {
 					this.$_.deepClone(res.data, this.diaryCatelogBak);
 					this.diaryTypeList = res.data;
@@ -277,7 +276,6 @@ export default {
 			this.fetchData();
 		},
 		fetchData(fn) {
-			let userIdstr = JSON.parse(localStorage.getItem("userInfo"));
 			let startTime =
 					this.ruleForm.diaryDate.length > 0
 						? new Date(this.ruleForm.diaryDate[0]).Format(
@@ -294,7 +292,6 @@ export default {
 				startTime: startTime,
 				endTime: endTime,
 				diaryCatalogId: this.ruleForm.type,
-				userId: userIdstr.userId,
 				pageSize: this.queryPageSize,
 				pageIndex: this.queryPageNo,
 			};

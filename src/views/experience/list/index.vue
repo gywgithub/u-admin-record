@@ -1186,7 +1186,6 @@ export default {
 			this.fetchData();
 		},
 		fetchData(fn) {
-			let userIdstr = JSON.parse(localStorage.getItem("userInfo"));
 			let startTime =
 					this.ruleForm.queryDate.length > 0
 						? new Date(this.ruleForm.queryDate[0]).Format(
@@ -1204,7 +1203,6 @@ export default {
 				endTime: endTime,
 				status: this.ruleForm.status,
 				type: this.ruleForm.type,
-				userId: userIdstr.userId,
 				pageSize: this.queryPageSize,
 				pageIndex: this.queryPageNo,
 			};
@@ -1214,7 +1212,8 @@ export default {
 						res.data.experienceList,
 						this.experienceListBakSourceData
 					);
-					let userName = res.data.userName;
+					let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+					let userName = userInfo.userName;
 					let json = res.data.experienceList;
 					for (let i = 0; i < json.length; i++) {
 						json[i].userName = userName;
