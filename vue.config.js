@@ -13,7 +13,7 @@ const name = defaultSettings.title || "vue Admin Record"; // page title
 // For example, Mac: sudo npm run
 // You can change the port by the following methods:
 // port = 9528 npm run dev OR npm run dev --port = 9528
-const port = process.env.port || process.env.npm_config_port || 9528; // dev port
+const port = process.env.port || process.env.npm_config_port || 9526; // dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
@@ -38,8 +38,8 @@ module.exports = {
 		},
 		proxy: {
 			"/api": {
-				target: "http://10.255.50.70:8080", //gs
-				// target: "http://192.168.124.14:8080", //jia
+				// target: "http://10.255.50.70:8080", //gs
+				target: "http://192.168.124.14:8080", //jia
 				ws: true,
 				changeOrigin: true,
 				pathRewrite: { "^/api": "" },

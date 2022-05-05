@@ -7,9 +7,9 @@ import "@/styles/business-style-Impl.css";
 import "@/styles/index.scss"; // global css
 
 import ElementUI from "element-ui";
-import Antd from 'ant-design-vue';
+import Antd from "ant-design-vue";
 import "element-ui/lib/theme-chalk/index.css";
-import 'ant-design-vue/dist/antd.css';
+import "ant-design-vue/dist/antd.css";
 import { Sortable, Swap } from "sortablejs/modular/sortable.esm";
 
 import App from "./App";

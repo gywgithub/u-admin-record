@@ -98,7 +98,7 @@
 				:rules="catalogModelRules"
 				:label-position="catalogPos"
 				class="disf"
-				label-width="50px"
+				label-width="70px"
 			>
 				<el-form-item label="名称" prop="name">
 					<el-input

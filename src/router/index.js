@@ -50,7 +50,7 @@ export const constantRoutes = [
 				path: "demands",
 				name: "Demands",
 				component: () => import("@/views/demands/index"),
-				meta: { title: "需求管理", icon: "bug" },
+				meta: { title: "需求墙", icon: "bug" },
 			},
 		],
 	},
