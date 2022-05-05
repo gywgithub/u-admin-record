@@ -42,6 +42,19 @@ export const constantRoutes = [
 		hidden: true,
 	},
 	{
+		path: "/demands",
+		component: Layout,
+		redirect: "/demands",
+		children: [
+			{
+				path: "demands",
+				name: "Demands",
+				component: () => import("@/views/demands/index"),
+				meta: { title: "需求管理", icon: "bug" },
+			},
+		],
+	},
+	{
 		path: "/",
 		component: Layout,
 		redirect: "/dashboard",

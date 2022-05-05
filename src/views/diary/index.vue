@@ -61,17 +61,6 @@
 								></i>
 							</el-form-item>
 							<el-form-item>
-								<!-- <confirm-popover
-									class="mt20 mr10"
-									textMessage="确认保存当前日记吗？"
-									adsorptionBtnType="primary"
-									adsorptionBtnIcon=""
-									:iconStyle="iconStyleObj"
-									:iconClass="iconClassString"
-									:isPlain="plainFalse"
-									@emitCallback="handleSave"
-									adsorptionTxt="保 存"
-								></confirm-popover> -->
 								<el-button
 									class="mt20"
 									type="primary"
