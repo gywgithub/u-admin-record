@@ -126,7 +126,7 @@ export default {
 						},
 						{
 							id: 8,
-							label: "实时展示",
+							label: "精选经验",
 							value: "8",
 							isChecked: false,
 						},

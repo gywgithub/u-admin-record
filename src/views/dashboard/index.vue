@@ -115,7 +115,7 @@
 			<el-col :xs="24" :lg="12">
 				<el-card class="card" shadow="never">
 					<div slot="header">
-						<span>实时展示</span>
+						<span>精选经验</span>
 					</div>
 					<el-timeline :reverse="reverse">
 						<el-timeline-item

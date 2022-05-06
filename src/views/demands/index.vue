@@ -79,6 +79,21 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
+				<el-form-item label="需求状态" prop="status">
+					<el-select
+						v-model="demandModelForm.status"
+						placeholder="请选择"
+						style="width: 500px"
+					>
+						<el-option
+							v-for="item in statusList"
+							:key="item.id"
+							:label="item.label"
+							:value="item.value"
+						>
+						</el-option>
+					</el-select>
+				</el-form-item>
 				<el-form-item label="描述" prop="descript">
 					<el-input
 						v-model="demandModelForm.descript"
@@ -123,6 +138,23 @@
 				>
 			</el-form>
 		</el-drawer>
+		
+		<el-dialog
+			:title="showDialogTitle"
+			:visible.sync="showDialogVisible"
+			width="800px"
+			:before-close="handleShowClose"
+		>
+			<el-descriptions  column="1" :colon="true">
+				<el-descriptions-item label="需求标题" labelClassName="fwb">{{currRow.title}}</el-descriptions-item>
+				<el-descriptions-item label="紧急程度" labelClassName="fwb"><div v-html="$options.filters.levelFillter(currRow.urgentLevel)"></div></el-descriptions-item>
+				<el-descriptions-item label="所属类别" labelClassName="fwb"><div v-html="$options.filters.catalogFillter(currRow.catalog)"></div></el-descriptions-item>
+				<el-descriptions-item label="需求状态" labelClassName="fwb"><div v-html="$options.filters.statusFillter(currRow.status)"></div></el-descriptions-item>
+				<el-descriptions-item label="需求描述" labelClassName="fwb">{{currRow.descript}}</el-descriptions-item>
+				<el-descriptions-item label="需求场景" labelClassName="fwb">{{currRow.applyScenes}}</el-descriptions-item>
+				<el-descriptions-item label="需求备注" labelClassName="fwb">{{currRow.remark}}</el-descriptions-item>
+			</el-descriptions>
+		</el-dialog>
 	</div>
 </template>
 
@@ -138,6 +170,32 @@ export default {
 	name: "Demands",
 	components: {
 		elephantTable,
+	},
+	filters: {
+		levelFillter: function(value) {
+			if (!value) return "";
+			let str = value.replace(/<[^>]+>/gi, "");
+			switch (str) {
+				case "极高":
+					return value = "<span class='lev-demand jg-demand'>极高</span>";
+				case "高":
+					return value = "<span class='lev-demand g-demand'>高</span>";
+				case "中":
+					return value = "<span class='lev-demand z-demand'>中</span>";
+				case "低":
+					return value = "<span class='lev-demand d-demand'>低</span>";
+				default:
+					return value = "";
+			}
+		},
+		catalogFillter: function(value) {
+			if (!value) return "";
+			return value.replace(/<[^>]+>/gi, "");
+		},
+		statusFillter: function(value) {
+			if (!value) return "";
+			return value.replace(/<[^>]+>/gi, "");
+		},
 	},
 	data() {
 		return {
@@ -155,6 +213,23 @@ export default {
 				{ id: 5, label: "代码优化", value: 5 },
 				{ id: 6, label: "系统规则优化", value: 6 },
 			],
+			statusList: [
+				{ id: 1, label: "未开始", value: 1 },
+				{ id: 2, label: "进行中", value: 2 },
+				{ id: 3, label: "已完毕", value: 3 },
+			],
+			showDialogTitle:"详情",
+			showDialogVisible: false,
+			showDemandModelForm: {
+				title: "",
+				urgentLevel: "",
+				catalog: "",
+				descript: "",
+				applyScenes: "",
+				remark: "",
+				status: 1
+			},
+			showFormPos: "right",
 			dialogTitle: "新增需求",
 			wrapperClosableBol: false,
 			dialogVisible: false,
@@ -168,6 +243,7 @@ export default {
 				descript: "",
 				applyScenes: "",
 				remark: "",
+				status: 1
 			},
 			demandModelRules: {
 				title: [
@@ -198,6 +274,13 @@ export default {
 						message: "请选择",
 					},
 				],
+				status: [
+					{
+						required: true,
+						trigger: "change",
+						message: "请选择",
+					},
+				],
 			},
 			isShowPagesBol: false,
 			taskTableHeight: "700px",
@@ -210,16 +293,6 @@ export default {
 					name: "紧急程度",
 					label: "紧急程度",
 					prop: "urgentLevel",
-					sort: false,
-					width: "180px",
-					align: "center",
-					filterData: [],
-				},
-				{
-					id: 2,
-					name: "需求场景",
-					label: "需求场景",
-					prop: "applyScenes",
 					sort: false,
 					align: "center",
 					filterData: [],
@@ -252,6 +325,15 @@ export default {
 					filterData: [],
 				},
 				{
+					id: 2,
+					name: "需求场景",
+					label: "需求场景",
+					prop: "applyScenes",
+					sort: false,
+					align: "center",
+					filterData: [],
+				},
+				{
 					id: 6,
 					name: "所属分类",
 					label: "所属分类",
@@ -261,12 +343,11 @@ export default {
 					filterData: [],
 				},
 				{
-					id: 7,
-					name: "备注",
-					label: "备注",
-					prop: "remark",
+					id: 12,
+					name: "需求状态",
+					label: "需求状态",
+					prop: "status",
 					sort: false,
-					width: "180px",
 					align: "center",
 					filterData: [],
 				},
@@ -276,7 +357,7 @@ export default {
 					label: "创建时间",
 					prop: "createTime",
 					sort: false,
-					width: "180px",
+					width: "170px",
 					align: "center",
 					filterData: [],
 				},
@@ -286,7 +367,6 @@ export default {
 					label: "更新人",
 					prop: "updateUserName",
 					sort: false,
-					width: "180px",
 					align: "center",
 					filterData: [],
 				},
@@ -296,7 +376,7 @@ export default {
 					label: "更新时间",
 					prop: "updateTime",
 					sort: false,
-					width: "180px",
+					width: "170px",
 					align: "center",
 					filterData: [],
 				},
@@ -307,6 +387,7 @@ export default {
 					prop: "customHanndle",
 					sort: false,
 					fixed: false,
+					width: "180px",
 					align: "center",
 					filterData: [],
 				},
@@ -334,41 +415,61 @@ export default {
 		packageData(data){
 			let json = data.data;
 			for (let i = 0; i < json.length; i++) {
-				if (json[i].urgentLevel == 1) {
-					json[i].urgentLevel =
-						"<span class='lev-demand jg-demand'>极高</span>";
+				switch (json[i].status) {
+					case "1":
+						json[i].status = "未开始";
+						break;
+					case "2":
+						json[i].status = "进行中";
+						break;
+					case "3":
+						json[i].status = "已结束";
+						break;
+					default:
+						json[i].status = "";
+						break;
 				}
-				if (json[i].urgentLevel == 2) {
-					json[i].urgentLevel =
-						"<span class='lev-demand g-demand'>高</span>";
+				switch (json[i].urgentLevel) {
+					case 1:
+						json[i].urgentLevel = "<span class='lev-demand jg-demand'>极高</span>";
+						break;
+					case 2:
+						json[i].urgentLevel = "<span class='lev-demand g-demand'>高</span>";
+						break;
+					case 3:
+						json[i].urgentLevel = "<span class='lev-demand z-demand'>中</span>";
+						break;
+					case 4:
+						json[i].urgentLevel = "<span class='lev-demand d-demand'>低</span>";
+						break;
+					default:
+						json[i].urgentLevel = "";
+						break;
 				}
-				if (json[i].urgentLevel == 3) {
-					json[i].urgentLevel =
-						"<span class='lev-demand z-demand'>中</span>";
+				switch (json[i].catalog) {
+					case "1":
+						json[i].catalog = "<span class=''>核心功能</span>";
+						break;
+					case "2":
+						json[i].catalog = "<span class=''>新功能</span>";
+						break;
+					case "3":
+						json[i].catalog = "<span class=''>功能优化</span>";
+						break;
+					case "4":
+						json[i].catalog = "<span class=''>样式优化</span>";
+						break;
+					case "5":
+						json[i].catalog = "<span class=''>代码优化</span>";
+						break;
+					case "6":
+						json[i].catalog = "<span class=''>系统规则优化</span>";
+						break;
+					default:
+						json[i].catalog = "";
+						break;
 				}
-				if (json[i].urgentLevel == 4) {
-					json[i].urgentLevel =
-						"<span class='lev-demand d-demand'>低</span>";
-				}
-				if (json[i].catalog == 1) {
-					json[i].catalog = "<span class=''>核心功能</span>";
-				}
-				if (json[i].catalog == 2) {
-					json[i].catalog = "<span class=''>新功能</span>";
-				}
-				if (json[i].catalog == 3) {
-					json[i].catalog = "<span class=''>功能优化</span>";
-				}
-				if (json[i].catalog == 4) {
-					json[i].catalog = "<span class=''>样式优化</span>";
-				}
-				if (json[i].catalog == 5) {
-					json[i].catalog = "<span class=''>代码优化</span>";
-				}
-				if (json[i].catalog == 6) {
-					json[i].catalog = "<span class=''>系统规则优化</span>";
-				}
-				json[i].customHanndle = ["编辑", "删除"];
+				json[i].customHanndle = ["查看详情" , "编辑", "删除"];
 				
 			}
 
@@ -383,7 +484,11 @@ export default {
 						json[j].customHanndle[k] +
 						"</span>";
 				}
-				json[j].customHanndle = hanndleStr;
+				if(json[j].status == "已结束"){
+					json[j].customHanndle = "<span class='linkText ml10' data-id='" + json[j].id + "'>查看详情</span>";
+				}else{
+					json[j].customHanndle = hanndleStr;
+				}
 				json[j].createTime = new Date(json[j].createTime).Format(
 					"yyyy-MM-dd hh:mm:ss"
 				);
@@ -413,6 +518,9 @@ export default {
 		},
 		handleClose() {
 			this.dialogVisible = false;
+		},
+		handleShowClose(){
+			this.showDialogVisible = false;
 		},
 		hanndleAddDemand(){
 			addDemandReq(this.demandModelForm).then((res)=>{
@@ -454,6 +562,10 @@ export default {
 		//当某个单元格被点击时
 		cellUserClick({ row, column, cell, event }) {
 			if (column.label == "操作") {
+				this.currRow = row;
+				if (event.target.innerText == "查看详情") {
+					this.showDialogVisible = true;
+				}
 				if (event.target.innerText == "编辑") {
 					this.reviewData(row.id);
 					this.currRow = row;
@@ -489,6 +601,8 @@ export default {
 	border-radius: 3px;
 	width: 50px;
 	height: 25px;
+	text-align: center;
+    line-height: 25px;
 }
 .jg-demand {
 	background-color: #f56c6c;
@@ -506,8 +620,24 @@ export default {
 	background-color: #409eff;
 	border-color: #409eff;
 }
+.end-demand{
+	display: inline-block;
+	color: #fff;
+	background-color: #909399;
+	border-color: #909399;
+	border-radius: 3px;
+	width: 70px;
+	height: 30px;
+	line-height: 30px;
+}
 </style>
 <style lang="scss" scoped>
+::v-deep .showForm .el-form-item__content{
+		line-height:24px;
+}
 .demands {
+	.showForm{
+		
+	}
 }
 </style>

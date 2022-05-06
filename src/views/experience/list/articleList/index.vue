@@ -257,7 +257,7 @@ export default {
 				temp.author = "张军";
 				temp.fbz = "<span class='linkText' data-see='true'>刘云</span>";
 				temp.linkExperience =
-					"<span class='linkText' data-see='true'>查看</span>";
+					"<span class='linkText' data-see='true'>详情</span>";
 				temp.createTime = "张三";
 				temp.levUser = "高级用户";
 				temp.coll = "5天前来过";
@@ -269,7 +269,7 @@ export default {
 				temp.fbsj = "2021/02/12 12:23:12";
 				temp.singlecoll = "283 / 512";
 				temp.hanndle =
-					"<span class='linkText ml20' data-linkexp='true'>关联的经验</span> <span class='linkText ml20' data-edit='true'>编辑</span> ";
+					"<span class='linkText ml20' data-linkexp='true'>关联的经验</span>";
 				json.push(temp);
 			}
 			this.tableData = json;
@@ -283,11 +283,11 @@ export default {
 		//当某个单元格被点击时
 		cellUserClick({ row, column, cell, event }) {
 			if (
-				column.label == "文章" &&
-				event.target.innerText == "查看" &&
+				column.label == "详情" &&
+				event.target.innerText == "详情" &&
 				event.target.dataset.see
 			) {
-				alert("查看文章具体内容");
+				alert("查看此经验下，此作者的详细文章内容");
 			}
 			if (
 				column.label == "操作" &&

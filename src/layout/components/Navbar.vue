@@ -42,6 +42,9 @@ export default {
 		Breadcrumb,
 		Hamburger,
 	},
+	created(){
+		this.$_.addClass(document.body, "cube-default"); //添加默认样式
+	},
 	computed: {
 		...mapGetters(["sidebar", "avatar"]),
 	},

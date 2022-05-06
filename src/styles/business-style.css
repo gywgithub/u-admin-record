@@ -989,3 +989,9 @@ body,
 	color: #66b1ff;
 	cursor: pointer;
 }
+
+.cube-default .el-table td div {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
