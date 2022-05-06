@@ -15,7 +15,6 @@
 			<elephant-table
 				:tableSourceData="demandsList"
 				:tableSourceTitleData="tableTitleData"
-				:isOpenMultipleSelect="isSelectTable"
 				:tableHeight="taskTableHeight"
 				:isOpenColumnCustom="isCusColumn"
 				:openDefaultRender="defaultShowFailed"
@@ -50,9 +49,9 @@
 						style="width: 500px"
 					></el-input>
 				</el-form-item>
-				<el-form-item label="紧急程度" prop="demandLevel">
+				<el-form-item label="紧急程度" prop="urgentLevel">
 					<el-select
-						v-model="demandModelForm.demandLevel"
+						v-model="demandModelForm.urgentLevel"
 						placeholder="请选择"
 						style="width: 500px"
 					>
@@ -65,9 +64,9 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="所属类别" prop="category">
+				<el-form-item label="所属类别" prop="catalog">
 					<el-select
-						v-model="demandModelForm.category"
+						v-model="demandModelForm.catalog"
 						placeholder="请选择"
 						style="width: 500px"
 					>
@@ -80,9 +79,9 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="描述" prop="descride">
+				<el-form-item label="描述" prop="descript">
 					<el-input
-						v-model="demandModelForm.descride"
+						v-model="demandModelForm.descript"
 						type="textarea"
 						maxlength="300"
 						resize="none"
@@ -92,9 +91,9 @@
 						placeholder="限300字"
 					></el-input>
 				</el-form-item>
-				<el-form-item label="需求场景" prop="demandScenes">
+				<el-form-item label="需求场景" prop="applyScenes">
 					<el-input
-						v-model="demandModelForm.demandScenes"
+						v-model="demandModelForm.applyScenes"
 						type="textarea"
 						maxlength="500"
 						resize="none"
@@ -164,10 +163,10 @@ export default {
 			demandPos: "right",
 			demandModelForm: {
 				title: "",
-				demandLevel: "",
-				category: "",
-				descride: "",
-				demandScenes: "",
+				urgentLevel: "",
+				catalog: "",
+				descript: "",
+				applyScenes: "",
 				remark: "",
 			},
 			demandModelRules: {
@@ -178,21 +177,21 @@ export default {
 						message: "请输入",
 					},
 				],
-				category: [
+				catalog: [
 					{
 						required: true,
 						trigger: "change",
 						message: "请选择",
 					},
 				],
-				demandLevel: [
+				urgentLevel: [
 					{
 						required: true,
 						trigger: "change",
 						message: "请选择",
 					},
 				],
-				demandScenes: [
+				applyScenes: [
 					{
 						required: true,
 						trigger: "change",
@@ -200,67 +199,17 @@ export default {
 					},
 				],
 			},
-			isSelectTable: true,
 			isShowPagesBol: false,
 			taskTableHeight: "700px",
 			isCusColumn: true, //是否开启列自定义
 			defaultShowFailed: false, //开启列自定义或行自定义，此属性必须为false
-			demandsList: [
-				{
-					id: 1,
-					title: "首页功能都没做",
-					jjcd: 1,
-					xqcj: "首页功能排行榜对用户很重要",
-					fqr: "张盼伟",
-					ms: "好的，核心功能必须做",
-					ssfl: 1,
-					bz: "这个功能在首页",
-					updateUserName: "程详一",
-					updateTime: "2021-12-30 12:01:23",
-					createTime: "2021-11-04 08:12:05",
-				},
-				{
-					id: 2,
-					title: "发起经验优化",
-					jjcd: 2,
-					xqcj: "发起经验优化对用户很重要",
-					fqr: "张盼伟",
-					ms: "",
-					bz: "这个功能在首页",
-					ssfl: 2,
-					createTime: "2022-01-12 16:01:31",
-				},
-				{
-					id: 3,
-					title: "权限还未完善",
-					jjcd: 3,
-					xqcj: "权限还未完善",
-					fqr: "张盼伟",
-					ms: "必须完善",
-					bz: "这个功能在首页",
-					ssfl: 3,
-					createTime: "2021-09-12 13:21:33",
-					updateUserName: "郭远威",
-					updateTime: "2022-03-12 11:12:56",
-				},
-				{
-					id: 4,
-					title: "征求经验规则优化",
-					jjcd: 4,
-					xqcj: "征求经验金额需要调整",
-					fqr: "张盼伟",
-					ms: "",
-					bz: "这个功能在首页",
-					ssfl: 6,
-					createTime: "2022-04-01 18:08:33",
-				},
-			],
+			demandsList: [],
 			tableTitleData: [
 				{
 					id: 1,
 					name: "紧急程度",
 					label: "紧急程度",
-					prop: "jjcd",
+					prop: "urgentLevel",
 					sort: false,
 					width: "180px",
 					align: "center",
@@ -270,7 +219,7 @@ export default {
 					id: 2,
 					name: "需求场景",
 					label: "需求场景",
-					prop: "xqcj",
+					prop: "applyScenes",
 					sort: false,
 					align: "center",
 					filterData: [],
@@ -279,7 +228,7 @@ export default {
 					id: 3,
 					name: "发起人",
 					label: "发起人",
-					prop: "fqr",
+					prop: "userName",
 					sort: false,
 					align: "center",
 					filterData: [],
@@ -297,7 +246,7 @@ export default {
 					id: 5,
 					name: "描述",
 					label: "描述",
-					prop: "ms",
+					prop: "descript",
 					sort: false,
 					align: "center",
 					filterData: [],
@@ -306,7 +255,7 @@ export default {
 					id: 6,
 					name: "所属分类",
 					label: "所属分类",
-					prop: "ssfl",
+					prop: "catalog",
 					sort: false,
 					align: "center",
 					filterData: [],
@@ -315,7 +264,7 @@ export default {
 					id: 7,
 					name: "备注",
 					label: "备注",
-					prop: "bz",
+					prop: "remark",
 					sort: false,
 					width: "180px",
 					align: "center",
@@ -362,6 +311,8 @@ export default {
 					filterData: [],
 				},
 			],
+			demandListBak:[],
+			currRow:{}
 		};
 	},
 	mounted() {
@@ -369,43 +320,56 @@ export default {
 	},
 	methods: {
 		initData() {
-			let json = this.demandsList;
+			this.getDemandListData();
+		},
+		getDemandListData(){
+			getDemandDataReq().then((res)=>{
+				this.$_.deepClone(
+					res.data,
+					this.demandListBak
+				);
+				this.packageData(res);
+			});
+		},
+		packageData(data){
+			let json = data.data;
 			for (let i = 0; i < json.length; i++) {
-				if (json[i].jjcd == 1) {
-					json[i].jjcd =
+				if (json[i].urgentLevel == 1) {
+					json[i].urgentLevel =
 						"<span class='lev-demand jg-demand'>极高</span>";
 				}
-				if (json[i].jjcd == 2) {
-					json[i].jjcd =
+				if (json[i].urgentLevel == 2) {
+					json[i].urgentLevel =
 						"<span class='lev-demand g-demand'>高</span>";
 				}
-				if (json[i].jjcd == 3) {
-					json[i].jjcd =
+				if (json[i].urgentLevel == 3) {
+					json[i].urgentLevel =
 						"<span class='lev-demand z-demand'>中</span>";
 				}
-				if (json[i].jjcd == 4) {
-					json[i].jjcd =
+				if (json[i].urgentLevel == 4) {
+					json[i].urgentLevel =
 						"<span class='lev-demand d-demand'>低</span>";
 				}
-				if (json[i].ssfl == 1) {
-					json[i].ssfl = "<span class=''>核心功能</span>";
+				if (json[i].catalog == 1) {
+					json[i].catalog = "<span class=''>核心功能</span>";
 				}
-				if (json[i].ssfl == 2) {
-					json[i].ssfl = "<span class=''>新功能</span>";
+				if (json[i].catalog == 2) {
+					json[i].catalog = "<span class=''>新功能</span>";
 				}
-				if (json[i].ssfl == 3) {
-					json[i].ssfl = "<span class=''>功能优化</span>";
+				if (json[i].catalog == 3) {
+					json[i].catalog = "<span class=''>功能优化</span>";
 				}
-				if (json[i].ssfl == 4) {
-					json[i].ssfl = "<span class=''>样式优化</span>";
+				if (json[i].catalog == 4) {
+					json[i].catalog = "<span class=''>样式优化</span>";
 				}
-				if (json[i].ssfl == 5) {
-					json[i].ssfl = "<span class=''>代码优化</span>";
+				if (json[i].catalog == 5) {
+					json[i].catalog = "<span class=''>代码优化</span>";
 				}
-				if (json[i].ssfl == 6) {
-					json[i].ssfl = "<span class=''>系统规则优化</span>";
+				if (json[i].catalog == 6) {
+					json[i].catalog = "<span class=''>系统规则优化</span>";
 				}
 				json[i].customHanndle = ["编辑", "删除"];
+				
 			}
 
 			for (let j = 0; j < json.length; j++) {
@@ -420,20 +384,29 @@ export default {
 						"</span>";
 				}
 				json[j].customHanndle = hanndleStr;
+				json[j].createTime = new Date(json[j].createTime).Format(
+					"yyyy-MM-dd hh:mm:ss"
+				);
+				if(json[j].updateTime){
+					json[j].updateTime = new Date(json[j].updateTime).Format(
+						"yyyy-MM-dd hh:mm:ss"
+					);
+				}
 			}
 			this.demandsList = json;
 		},
 		handleBatch(e) {
 			this.dialogTitle = "新增需求";
 			this.dialogVisible = true;
+			this.$refs.demandForm.resetFields();
 		},
 		addDemand(refDom) {
 			this.$refs[refDom].validate((valid) => {
 				if (valid) {
 					if (this.dialogTitle == "新增需求") {
-						this.hanndleAddCatelog();
+						this.hanndleAddDemand();
 					} else {
-						this.hanndleUpdateCatelog();
+						this.hanndleUpdateDemand();
 					}
 				}
 			});
@@ -441,10 +414,49 @@ export default {
 		handleClose() {
 			this.dialogVisible = false;
 		},
+		hanndleAddDemand(){
+			addDemandReq(this.demandModelForm).then((res)=>{
+				if(res.success){
+					this.$message.success("添加成功");
+					this.dialogVisible = false;
+					this.getDemandListData();
+				}
+			});
+		},
+		hanndleUpdateDemand(){
+			let params = { id : this.currRow.id};
+			Object.assign(params, this.demandModelForm)
+			updateDemandReq(params).then((res)=>{
+				if(res.success){
+					this.$message.success("修改成功");
+					this.dialogVisible = false;
+					this.getDemandListData();
+				}
+			});
+		},
+		reviewData(id){
+			let bakData = this.demandListBak;
+			let reviewData = {};
+			for(let i =0;i<bakData.length;i++){
+				if(id == bakData[i].id){
+					reviewData = bakData[i];
+				}
+			}
+			this.$nextTick(() => {
+				this.demandModelForm.title = reviewData.title;
+				this.demandModelForm.urgentLevel = reviewData.urgentLevel;
+				this.demandModelForm.catalog = parseInt(reviewData.catalog);
+				this.demandModelForm.descript = reviewData.descript;
+				this.demandModelForm.applyScenes = reviewData.applyScenes;
+				this.demandModelForm.remark = reviewData.remark;
+			});
+		},
 		//当某个单元格被点击时
 		cellUserClick({ row, column, cell, event }) {
 			if (column.label == "操作") {
 				if (event.target.innerText == "编辑") {
+					this.reviewData(row.id);
+					this.currRow = row;
 					this.dialogTitle = "修改需求";
 					this.dialogVisible = true;
 				}
@@ -453,12 +465,19 @@ export default {
 						"您确定要删除吗?",
 						{ title: "提示" },
 						async () => {
-							this.$message.success("删除成功");
-							// this.deleteFn([event.target.dataset.id]);
+							this.deleteFn([event.target.dataset.id]);
 						}
 					);
 				}
 			}
+		},
+		deleteFn(ids){
+			deleteDemandReq(ids).then((res)=>{
+				if(res.success){
+					this.$message.success("删除成功");
+					this.getDemandListData();
+				}
+			});
 		},
 	},
 };
