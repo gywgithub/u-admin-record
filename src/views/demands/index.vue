@@ -1,5 +1,40 @@
 <template>
 	<div class="demands">
+		<div class="headerTitle">
+			<el-row>
+				<el-col>
+					<el-form
+						ref="platformRef"
+						:inline="true"
+						:model="platformForm"
+						:rules="platformRules"
+					>
+						<el-form-item
+							label="所属平台"
+							prop="keyword"
+							label-width="70px"
+						>
+							<el-select v-model="platformForm.keyword">
+								<el-option
+									v-for="(item, index) in demandKeywordList"
+									:key="index"
+									:label="item.label"
+									:value="item.value"
+								></el-option>
+							</el-select>
+						</el-form-item>
+						<el-button
+							icon="el-icon-search"
+							type="primary"
+							class="ml20"
+							@click="handleQuery"
+						>
+							查 询
+						</el-button>
+					</el-form>
+				</el-col>
+			</el-row>
+		</div>
 		<div class="mainBody mt30" ref="mainRef">
 			<el-row class="mb30">
 				<el-col>
@@ -42,6 +77,21 @@
 				class="disf"
 				label-width="120px"
 			>
+				<el-form-item label="所属平台" prop="keyword">
+					<el-select
+						v-model="demandModelForm.keyword"
+						placeholder="请选择"
+						style="width: 500px"
+					>
+						<el-option
+							v-for="item in demandKeywordList"
+							:key="item.id"
+							:label="item.label"
+							:value="item.value"
+						>
+						</el-option>
+					</el-select>
+				</el-form-item>
 				<el-form-item label="标题" prop="title">
 					<el-input
 						v-model="demandModelForm.title"
@@ -199,6 +249,16 @@ export default {
 	},
 	data() {
 		return {
+			platformForm:{
+				keyword: ""
+			},
+			platformRules: {},
+			
+			demandKeywordList: [
+				{ id: 1, label: "App端", value: 1 },
+				{ id: 2, label: "中台", value: 2 },
+				{ id: 3, label: "后台", value: 3 },
+			],
 			demandLevelList: [
 				{ id: 1, label: "极高", value: 1 },
 				{ id: 2, label: "高", value: 2 },
@@ -227,7 +287,7 @@ export default {
 				descript: "",
 				applyScenes: "",
 				remark: "",
-				status: 1
+				status: 1,
 			},
 			showFormPos: "right",
 			dialogTitle: "新增需求",
@@ -243,7 +303,8 @@ export default {
 				descript: "",
 				applyScenes: "",
 				remark: "",
-				status: 1
+				status: 1,
+				keyword: ""
 			},
 			demandModelRules: {
 				title: [
@@ -275,6 +336,13 @@ export default {
 					},
 				],
 				status: [
+					{
+						required: true,
+						trigger: "change",
+						message: "请选择",
+					},
+				],
+				keyword: [
 					{
 						required: true,
 						trigger: "change",
@@ -401,10 +469,13 @@ export default {
 	},
 	methods: {
 		initData() {
-			this.getDemandListData();
+			this.getDemandListData({});
 		},
-		getDemandListData(){
-			getDemandDataReq().then((res)=>{
+		handleQuery(){
+			this.getDemandListData({"keyword" : this.platformForm.keyword});
+		},
+		getDemandListData(params){
+			getDemandDataReq(params).then((res)=>{
 				this.$_.deepClone(
 					res.data,
 					this.demandListBak
@@ -527,7 +598,7 @@ export default {
 				if(res.success){
 					this.$message.success("添加成功");
 					this.dialogVisible = false;
-					this.getDemandListData();
+					this.getDemandListData({});
 				}
 			});
 		},
@@ -538,7 +609,7 @@ export default {
 				if(res.success){
 					this.$message.success("修改成功");
 					this.dialogVisible = false;
-					this.getDemandListData();
+					this.getDemandListData({});
 				}
 			});
 		},
@@ -557,6 +628,7 @@ export default {
 				this.demandModelForm.descript = reviewData.descript;
 				this.demandModelForm.applyScenes = reviewData.applyScenes;
 				this.demandModelForm.remark = reviewData.remark;
+				this.demandModelForm.keyword = reviewData.keyword;
 			});
 		},
 		//当某个单元格被点击时
@@ -587,7 +659,7 @@ export default {
 			deleteDemandReq(ids).then((res)=>{
 				if(res.success){
 					this.$message.success("删除成功");
-					this.getDemandListData();
+					this.getDemandListData({});
 				}
 			});
 		},
