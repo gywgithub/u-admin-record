@@ -44,6 +44,22 @@
 						>未找到?</el-link
 					> -->
 				</el-form-item>
+				<el-form-item
+					label="维度"
+					prop="dimension"
+					label-width="90px"
+				>
+					<el-select v-model="form.dimension" style="width: 440px">
+						<el-option
+							v-for="(item, index) in dimensionList"
+							:key="index"
+							:label="item.text"
+							:value="item.value"
+						></el-option>
+					</el-select>
+					<el-link type="primary" :underline="false" class="ml10" @click="addDimension">添加</el-link>
+					<el-link type="primary" :underline="false" class="ml10" @click="manageDimension">管理</el-link>
+				</el-form-item>
 				<el-form-item label="价值共享" prop="shareMode">
 					<div class="mt8">
 						<el-radio-group v-model="form.shareMode">
@@ -544,10 +560,68 @@
 				>
 			</el-form>
 		</el-dialog>
+		<el-dialog
+			:title="dimensionAddDialogTitle"
+			:visible.sync="dimensionAddDialogVisible"
+			:close-on-click-modal="dimensionAddUnModalBack"
+			width="520px"
+			:before-close="dimensionAddHandleClose"
+		>
+			<el-form
+				ref="dimensionAddRef"
+				:model="dimensionAddModelForm"
+				:rules="dimensionAddModelRules"
+				:label-position="dimensionAddPos"
+				class="disf"
+				label-width="70px"
+			>
+				<el-form-item label="名称" prop="name">
+					<el-input
+						v-model="dimensionAddModelForm.name"
+						maxlength="12"
+						placeholder="12字内"
+					></el-input>
+				</el-form-item>
+				<el-form-item label="描述" prop="describe">
+					<el-input
+						v-model="dimensionAddModelForm.describe"
+						type="textarea"
+						maxlength="200"
+						resize="none"
+						show-word-limit
+						:autosize="{ minRows: 6 }"
+						placeholder="限200字"
+					></el-input>
+				</el-form-item>
+				<el-button
+					type="primary"
+					class="ml50-imp"
+					@click="dimensionAdd('dimensionAddRef')"
+					>提 交</el-button
+				>
+			</el-form>
+		</el-dialog>
+		<el-dialog
+			:title="dimensionMangeTitle"
+			:visible.sync="dimensionMangeVisible"
+			:close-on-click-modal="dimensionMangeBack"
+			width="800px"
+			:before-close="handleDimensionMangeClose"
+		>
+			<once-table
+				:titleData="titleDataDimensionMange"
+				:source="dimensionMangeData"
+				:columnCustom="columnCustomIsOpen"
+				:defaultShowFailed="showFailedIsDimensionMange"
+				@commonCellClicked="dimensionMangeCellClickedCallback"
+			></once-table>
+		</el-dialog>
 	</div>
 </template>
 
 <script>
+import onceTable from "@/components/Table";
+
 import {
 	getIndustryCategoryReq,
 	getCategoryReq,
@@ -557,7 +631,7 @@ import {
 
 export default {
 	name: "Release",
-	components: {},
+	components: { onceTable },
 	watch: {
 		filterText(val) {
 			this.$refs.cateTree.filter(val);
@@ -565,9 +639,83 @@ export default {
 	},
 	data() {
 		return {
+			dimensionMangeTitle: "维度管理",
+			dimensionMangeVisible: false,
+			dimensionMangeBack: false,
+			titleDataDimensionMange: [
+				{
+					id: 2,
+					name: "维度名称",
+					label: "维度名称",
+					prop: "name",
+					sort: false,
+					align: "center",
+					filterData: [],
+				},
+				{
+					id: 3,
+					name: "维度描述",
+					label: "维度描述",
+					prop: "describe",
+					sort: false,
+					align: "center",
+					filterData: [],
+				},
+				{
+					id: 4,
+					name: "创建时间",
+					label: "创建时间",
+					prop: "createTime",
+					sort: false,
+					align: "center",
+					filterData: [],
+				},
+				{
+					id: 5,
+					name: "操作",
+					label: "操作",
+					prop: "customHanndle",
+					sort: false,
+					align: "center",
+					filterData: [],
+				},
+			],
+			dimensionMangeData:[
+				{ id: 1, name: "默认", describe: "sdfsdfsdf", createTime: "2020-12-01 12:34:21", customHanndle: ["编辑","删除"] }
+			],
+			columnCustomIsOpen: true,
+			showFailedIsDimensionMange: false,
 			categoryList: [],
 			professionList: [],
 			addressList: [],
+			dimensionList: [
+				{ id: 1, text: "默认", value: "" }
+			],
+			dimensionAddDialogTitle: "添加维度",
+			dimensionAddDialogVisible: false,
+			dimensionAddUnModalBack: false,
+			dimensionAddPos: "right",
+			dimensionAddModelForm:{
+				name : "",
+				describe : ""
+			},
+			dimensionAddModelRules: {
+				name: [
+					{
+						required: true,
+						message: "请输入",
+						trigger: "change",
+					},
+				],
+				describe: [
+					{
+						required: true,
+						message: "请输入",
+						trigger: "change",
+					},
+				],
+			},
+		
 			dialogCategoryVisible: false,
 			newindustryTipShow: false,
 			newAreaTipShow: false,
@@ -805,6 +953,7 @@ export default {
 				content: "", //描述
 				shareMode: 1, //共享模式
 				category: [],
+				dimension: ""
 			},
 			moreForm: {
 				cause: "",
@@ -844,6 +993,13 @@ export default {
 					{
 						required: true,
 						message: "请输入",
+						trigger: "change",
+					},
+				],
+				dimension: [
+					{
+						required: true,
+						message: "请选择",
 						trigger: "change",
 					},
 				],
@@ -909,6 +1065,41 @@ export default {
 		},
 		saveContent() {
 			this.dialogVisible = true;
+		},
+		dimensionAddHandleClose(){
+			this.dimensionAddDialogVisible = false;
+		},
+		dimensionAdd(refDom) {
+			this.$refs[refDom].validate((valid) => {
+				if (valid) {
+					this.hanndleAddDimensionFn();
+				}
+			});
+		},
+		hanndleAddDimensionFn(){
+			this.dimensionAddDialogVisible = false;
+		},
+		dimensionMangeCellClickedCallback({ row, column, cell, event }) {
+			if (column.label == "操作") {
+				if (event.target.innerText == "编辑") {
+					// this.editCurrCategoryId = row.id;
+					// this.catalogModelForm.name = row.name;
+					// this.catalogModelForm.descride =
+					// 	row.describe == "无" ? "" : row.describe;
+					// this.dialogTitle = "修改维度";
+					this.dimensionAddDialogVisible = true;
+				}
+				if (event.target.innerText == "删除") {
+					this.$baseConfirm(
+						"您确定要删除吗?",
+						{ title: "提示" },
+						async () => {
+							this.$message.success("删除成功");
+							//this.deleteCategory(row.id);
+						}
+					);
+				}
+			}
 		},
 		handleClose() {
 			this.dialogVisible = false;
@@ -1042,6 +1233,9 @@ export default {
 				dropType
 			);
 		},
+		handleDimensionMangeClose(){
+			this.dimensionMangeVisible = false;
+		},
 		handleDrop(draggingNode, dropNode, dropType, ev) {
 			console.log("tree drop: ", dropNode.label, dropType);
 		},
@@ -1165,6 +1359,41 @@ export default {
 					return item;
 				}
 			});
+		},
+		addDimension(){
+			this.dimensionAddDialogVisible = true;
+		},
+		manageDimension(){
+			this.manageDimensionBuss();
+			this.dimensionMangeVisible = true;
+		},
+		manageDimensionBuss(){
+			let json = this.dimensionMangeData;
+				for (let i = 0; i < json.length; i++) {
+					json[i].customHanndle = ["编辑", "删除"];
+					if (!json[i].descride) {
+						json[i].descride = "无";
+					}
+				}
+
+				for (let j = 0; j < json.length; j++) {
+					//操作按钮逻辑
+					let hanndleStr = "";
+					for (let k = 0; k < json[j].customHanndle.length; k++) {
+						hanndleStr +=
+							"<span class='linkText ml10' data-id='" +
+							json[j].id +
+							"'>" +
+							json[j].customHanndle[k] +
+							"</span>";
+					}
+					json[j].customHanndle = hanndleStr;
+					// json[j].createTime = new Date(json[j].createTime).Format(
+					// 	"yyyy-MM-dd hh:mm:ss"
+					// );
+				}
+
+				this.dimensionMangeData = json;
 		},
 		handleChange() {
 			console.dir(123);
