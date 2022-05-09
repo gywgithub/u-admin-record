@@ -4,3 +4,4 @@ src/icons
 public
 dist
 src/utils/native/modules
+*
