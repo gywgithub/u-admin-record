@@ -27,7 +27,7 @@ module.exports = {
 	publicPath: "/",
 	outputDir: "dist",
 	assetsDir: "static",
-	lintOnSave: false,
+	lintOnSave: process.env.NODE_ENV === "development",
 	productionSourceMap: false,
 	devServer: {
 		port: port,
@@ -38,7 +38,7 @@ module.exports = {
 		},
 		proxy: {
 			"/api": {
-				target: "http://10.255.50.70:8080", //gs
+				// target: "http://10.255.50.70:8080", //gs
 				// target: "http://192.168.124.14:8080", //jia
 				ws: true,
 				changeOrigin: true,
