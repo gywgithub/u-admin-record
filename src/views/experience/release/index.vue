@@ -621,13 +621,18 @@
 
 <script>
 import onceTable from "@/components/Table";
-
 import {
 	getIndustryCategoryReq,
 	getCategoryReq,
 	getAddressReq,
 	updateExperienceDataReq,
 } from "@/api/release";
+import {
+	addDimensionReq,
+	deleteDimensionReq,
+	updateDimensionReq,
+	queryDimensionReq,
+} from "@/api/dimension";
 
 export default {
 	name: "Release",
@@ -1077,7 +1082,15 @@ export default {
 			});
 		},
 		hanndleAddDimensionFn(){
-			this.dimensionAddDialogVisible = false;
+			//{"pageSize" : 100 , "pageIndex" : 1}
+			let params = {
+				"name" : this.dimensionAddModelForm.name,
+				"describe" : this.dimensionAddModelForm.describe
+			}
+			addDimensionReq(params).then((res)=>{
+				this.$message.success("添加成功");
+				this.dimensionAddDialogVisible = false;
+			});
 		},
 		dimensionMangeCellClickedCallback({ row, column, cell, event }) {
 			if (column.label == "操作") {
@@ -1364,11 +1377,12 @@ export default {
 			this.dimensionAddDialogVisible = true;
 		},
 		manageDimension(){
-			this.manageDimensionBuss();
-			this.dimensionMangeVisible = true;
+			queryDimensionReq({"pageSize" : 100 , "pageIndex" : 1}).then((res)=>{
+				this.manageDimensionBuss(res.data);
+			});
 		},
-		manageDimensionBuss(){
-			let json = this.dimensionMangeData;
+		manageDimensionBuss(data){
+			let json = data.dimensionList;
 				for (let i = 0; i < json.length; i++) {
 					json[i].customHanndle = ["编辑", "删除"];
 					if (!json[i].descride) {
@@ -1388,12 +1402,12 @@ export default {
 							"</span>";
 					}
 					json[j].customHanndle = hanndleStr;
-					// json[j].createTime = new Date(json[j].createTime).Format(
-					// 	"yyyy-MM-dd hh:mm:ss"
-					// );
+					json[j].createTime = new Date(json[j].createTime).Format(
+						"yyyy-MM-dd hh:mm:ss"
+					);
 				}
-
 				this.dimensionMangeData = json;
+				this.dimensionMangeVisible = true;
 		},
 		handleChange() {
 			console.dir(123);
