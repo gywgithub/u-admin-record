@@ -47,7 +47,7 @@
 				<el-form-item
 					label="维度"
 					prop="dimension"
-					label-width="90px"
+					label-width="100px"
 				>
 					<el-select v-model="form.dimension" style="width: 440px">
 						<el-option
@@ -694,7 +694,7 @@ export default {
 			professionList: [],
 			addressList: [],
 			dimensionList: [
-				{ id: 1, text: "默认", value: "" }
+				{ id: 1, text: "默认", value: 99 }
 			],
 			dimensionAddDialogTitle: "添加维度",
 			dimensionAddDialogVisible: false,
@@ -957,8 +957,8 @@ export default {
 				title: "", //标题
 				content: "", //描述
 				shareMode: 1, //共享模式
-				category: [],
-				dimension: ""
+				category: "",
+				dimension: 99
 			},
 			moreForm: {
 				cause: "",
@@ -1082,37 +1082,52 @@ export default {
 			});
 		},
 		hanndleAddDimensionFn(){
-			//{"pageSize" : 100 , "pageIndex" : 1}
 			let params = {
 				"name" : this.dimensionAddModelForm.name,
 				"describe" : this.dimensionAddModelForm.describe
 			}
-			addDimensionReq(params).then((res)=>{
-				this.$message.success("添加成功");
-				this.dimensionAddDialogVisible = false;
-			});
+			if(this.dimensionAddDialogTitle == "添加维度"){
+				addDimensionReq(params).then((res)=>{
+					this.$message.success("添加成功");
+					this.dimensionAddDialogVisible = false;
+				});
+			}else{
+				params['id'] = this.editDimensionCurrCategoryId;
+				updateDimensionReq(params).then((res)=>{
+					this.$message.success("修改成功");
+					this.manageDimension();
+					this.dimensionAddDialogVisible = false;
+				});
+			}
+			
 		},
 		dimensionMangeCellClickedCallback({ row, column, cell, event }) {
 			if (column.label == "操作") {
 				if (event.target.innerText == "编辑") {
-					// this.editCurrCategoryId = row.id;
-					// this.catalogModelForm.name = row.name;
-					// this.catalogModelForm.descride =
-					// 	row.describe == "无" ? "" : row.describe;
-					// this.dialogTitle = "修改维度";
+					this.dimensionAddDialogTitle = "修改维度";
 					this.dimensionAddDialogVisible = true;
+					this.$nextTick(()=>{
+						this.editDimensionCurrCategoryId = row.id;
+						this.dimensionAddModelForm.name = row.name;
+						this.dimensionAddModelForm.descride = row.describe;
+					});
 				}
 				if (event.target.innerText == "删除") {
 					this.$baseConfirm(
 						"您确定要删除吗?",
 						{ title: "提示" },
 						async () => {
-							this.$message.success("删除成功");
-							//this.deleteCategory(row.id);
+							this.deleteCategory(row.id);
 						}
 					);
 				}
 			}
+		},
+		deleteCategory(ids){
+			deleteDimensionReq([ids]).then((res)=>{
+				this.$message.success("删除成功");
+				this.manageDimension();
+			});
 		},
 		handleClose() {
 			this.dialogVisible = false;
@@ -1374,6 +1389,7 @@ export default {
 			});
 		},
 		addDimension(){
+			this.dimensionAddDialogTitle = "添加维度";
 			this.dimensionAddDialogVisible = true;
 		},
 		manageDimension(){
@@ -1467,6 +1483,7 @@ export default {
 				address: data.address.join(","),
 				cause: data.cause,
 				reules: data.reules,
+				dimensionId: data.dimension
 			};
 			return expInfo;
 		},
@@ -1491,6 +1508,7 @@ export default {
 					let baseParams = this.hanndleStrogeSaveForm(
 						Object.assign(this.form, this.moreForm)
 					);
+					
 					localStorage.setItem(
 						"experienceBaseInfo",
 						JSON.stringify(baseParams)

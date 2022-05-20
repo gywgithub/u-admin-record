@@ -373,20 +373,46 @@ export default {
 			this.$b.successMsg("努力开发中，敬请期待......");
 		},
 		saveAndContent() {
-			this.$confirm("确认提交本次内容?", "提示", {
-				confirmButtonText: "确定",
-				cancelButtonText: "取消",
-				type: "warning",
-			})
-				.then(() => {
-					//articleType 1：新增第一篇文章  2：编辑文章
-					if (this.$route.params.articleType == 2) {
-						this.dialogVisible = true;
-					} else {
-						this.submitArticle();
-					}
-				})
-				.catch(() => {});
+
+				//articleType 1：新增第一篇文章  2：编辑文章
+				if (this.$route.params.articleType == 2) {
+					this.dialogVisible = true;
+				} else {
+					this.submitArticle();
+				}
+
+				// this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+				// confirmButtonText: '确定',
+				// cancelButtonText: '取消',
+				// type: 'warning',
+				// center: true
+				// }).then(() => {
+				// this.$message({
+				// 	type: 'success',
+				// 	message: '删除成功!'
+				// });
+				// }).catch(() => {
+				// this.$message({
+				// 	type: 'info',
+				// 	message: '已取消删除'
+				// });
+				// });
+
+
+			// this.$confirm("确认提交本次内容?", "提示", {
+			// 	confirmButtonText: "确定",
+			// 	cancelButtonText: "取消",
+			// 	type: "warning",
+			// })
+			// 	.then(() => {
+			// 		//articleType 1：新增第一篇文章  2：编辑文章
+			// 		if (this.$route.params.articleType == 2) {
+			// 			this.dialogVisible = true;
+			// 		} else {
+			// 			this.submitArticle();
+			// 		}
+			// 	})
+			// 	.catch(() => {});
 		},
 		submitArticle() {
 			let paramStorage = this.currShareData;
@@ -407,6 +433,7 @@ export default {
 						disabled: false,
 						label: "默认目录",
 					}, //新增文章 自动增加 默认目录
+					dimensionId: paramStorage.dimensionId, //dimension 和 selectCatalog 是做同一个业务，区别在于selectCatalog可支持无限级目录，dimension只支持一级目录
 					richTextCode: this.content, //富文本内容
 				};
 				this.submitExperience(params);
@@ -534,6 +561,7 @@ export default {
 					reules: paramStorage.reules,
 					category: paramStorage.type,
 					selectCatalog: selected[0], //用户勾选的目录
+					dimensionId: paramStorage.dimensionId, //dimension 和 selectCatalog 是做同一个业务，区别在于selectCatalog可支持无限级目录，dimension只支持一级目录
 					richTextCode: this.content, //富文本内容
 				};
 				this.submitExperience(params);
